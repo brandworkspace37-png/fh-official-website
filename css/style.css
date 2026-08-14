@@ -3,10 +3,11 @@
    ========================================= */
 
 :root {
-    --color-black: #0a0a0a;
-    --color-white: #f7f7f5;
-    --color-gray: #a3a3a3;
-    --color-dark-gray: #171717;
+    --color-black: #111111;
+    --color-white: #F1EEE7;
+    --color-gray: #A6A39B;
+    --color-dark-gray: #6F7A70;
+    --color-bronze: #9A7B52;
 
     --font-main: Arial, Helvetica, sans-serif;
 
