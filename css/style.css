@@ -359,4 +359,11 @@ footer {
         gap: 25px;
     }
 
+
+    .before .image-placeholder {
+    background: linear-gradient(135deg, #40503d, #77786f);
+}
+
+.after .image-placeholder {
+    background: linear-gradient(135deg, #e8e5dc, #9b978e);
 }
