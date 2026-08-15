@@ -79,3 +79,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+/* =========================================
+   FORMULARIO — MÁXIMO 2 INTERESES
+   ========================================= */
+
+const interestOptions = document.querySelectorAll(
+    'input[name="interest"]'
+);
+
+interestOptions.forEach((option) => {
+
+    option.addEventListener("change", () => {
+
+        const selectedOptions = document.querySelectorAll(
+            'input[name="interest"]:checked'
+        );
+
+        if (selectedOptions.length >= 2) {
+
+            interestOptions.forEach((item) => {
+
+                if (!item.checked) {
+                    item.disabled = true;
+                }
+
+            });
+
+        } else {
+
+            interestOptions.forEach((item) => {
+                item.disabled = false;
+            });
+
+        }
+
+    });
+
+});
