@@ -345,3 +345,189 @@ footer {
         gap: 25px;
     }
 }
+/* FILOSOFÍA */
+
+.philosophy {
+    padding-top: 160px;
+    padding-bottom: 160px;
+}
+
+.philosophy-intro {
+    max-width: 900px;
+    margin-bottom: 100px;
+}
+
+.section-eyebrow {
+    display: block;
+
+    margin-bottom: 25px;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+
+    color: var(--color-gray);
+}
+
+.philosophy h2 {
+    max-width: 850px;
+
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    font-weight: 500;
+}
+
+.philosophy h2 span {
+    display: block;
+    color: var(--color-gray);
+}
+
+.philosophy-intro > p {
+    max-width: 600px;
+
+    margin-top: 35px;
+
+    font-size: 19px;
+    line-height: 1.6;
+
+    color: var(--color-gray);
+}
+
+
+/* CONTENIDO */
+
+.philosophy-content {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+
+    gap: 100px;
+
+    padding-top: 80px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.philosophy-statement h3 {
+    max-width: 700px;
+
+    margin-bottom: 35px;
+
+    font-size: clamp(32px, 4vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+}
+
+.philosophy-statement p {
+    max-width: 650px;
+
+    margin-bottom: 22px;
+
+    font-size: 17px;
+    line-height: 1.7;
+
+    color: var(--color-gray);
+}
+
+
+/* PRINCIPIOS */
+
+.philosophy-principles {
+    display: flex;
+    flex-direction: column;
+}
+
+.principle {
+    display: grid;
+    grid-template-columns: 45px 1fr;
+
+    gap: 20px;
+
+    padding: 25px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.principle:first-child {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.principle > span {
+    font-size: 11px;
+    color: var(--color-gray);
+}
+
+.principle h4 {
+    margin-bottom: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+.principle p {
+    font-size: 15px;
+    line-height: 1.5;
+
+    color: var(--color-gray);
+}
+
+
+/* CIERRE */
+
+.philosophy-closing {
+    max-width: 900px;
+
+    margin-top: 150px;
+}
+
+.philosophy-closing p {
+    margin-bottom: 15px;
+
+    font-size: 18px;
+    color: var(--color-gray);
+}
+
+.philosophy-closing strong {
+    display: block;
+
+    font-size: clamp(30px, 4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+}
+
+
+/* FILOSOFÍA — MOBILE */
+
+@media (max-width: 768px) {
+
+    .philosophy {
+        padding-top: 100px;
+        padding-bottom: 100px;
+    }
+
+    .philosophy-intro {
+        margin-bottom: 70px;
+    }
+
+    .philosophy-content {
+        grid-template-columns: 1fr;
+        gap: 70px;
+
+        padding-top: 50px;
+    }
+
+    .philosophy-statement h3 {
+        font-size: 36px;
+    }
+
+    .philosophy-statement p {
+        font-size: 16px;
+    }
+
+    .philosophy-closing {
+        margin-top: 90px;
+    }
+}
