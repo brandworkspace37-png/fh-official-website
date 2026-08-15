@@ -522,7 +522,9 @@
 
     <form id="project-form" class="project-form">
 
-        <!-- INFORMACIÓN DE CONTACTO -->
+    <!-- PASO 1 — INFORMACIÓN DE CONTACTO -->
+
+    <div class="form-step is-active" data-step="1">
 
         <div class="form-section">
 
@@ -536,9 +538,7 @@
 
                     <div class="form-field">
 
-                        <label for="name">
-                            Nombre
-                        </label>
+                        <label for="name">Nombre</label>
 
                         <input
                             type="text"
@@ -553,9 +553,7 @@
 
                     <div class="form-field">
 
-                        <label for="phone">
-                            Número de teléfono
-                        </label>
+                        <label for="phone">Número de teléfono</label>
 
                         <input
                             type="tel"
@@ -570,9 +568,7 @@
 
                     <div class="form-field">
 
-                        <label for="email">
-                            Email
-                        </label>
+                        <label for="email">Email</label>
 
                         <input
                             type="email"
@@ -587,9 +583,7 @@
 
                     <div class="form-field">
 
-                        <label for="zip">
-                            Código postal
-                        </label>
+                        <label for="zip">Código postal</label>
 
                         <input
                             type="text"
@@ -604,12 +598,29 @@
 
                 </div>
 
+
+                <div class="form-step-actions">
+
+                    <button
+                        type="button"
+                        class="form-button"
+                        id="next-step"
+                    >
+                        Continuar
+                    </button>
+
+                </div>
+
             </div>
 
         </div>
 
+    </div>
 
-        <!-- DETALLES DEL PROYECTO -->
+
+    <!-- PASO 2 — PROYECTO -->
+
+    <div class="form-step" data-step="2">
 
         <div class="form-section">
 
@@ -625,114 +636,197 @@
                 </p>
 
 
-                <div class="project-options">
+                <!-- SELECCIÓN -->
 
-                    <label class="project-option">
+                <div id="selection-mode">
 
-                        <input
-                            type="checkbox"
-                            name="interest"
-                            value="identidad"
-                        >
+                    <div class="project-options">
 
-                        <span>
-                            Quiero crear la identidad de mi negocio
-                        </span>
+                        <label class="project-option">
 
-                    </label>
+                            <input
+                                type="checkbox"
+                                name="interest"
+                                value="identidad"
+                            >
 
+                            <span>
+                                Quiero crear la identidad de mi negocio
+                            </span>
 
-                    <label class="project-option">
-
-                        <input
-                            type="checkbox"
-                            name="interest"
-                            value="logo-identidad"
-                        >
-
-                        <span>
-                            Quiero crear mi logo desde cero y desarrollar mi identidad
-                        </span>
-
-                    </label>
+                        </label>
 
 
-                    <label class="project-option">
+                        <label class="project-option">
 
-                        <input
-                            type="checkbox"
-                            name="interest"
-                            value="logo-3d"
-                        >
+                            <input
+                                type="checkbox"
+                                name="interest"
+                                value="logo-identidad"
+                            >
 
-                        <span>
-                            Quiero imprimir mi logo en 3D
-                        </span>
+                            <span>
+                                Quiero crear mi logo desde cero y desarrollar mi identidad
+                            </span>
 
-                    </label>
-
-
-                    <label class="project-option">
-
-                        <input
-                            type="checkbox"
-                            name="interest"
-                            value="transformacion"
-                        >
-
-                        <span>
-                            Quiero transformar la imagen de mi negocio
-                        </span>
-
-                    </label>
+                        </label>
 
 
-                    <label class="project-option">
+                        <label class="project-option">
 
-                        <input
-                            type="checkbox"
-                            name="interest"
-                            value="asesoria"
-                        >
+                            <input
+                                type="checkbox"
+                                name="interest"
+                                value="logo-3d"
+                            >
 
-                        <span>
-                            Quiero conocer qué necesita mi negocio
-                        </span>
+                            <span>
+                                Quiero imprimir mi logo en 3D
+                            </span>
 
-                    </label>
+                        </label>
 
 
-                    <label class="project-option">
+                        <label class="project-option">
 
-                        <input
-                            type="checkbox"
-                            name="interest"
-                            value="informacion"
-                        >
+                            <input
+                                type="checkbox"
+                                name="interest"
+                                value="transformacion"
+                            >
 
-                        <span>
-                            Solo quiero información antes de decidir
-                        </span>
+                            <span>
+                                Quiero transformar la imagen de mi negocio
+                            </span>
 
-                    </label>
+                        </label>
+
+
+                        <label class="project-option">
+
+                            <input
+                                type="checkbox"
+                                name="interest"
+                                value="asesoria"
+                            >
+
+                            <span>
+                                Quiero conocer qué necesita mi negocio
+                            </span>
+
+                        </label>
+
+
+                        <label class="project-option">
+
+                            <input
+                                type="checkbox"
+                                name="interest"
+                                value="informacion"
+                            >
+
+                            <span>
+                                Solo quiero información antes de decidir
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="custom-response-trigger"
+                        id="custom-response-trigger"
+                    >
+                        Personalizar mi respuesta
+                    </button>
 
                 </div>
 
 
-                <!-- PERSONALIZAR -->
+                <!-- RESPUESTA PERSONALIZADA -->
 
-                <div class="custom-response">
+                <div
+                    class="custom-response custom-response-mode"
+                    id="custom-response-mode"
+                    hidden
+                >
 
                     <label for="project-details">
-                        Personalizar mi respuesta
+                        Cuéntanos sobre tu proyecto
                     </label>
 
                     <textarea
                         id="project-details"
                         name="project-details"
-                        rows="6"
+                        rows="7"
                         placeholder="Cuéntanos cualquier detalle, idea o plan que tengas para tu proyecto."
                     ></textarea>
+
+
+                    <button
+                        type="button"
+                        class="back-to-selection"
+                        id="back-to-selection"
+                    >
+                        Volver a las opciones
+                    </button>
+
+                </div>
+
+
+                <!-- ARCHIVO -->
+
+                <div
+                    class="project-file"
+                    id="project-file"
+                >
+
+                    <label for="project-attachment">
+                        ¿Tienes algún material que nos ayude a entender tu proyecto?
+                    </label>
+
+                    <p>
+                        Puedes adjuntar un archivo PNG o PDF.
+                    </p>
+
+                    <input
+                        type="file"
+                        id="project-attachment"
+                        name="project-attachment"
+                        accept=".png,.pdf,image/png,application/pdf"
+                    >
+
+                    <button
+                        type="button"
+                        class="skip-file"
+                        id="skip-file"
+                    >
+                        Omitir por ahora
+                    </button>
+
+                </div>
+
+
+                <!-- ACCIONES -->
+
+                <div class="form-step-actions">
+
+                    <button
+                        type="button"
+                        class="form-button form-button-secondary"
+                        id="previous-step"
+                    >
+                        Volver
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="form-button"
+                    >
+                        Enviar mi proyecto
+                    </button>
 
                 </div>
 
@@ -740,26 +834,9 @@
 
         </div>
 
+    </div>
 
-        <!-- ENVÍO -->
-
-        <div class="form-submit">
-
-            <p class="form-required">
-                Los campos de contacto son obligatorios.
-            </p>
-
-            <button
-                type="submit"
-                class="form-button"
-            >
-                Enviar mi proyecto
-            </button>
-
-        </div>
-
-    </form>
-
+</form>
 
     <!-- CONTACTO SECUNDARIO -->
 
