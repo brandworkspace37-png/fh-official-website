@@ -531,3 +531,180 @@ footer {
         margin-top: 90px;
     }
 }
+/* SERVICIOS */
+
+.services {
+    padding-top: 160px;
+    padding-bottom: 160px;
+}
+
+.services-intro {
+    max-width: 900px;
+    margin-bottom: 100px;
+}
+
+.services-intro h2 {
+    max-width: 900px;
+
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    font-weight: 500;
+}
+
+.services-intro h2 span {
+    display: block;
+    color: var(--color-gray);
+}
+
+.services-intro p {
+    max-width: 650px;
+
+    margin-top: 35px;
+
+    font-size: 18px;
+    line-height: 1.65;
+
+    color: var(--color-gray);
+}
+
+
+/* LISTA DE SERVICIOS */
+
+.services-list {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.service {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+
+    gap: 40px;
+
+    padding: 55px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    transition: padding 0.3s ease;
+}
+
+.service:hover {
+    padding-left: 15px;
+}
+
+.service-number {
+    padding-top: 8px;
+
+    font-size: 11px;
+    letter-spacing: 0.12em;
+
+    color: var(--color-gray);
+}
+
+.service-content {
+    max-width: 850px;
+}
+
+.service-content h3 {
+    margin-bottom: 20px;
+
+    font-size: clamp(30px, 4vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+}
+
+.service-content p {
+    max-width: 680px;
+
+    margin-bottom: 25px;
+
+    font-size: 17px;
+    line-height: 1.65;
+
+    color: var(--color-gray);
+}
+
+.service-link {
+    display: block;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+
+    color: var(--color-gray);
+}
+
+
+/* CIERRE */
+
+.services-closing {
+    max-width: 900px;
+
+    margin-top: 140px;
+}
+
+.services-closing p {
+    margin-bottom: 15px;
+
+    font-size: 18px;
+
+    color: var(--color-gray);
+}
+
+.services-closing strong {
+    display: block;
+
+    font-size: clamp(32px, 4vw, 58px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+}
+
+
+/* SERVICIOS — MOBILE */
+
+@media (max-width: 768px) {
+
+    .services {
+        padding-top: 100px;
+        padding-bottom: 100px;
+    }
+
+    .services-intro {
+        margin-bottom: 70px;
+    }
+
+    .services-intro h2 {
+        font-size: 48px;
+    }
+
+    .services-intro p {
+        font-size: 16px;
+    }
+
+    .service {
+        grid-template-columns: 35px 1fr;
+
+        gap: 15px;
+
+        padding: 40px 0;
+    }
+
+    .service:hover {
+        padding-left: 0;
+    }
+
+    .service-content h3 {
+        font-size: 32px;
+    }
+
+    .service-content p {
+        font-size: 16px;
+    }
+
+    .services-closing {
+        margin-top: 90px;
+    }
+}
