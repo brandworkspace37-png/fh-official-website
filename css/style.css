@@ -90,6 +90,27 @@ nav {
 .nav-links a:hover {
     color: var(--color-white);
 }
+/* CTA DEL HEADER */
+
+.nav-cta {
+    padding: 12px 18px;
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    font-size: 12px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+.nav-cta:hover {
+    background: var(--color-white);
+    color: var(--color-black);
+}
 
 
 /* SECCIONES */
