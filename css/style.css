@@ -708,3 +708,167 @@ footer {
         margin-top: 90px;
     }
 }
+/* PROCESO */
+
+.process {
+    padding-top: 160px;
+    padding-bottom: 160px;
+}
+
+.process-intro {
+    max-width: 900px;
+    margin-bottom: 100px;
+}
+
+.process-intro h2 {
+    max-width: 900px;
+
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    font-weight: 500;
+}
+
+.process-intro h2 span {
+    display: block;
+    color: var(--color-gray);
+}
+
+.process-intro p {
+    max-width: 650px;
+
+    margin-top: 35px;
+
+    font-size: 18px;
+    line-height: 1.65;
+
+    color: var(--color-gray);
+}
+
+
+/* PASOS */
+
+.process-list {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.process-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+
+    gap: 40px;
+
+    padding: 55px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    transition: padding 0.3s ease;
+}
+
+.process-step:hover {
+    padding-left: 15px;
+}
+
+.process-number {
+    padding-top: 8px;
+
+    font-size: 11px;
+    letter-spacing: 0.12em;
+
+    color: var(--color-gray);
+}
+
+.process-content {
+    max-width: 850px;
+}
+
+.process-content h3 {
+    margin-bottom: 18px;
+
+    font-size: clamp(30px, 4vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+}
+
+.process-content p {
+    max-width: 680px;
+
+    font-size: 17px;
+    line-height: 1.65;
+
+    color: var(--color-gray);
+}
+
+
+/* CIERRE */
+
+.process-closing {
+    max-width: 900px;
+
+    margin-top: 140px;
+}
+
+.process-closing p {
+    margin-bottom: 15px;
+
+    font-size: 18px;
+
+    color: var(--color-gray);
+}
+
+.process-closing strong {
+    display: block;
+
+    font-size: clamp(32px, 4vw, 58px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+}
+
+
+/* PROCESO — MOBILE */
+
+@media (max-width: 768px) {
+
+    .process {
+        padding-top: 100px;
+        padding-bottom: 100px;
+    }
+
+    .process-intro {
+        margin-bottom: 70px;
+    }
+
+    .process-intro h2 {
+        font-size: 48px;
+    }
+
+    .process-intro p {
+        font-size: 16px;
+    }
+
+    .process-step {
+        grid-template-columns: 35px 1fr;
+
+        gap: 15px;
+
+        padding: 40px 0;
+    }
+
+    .process-step:hover {
+        padding-left: 0;
+    }
+
+    .process-content h3 {
+        font-size: 32px;
+    }
+
+    .process-content p {
+        font-size: 16px;
+    }
+
+    .process-closing {
+        margin-top: 90px;
+    }
+}
