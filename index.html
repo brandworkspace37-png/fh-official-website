@@ -36,7 +36,7 @@
         <a href="#contacto" class="nav-cta">
             Iniciar mi proyecto
         </a>
-        
+
         <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">
              <span></span>
              <span></span>
@@ -500,7 +500,7 @@
     </div>
 
 </section>
-       <!-- CONTACTO -->
+<!-- CONTACTO / CAPTACIÓN -->
 <section id="contacto" class="contact">
 
     <div class="contact-intro">
@@ -508,62 +508,269 @@
         <span class="section-eyebrow">INICIAR UN PROYECTO</span>
 
         <h2>
-            Cuéntanos qué
-            <span>quieres construir.</span>
+            Cuéntanos de
+            <span>tu proyecto.</span>
         </h2>
 
         <p>
-            Si estás abriendo, renovando o transformando tu negocio,
-            queremos conocerlo antes de hablar de soluciones.
+            Queremos conocer tu negocio y entender qué estás buscando
+            antes de hablar de soluciones.
         </p>
 
     </div>
 
 
-    <div class="contact-options">
+    <form id="project-form" class="project-form">
 
-        <a href="#" class="contact-option">
+        <!-- INFORMACIÓN DE CONTACTO -->
 
-            <div>
-                <span class="contact-option-label">PROYECTO</span>
+        <div class="form-section">
 
-                <h3>Iniciar mi proyecto</h3>
+            <span class="form-section-number">01</span>
 
-                <p>
-                    Cuéntanos sobre tu negocio y lo que quieres transformar.
-                </p>
+            <div class="form-section-content">
+
+                <h3>Información de contacto</h3>
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+
+                        <label for="name">
+                            Nombre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="phone">
+                            Número de teléfono
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            autocomplete="tel"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="zip">
+                            Código postal
+                        </label>
+
+                        <input
+                            type="text"
+                            id="zip"
+                            name="zip"
+                            inputmode="numeric"
+                            autocomplete="postal-code"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <span class="contact-arrow">↗</span>
-
-        </a>
+        </div>
 
 
-        <a href="#" class="contact-option">
+        <!-- DETALLES DEL PROYECTO -->
 
-            <div>
-                <span class="contact-option-label">CONTACTO DIRECTO</span>
+        <div class="form-section">
 
-                <h3>Hablar por WhatsApp</h3>
+            <span class="form-section-number">02</span>
 
-                <p>
-                    ¿Prefieres hablar directamente? Escríbenos.
+            <div class="form-section-content">
+
+                <h3>Cuéntanos de tu proyecto</h3>
+
+                <p class="form-help">
+                    Selecciona hasta 2 opciones que mejor describan
+                    lo que estás buscando.
                 </p>
+
+
+                <div class="project-options">
+
+                    <label class="project-option">
+
+                        <input
+                            type="checkbox"
+                            name="interest"
+                            value="identidad"
+                        >
+
+                        <span>
+                            Quiero crear la identidad de mi negocio
+                        </span>
+
+                    </label>
+
+
+                    <label class="project-option">
+
+                        <input
+                            type="checkbox"
+                            name="interest"
+                            value="logo-identidad"
+                        >
+
+                        <span>
+                            Quiero crear mi logo desde cero y desarrollar mi identidad
+                        </span>
+
+                    </label>
+
+
+                    <label class="project-option">
+
+                        <input
+                            type="checkbox"
+                            name="interest"
+                            value="logo-3d"
+                        >
+
+                        <span>
+                            Quiero imprimir mi logo en 3D
+                        </span>
+
+                    </label>
+
+
+                    <label class="project-option">
+
+                        <input
+                            type="checkbox"
+                            name="interest"
+                            value="transformacion"
+                        >
+
+                        <span>
+                            Quiero transformar la imagen de mi negocio
+                        </span>
+
+                    </label>
+
+
+                    <label class="project-option">
+
+                        <input
+                            type="checkbox"
+                            name="interest"
+                            value="asesoria"
+                        >
+
+                        <span>
+                            Quiero conocer qué necesita mi negocio
+                        </span>
+
+                    </label>
+
+
+                    <label class="project-option">
+
+                        <input
+                            type="checkbox"
+                            name="interest"
+                            value="informacion"
+                        >
+
+                        <span>
+                            Solo quiero información antes de decidir
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <!-- PERSONALIZAR -->
+
+                <div class="custom-response">
+
+                    <label for="project-details">
+                        Personalizar mi respuesta
+                    </label>
+
+                    <textarea
+                        id="project-details"
+                        name="project-details"
+                        rows="6"
+                        placeholder="Cuéntanos cualquier detalle, idea o plan que tengas para tu proyecto."
+                    ></textarea>
+
+                </div>
+
             </div>
 
-            <span class="contact-arrow">↗</span>
+        </div>
 
+
+        <!-- ENVÍO -->
+
+        <div class="form-submit">
+
+            <p class="form-required">
+                Los campos de contacto son obligatorios.
+            </p>
+
+            <button
+                type="submit"
+                class="form-button"
+            >
+                Enviar mi proyecto
+            </button>
+
+        </div>
+
+    </form>
+
+
+    <!-- CONTACTO SECUNDARIO -->
+
+    <div class="contact-secondary">
+
+        <span>¿Prefieres hablar directamente?</span>
+
+        <a href="#" class="whatsapp-link">
+            <span class="whatsapp-icon">◉</span>
+            Contáctanos por WhatsApp
         </a>
-
-    </div>
-
-
-    <div class="contact-note">
-
-        <p>
-            También puedes escribirnos si todavía no estás seguro de
-            qué necesita tu negocio.
-        </p>
 
     </div>
 
