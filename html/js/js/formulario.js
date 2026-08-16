@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const stepOne = document.querySelector('[data-step="1"]');
     const stepTwo = document.querySelector('[data-step="2"]');
+    const formTrack =
+    document.querySelector(".form-track");
 
     const nextStep = document.querySelector("#next-step");
     const previousStep = document.querySelector("#previous-step");
@@ -240,12 +242,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
 
-            stepOne.hidden = true;
             stepOne.classList.remove("is-active");
+     stepTwo.classList.add("is-active");
 
-            stepTwo.hidden = false;
-            stepTwo.classList.add("is-active");
-
+     formTrack.classList.add("show-step-2");
             progressStepOne.classList.add("is-complete");
             progressStepTwo.classList.add("is-active");
 
@@ -578,72 +578,84 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================
-       ENVÍO DEL FORMULARIO
+   ENVÍO DEL FORMULARIO
+   ========================================= */
+
+form.addEventListener("submit", (event) => {
+
+    event.preventDefault();
+
+    clearStepTwoMessage();
+
+
+    /* =========================================
+       CAMINO 1 — PERSONALIZAR
        ========================================= */
 
-    form.addEventListener(
-        "submit",
-        (event) => {
+    if (customMode) {
 
-            event.preventDefault();
+        const text = projectDetails.value.trim();
 
-            clearStepTwoMessage();
+        if (text.length < 50) {
 
+            showStepTwoError();
 
-            /* PERSONALIZAR */
+            projectDetails.focus();
 
-            if (customMode) {
+            return;
+        }
 
-                const text =
-                    projectDetails.value.trim();
-
-
-                if (text.length < 50) {
-
-                    showStepTwoError();
-
-                    projectDetails.focus();
-
-                    return;
-
-                }
-
-            }
+    }
 
 
-            /* SELECCIÓN */
+    /* =========================================
+       CAMINO 2 — SELECCIÓN
+       ========================================= */
 
-            else {
+    else {
 
-                const selected =
-                    document.querySelectorAll(
-                        'input[name="interest"]:checked'
-                    );
-
-
-                if (selected.length === 0) {
-
-                    showStepTwoError();
-
-                    return;
-
-                }
-
-            }
-
-
-            /*
-             * TODAVÍA NO ENVIAMOS EL FORMULARIO.
-             *
-             * En esta etapa solamente verificamos
-             * que todos los datos sean válidos.
-             */
-
-            console.log(
-                "Formulario válido y listo para enviar."
+        const selected =
+            document.querySelectorAll(
+                'input[name="interest"]:checked'
             );
 
+
+        if (selected.length !== 2) {
+
+            showStepTwoError();
+
+            return;
         }
-    );
+
+    }
+
+
+    /* =========================================
+       VALIDACIÓN CORRECTA
+       ========================================= */
+
+    stepTwoMessage.textContent = "✓";
+
+    stepTwoMessage.classList.remove("has-error");
+    stepTwoMessage.classList.add("is-success");
+
+
+    /*
+     * TODAVÍA NO ENVIAMOS LOS DATOS.
+     *
+     * Aquí posteriormente conectaremos:
+     *
+     * formulario
+     * ↓
+     * backend
+     * ↓
+     * almacenamiento
+     * ↓
+     * base de datos
+     * ↓
+     * CRM
+     */
+
+    console.log("Formulario válido y listo para enviar.");
 
 });
