@@ -1,35 +1,24 @@
 /* =========================================
    FORM & HALO — FORMULARIO
-   STEP 1
+   STEP 1 + STEP 2
    ========================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
     const form = document.querySelector("#project-form");
 
-    if (!form) {
-        return;
-    }
+    if (!form) return;
 
 
     /* =========================================
-       ELEMENTOS
+       ELEMENTOS GENERALES
        ========================================= */
 
     const stepOne = document.querySelector('[data-step="1"]');
     const stepTwo = document.querySelector('[data-step="2"]');
 
     const nextStep = document.querySelector("#next-step");
-
-    const country = document.querySelector("#country");
-    const phone = document.querySelector("#phone");
-    const phoneCode = document.querySelector("#phone-code");
-
-    const name = document.querySelector("#name");
-    const email = document.querySelector("#email");
-    const zip = document.querySelector("#zip");
-
-    const message = document.querySelector("#step-one-message");
+    const previousStep = document.querySelector("#previous-step");
 
     const progressStepOne =
         document.querySelector('[data-progress-step="1"]');
@@ -39,8 +28,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================
-       CÓDIGOS DE PAÍS
+       STEP 1
        ========================================= */
+
+    const country = document.querySelector("#country");
+    const phone = document.querySelector("#phone");
+    const phoneCode = document.querySelector("#phone-code");
+
+    const name = document.querySelector("#name");
+    const email = document.querySelector("#email");
+    const zip = document.querySelector("#zip");
+
+    const stepOneMessage =
+        document.querySelector("#step-one-message");
+
 
     const countryCodes = {
         US: "+1",
@@ -49,37 +50,17 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    /* =========================================
-       CAMBIAR CÓDIGO SEGÚN PAÍS
-       ========================================= */
-
     country.addEventListener("change", () => {
 
-        const selectedCountry = country.value;
-
         phoneCode.textContent =
-            countryCodes[selectedCountry] || "+";
+            countryCodes[country.value] || "+";
 
         phone.value = "";
-
-        phone.focus();
 
     });
 
 
-    /* =========================================
-       VALIDACIÓN DEL NOMBRE
-       ========================================= */
-
     function validateName(value) {
-
-        /*
-         * Permitimos:
-         * letras
-         * espacios
-         * tildes
-         * ñ
-         */
 
         const namePattern =
             /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:\s+[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$/;
@@ -88,10 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
-    /* =========================================
-       VALIDACIÓN DEL EMAIL
-       ========================================= */
 
     function validateEmail(value) {
 
@@ -103,121 +80,72 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =========================================
-       VALIDACIÓN DEL TELÉFONO
-       ========================================= */
-
     function validatePhone(value, selectedCountry) {
 
         const digits = value.replace(/\D/g, "");
 
-        if (!selectedCountry) {
-            return false;
-        }
-
-
-        /*
-         * Estados Unidos / Canadá
-         * 10 dígitos nacionales
-         */
+        if (!selectedCountry) return false;
 
         if (
             selectedCountry === "US" ||
             selectedCountry === "CA"
         ) {
-
             return digits.length === 10;
-
         }
-
-
-        /*
-         * México
-         * 10 dígitos nacionales
-         */
 
         if (selectedCountry === "MX") {
-
             return digits.length === 10;
-
         }
-
 
         return false;
 
     }
 
-
-    /* =========================================
-       VALIDACIÓN DEL CÓDIGO POSTAL
-       ========================================= */
 
     function validateZip(value, selectedCountry) {
 
         const cleanZip = value.trim();
 
-
         if (selectedCountry === "US") {
-
             return /^\d{5}(-\d{4})?$/.test(cleanZip);
-
         }
-
 
         if (selectedCountry === "CA") {
-
             return /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/
                 .test(cleanZip);
-
         }
-
 
         if (selectedCountry === "MX") {
-
             return /^\d{5}$/.test(cleanZip);
-
         }
-
 
         return false;
 
     }
 
 
-    /* =========================================
-       MENSAJE DE ERROR
-       ========================================= */
+    function showStepOneError() {
 
-    function showError() {
-
-        message.textContent = "😥";
-        message.classList.add("has-error");
+        stepOneMessage.textContent = "😥";
+        stepOneMessage.classList.add("has-error");
 
     }
 
 
-    /* =========================================
-       VERIFICACIÓN CORRECTA
-       ========================================= */
+    function showStepOneSuccess() {
 
-    function showSuccess() {
-
-        message.textContent = "✓";
-        message.classList.remove("has-error");
-        message.classList.add("is-success");
+        stepOneMessage.textContent = "✓";
+        stepOneMessage.classList.remove("has-error");
+        stepOneMessage.classList.add("is-success");
 
     }
 
 
-    /* =========================================
-       LIMPIAR MENSAJE
-       ========================================= */
+    function clearStepOneMessage() {
 
-    function clearMessage() {
+        stepOneMessage.textContent = "";
 
-        message.textContent = "";
-
-        message.classList.remove(
+        stepOneMessage.classList.remove(
             "has-error",
             "is-success"
         );
@@ -226,12 +154,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================
-       CONTINUAR AL STEP 2
+       PASAR A STEP 2
        ========================================= */
 
     nextStep.addEventListener("click", () => {
 
-        clearMessage();
+        clearStepOneMessage();
 
 
         const nameValue = name.value.trim();
@@ -241,12 +169,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const countryValue = country.value;
 
 
-        /* NOMBRE */
+        if (
+            !nameValue ||
+            !validateName(nameValue)
+        ) {
 
-        if (!nameValue || !validateName(nameValue)) {
-
-            showError();
-
+            showStepOneError();
             name.focus();
 
             return;
@@ -254,12 +182,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* PAÍS */
-
         if (!countryValue) {
 
-            showError();
-
+            showStepOneError();
             country.focus();
 
             return;
@@ -267,15 +192,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* TELÉFONO */
+        if (
+            !validatePhone(
+                phoneValue,
+                countryValue
+            )
+        ) {
 
-        if (!validatePhone(
-            phoneValue,
-            countryValue
-        )) {
-
-            showError();
-
+            showStepOneError();
             phone.focus();
 
             return;
@@ -283,12 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* EMAIL */
+        if (
+            !emailValue ||
+            !validateEmail(emailValue)
+        ) {
 
-        if (!emailValue || !validateEmail(emailValue)) {
-
-            showError();
-
+            showStepOneError();
             email.focus();
 
             return;
@@ -296,15 +220,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* CÓDIGO POSTAL */
+        if (
+            !validateZip(
+                zipValue,
+                countryValue
+            )
+        ) {
 
-        if (!validateZip(
-            zipValue,
-            countryValue
-        )) {
-
-            showError();
-
+            showStepOneError();
             zip.focus();
 
             return;
@@ -312,26 +235,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /* TODO CORRECTO */
-
-        showSuccess();
+        showStepOneSuccess();
 
 
         setTimeout(() => {
 
             stepOne.hidden = true;
-
             stepOne.classList.remove("is-active");
 
             stepTwo.hidden = false;
-
             stepTwo.classList.add("is-active");
 
-
             progressStepOne.classList.add("is-complete");
-
             progressStepTwo.classList.add("is-active");
-
 
             stepTwo
                 .querySelector("h1")
@@ -343,5 +259,391 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 500);
 
     });
+
+
+    /* =========================================
+       VOLVER A STEP 1
+       ========================================= */
+
+    previousStep.addEventListener("click", () => {
+
+        stepTwo.hidden = true;
+        stepTwo.classList.remove("is-active");
+
+        stepOne.hidden = false;
+        stepOne.classList.add("is-active");
+
+        progressStepTwo.classList.remove("is-active");
+        progressStepOne.classList.remove("is-complete");
+
+        stepOne
+            .querySelector("h1")
+            ?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+    });
+
+
+    /* =========================================
+       STEP 2 — ELEMENTOS
+       ========================================= */
+
+    const interestOptions =
+        document.querySelectorAll(
+            'input[name="interest"]'
+        );
+
+    const selectionMode =
+        document.querySelector("#selection-mode");
+
+    const customResponseTrigger =
+        document.querySelector(
+            "#custom-response-trigger"
+        );
+
+    const customResponseMode =
+        document.querySelector(
+            "#custom-response-mode"
+        );
+
+    const backToSelection =
+        document.querySelector(
+            "#back-to-selection"
+        );
+
+    const projectDetails =
+        document.querySelector(
+            "#project-details"
+        );
+
+    const projectFile =
+        document.querySelector(
+            "#project-file"
+        );
+
+    const attachment =
+        document.querySelector(
+            "#project-attachment"
+        );
+
+    const skipFile =
+        document.querySelector("#skip-file");
+
+    const stepTwoMessage =
+        document.querySelector(
+            "#step-two-message"
+        );
+
+
+    let customMode = false;
+
+
+    /* =========================================
+       MÁXIMO 2 OPCIONES
+       ========================================= */
+
+    interestOptions.forEach((option) => {
+
+        option.addEventListener("change", () => {
+
+            const selected =
+                document.querySelectorAll(
+                    'input[name="interest"]:checked'
+                );
+
+            if (selected.length >= 2) {
+
+                interestOptions.forEach((item) => {
+
+                    if (!item.checked) {
+                        item.disabled = true;
+                    }
+
+                });
+
+            } else {
+
+                interestOptions.forEach((item) => {
+                    item.disabled = false;
+                });
+
+            }
+
+        });
+
+    });
+
+
+    /* =========================================
+       PERSONALIZAR MI RESPUESTA
+       ========================================= */
+
+    customResponseTrigger.addEventListener(
+        "click",
+        () => {
+
+            customMode = true;
+
+
+            interestOptions.forEach((option) => {
+
+                option.checked = false;
+                option.disabled = false;
+
+            });
+
+
+            selectionMode.hidden = true;
+
+            customResponseMode.hidden = false;
+
+            projectFile.hidden = true;
+
+            stepTwoMessage.textContent = "";
+
+            projectDetails.focus();
+
+        }
+    );
+
+
+    /* =========================================
+       VOLVER A OPCIONES
+       ========================================= */
+
+    backToSelection.addEventListener(
+        "click",
+        () => {
+
+            customMode = false;
+
+            customResponseMode.hidden = true;
+
+            selectionMode.hidden = false;
+
+            projectFile.hidden = true;
+
+            stepTwoMessage.textContent = "";
+
+        }
+    );
+
+
+    /* =========================================
+       CONTADOR DE CARACTERES
+       ========================================= */
+
+    const characterCounter =
+        document.querySelector(
+            ".character-counter"
+        );
+
+
+    projectDetails.addEventListener(
+        "input",
+        () => {
+
+            const length =
+                projectDetails.value.trim().length;
+
+            characterCounter.textContent =
+                `${length} / 50 caracteres mínimos`;
+
+        }
+    );
+
+
+    /* =========================================
+       ARCHIVO
+       ========================================= */
+
+    interestOptions.forEach((option) => {
+
+        option.addEventListener("change", () => {
+
+            const selected =
+                document.querySelectorAll(
+                    'input[name="interest"]:checked'
+                );
+
+            if (
+                selected.length > 0 &&
+                !customMode
+            ) {
+
+                projectFile.hidden = false;
+
+            }
+
+        });
+
+    });
+
+
+    /* =========================================
+       OMITIR ARCHIVO
+       ========================================= */
+
+    skipFile.addEventListener(
+        "click",
+        () => {
+
+            attachment.value = "";
+
+            projectFile.dataset.skipped = "true";
+
+        }
+    );
+
+
+    /* =========================================
+       VALIDAR ARCHIVO
+       ========================================= */
+
+    attachment.addEventListener(
+        "change",
+        () => {
+
+            const file = attachment.files[0];
+
+            if (!file) return;
+
+
+            const allowedTypes = [
+                "image/png",
+                "application/pdf"
+            ];
+
+
+            if (!allowedTypes.includes(file.type)) {
+
+                attachment.value = "";
+
+                alert(
+                    "Solo puedes subir archivos PNG o PDF."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Límite inicial de 10 MB.
+             * Posteriormente podremos cambiarlo
+             * desde el backend.
+             */
+
+            const maxSize =
+                10 * 1024 * 1024;
+
+
+            if (file.size > maxSize) {
+
+                attachment.value = "";
+
+                alert(
+                    "El archivo no puede superar los 10 MB."
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =========================================
+       MENSAJE DE ERROR STEP 2
+       ========================================= */
+
+    function showStepTwoError() {
+
+        stepTwoMessage.textContent = "😥";
+        stepTwoMessage.classList.add("has-error");
+
+    }
+
+
+    function clearStepTwoMessage() {
+
+        stepTwoMessage.textContent = "";
+
+        stepTwoMessage.classList.remove(
+            "has-error"
+        );
+
+    }
+
+
+    /* =========================================
+       ENVÍO DEL FORMULARIO
+       ========================================= */
+
+    form.addEventListener(
+        "submit",
+        (event) => {
+
+            event.preventDefault();
+
+            clearStepTwoMessage();
+
+
+            /* PERSONALIZAR */
+
+            if (customMode) {
+
+                const text =
+                    projectDetails.value.trim();
+
+
+                if (text.length < 50) {
+
+                    showStepTwoError();
+
+                    projectDetails.focus();
+
+                    return;
+
+                }
+
+            }
+
+
+            /* SELECCIÓN */
+
+            else {
+
+                const selected =
+                    document.querySelectorAll(
+                        'input[name="interest"]:checked'
+                    );
+
+
+                if (selected.length === 0) {
+
+                    showStepTwoError();
+
+                    return;
+
+                }
+
+            }
+
+
+            /*
+             * TODAVÍA NO ENVIAMOS EL FORMULARIO.
+             *
+             * En esta etapa solamente verificamos
+             * que todos los datos sean válidos.
+             */
+
+            console.log(
+                "Formulario válido y listo para enviar."
+            );
+
+        }
+    );
 
 });
