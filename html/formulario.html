@@ -161,35 +161,45 @@
 
                     <!-- TELÉFONO -->
 
-                    <div class="form-field">
+<div class="form-field">
 
-                        <label for="phone">
-                            Número de teléfono
-                        </label>
+    <label for="phone">
+        Número de teléfono
+    </label>
 
-                        <div class="phone-field">
+    <div class="phone-field">
 
-                            <span
-                                id="phone-code"
-                                class="phone-code"
-                            >
-                                +
-                            </span>
+        <select
+            id="country"
+            name="country"
+            required
+            aria-label="Seleccionar país"
+        >
+            <option value="US">🇺🇸</option>
+            <option value="MX">🇲🇽</option>
+            <option value="CA">🇨🇦</option>
+        </select>
 
-                            <input
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                autocomplete="tel"
-                                inputmode="tel"
-                                placeholder="Número de teléfono"
-                                required
-                            >
+        <span
+            id="phone-code"
+            class="phone-code"
+        >
+            +
+        </span>
 
-                        </div>
+        <input
+            type="tel"
+            id="phone"
+            name="phone"
+            autocomplete="tel"
+            inputmode="tel"
+            placeholder="Número de teléfono"
+            required
+        >
 
-                    </div>
+    </div>
 
+</div>
 
                     <!-- EMAIL -->
 
