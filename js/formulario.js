@@ -242,10 +242,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
 
-            stepOne.classList.remove("is-active");
-     stepTwo.classList.add("is-active");
+            /* FIX: el paso 2 tenía el atributo [hidden] y
+               nunca se quitaba, así que aunque el track
+               se deslizara, el panel seguía invisible. */
+            stepTwo.hidden = false;
 
-     formTrack.classList.add("show-step-2");
+            stepOne.classList.remove("is-active");
+            stepTwo.classList.add("is-active");
+
+            formTrack.classList.add("show-step-2");
             progressStepOne.classList.add("is-complete");
             progressStepTwo.classList.add("is-active");
 
@@ -581,81 +586,88 @@ document.addEventListener("DOMContentLoaded", () => {
    ENVÍO DEL FORMULARIO
    ========================================= */
 
-form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", (event) => {
 
-    event.preventDefault();
+        event.preventDefault();
 
-    clearStepTwoMessage();
+        clearStepTwoMessage();
 
 
-    /* =========================================
-       CAMINO 1 — PERSONALIZAR
-       ========================================= */
+        /* =========================================
+           CAMINO 1 — PERSONALIZAR
+           ========================================= */
 
-    if (customMode) {
+        if (customMode) {
 
-        const text = projectDetails.value.trim();
+            const text = projectDetails.value.trim();
 
-        if (text.length < 50) {
+            if (text.length < 50) {
 
-            showStepTwoError();
+                showStepTwoError();
 
-            projectDetails.focus();
+                projectDetails.focus();
 
-            return;
+                return;
+            }
+
         }
 
-    }
 
+        /* =========================================
+           CAMINO 2 — SELECCIÓN
+           ========================================= */
 
-    /* =========================================
-       CAMINO 2 — SELECCIÓN
-       ========================================= */
+        else {
 
-    else {
+            const selected =
+                document.querySelectorAll(
+                    'input[name="interest"]:checked'
+                );
 
-        const selected =
-            document.querySelectorAll(
-                'input[name="interest"]:checked'
-            );
+            /* FIX: el texto dice "Selecciona hasta 2
+               opciones" (1 o 2 son válidas), pero antes
+               se exigía exactamente 2. */
+            if (
+                selected.length < 1 ||
+                selected.length > 2
+            ) {
 
+                showStepTwoError();
 
-        if (selected.length !== 2) {
+                return;
+            }
 
-            showStepTwoError();
-
-            return;
         }
 
-    }
+
+        /* =========================================
+           VALIDACIÓN CORRECTA
+           ========================================= */
+
+        stepTwoMessage.textContent = "✓";
+
+        stepTwoMessage.classList.remove("has-error");
+        stepTwoMessage.classList.add("is-success");
 
 
-    /* =========================================
-       VALIDACIÓN CORRECTA
-       ========================================= */
+        /*
+         * TODAVÍA NO ENVIAMOS LOS DATOS.
+         *
+         * Aquí posteriormente conectaremos:
+         *
+         * formulario
+         * ↓
+         * backend
+         * ↓
+         * almacenamiento
+         * ↓
+         * base de datos
+         * ↓
+         * CRM
+         */
 
-    stepTwoMessage.textContent = "✓";
+        console.log("Formulario válido y listo para enviar.");
 
-    stepTwoMessage.classList.remove("has-error");
-    stepTwoMessage.classList.add("is-success");
+    });
 
-
-    /*
-     * TODAVÍA NO ENVIAMOS LOS DATOS.
-     *
-     * Aquí posteriormente conectaremos:
-     *
-     * formulario
-     * ↓
-     * backend
-     * ↓
-     * almacenamiento
-     * ↓
-     * base de datos
-     * ↓
-     * CRM
-     */
-
-    console.log("Formulario válido y listo para enviar.");
-
-});
+}); 
