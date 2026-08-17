@@ -1935,6 +1935,11 @@ footer {
 
     gap: 14px;
 }
+.custom-response-mode[hidden],
+.selection-mode[hidden],
+.project-file[hidden] {
+    display: none !important;
+}
 
 .custom-response-mode label {
     font-size: 11px;
