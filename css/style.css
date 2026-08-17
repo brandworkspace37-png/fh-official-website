@@ -1624,13 +1624,7 @@ footer {
     box-sizing: border-box;
 }
 
-.form-step[aria-hidden="true"] {
-    visibility: hidden;
-}
 
-.form-step.is-active {
-    visibility: visible;
-}
 
 
 /* STEP 1 → STEP 2 */
