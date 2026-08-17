@@ -242,13 +242,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
 
-            /* FIX: el paso 2 tenía el atributo [hidden] y
-               nunca se quitaba, así que aunque el track
-               se deslizara, el panel seguía invisible. */
-            stepTwo.hidden = false;
-
             stepOne.classList.remove("is-active");
             stepTwo.classList.add("is-active");
+
+            stepOne.setAttribute("aria-hidden", "true");
+            stepTwo.removeAttribute("aria-hidden");
 
             formTrack.classList.add("show-step-2");
             progressStepOne.classList.add("is-complete");
@@ -272,11 +270,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     previousStep.addEventListener("click", () => {
 
-        stepTwo.hidden = true;
         stepTwo.classList.remove("is-active");
+        stepTwo.setAttribute("aria-hidden", "true");
 
-        stepOne.hidden = false;
         stepOne.classList.add("is-active");
+        stepOne.removeAttribute("aria-hidden");
+
+        formTrack.classList.remove("show-step-2");
 
         progressStepTwo.classList.remove("is-active");
         progressStepOne.classList.remove("is-complete");
@@ -670,4 +670,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-}); 
+});
