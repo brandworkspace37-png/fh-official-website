@@ -33,7 +33,7 @@
 
         </div>
 
-        <a href="#contacto" class="nav-cta">
+        <a href="html/formulario.html" target="_blank" rel="noopener" class="nav-cta">
             Iniciar mi proyecto
         </a>
 
@@ -119,7 +119,7 @@
 
         <h2>¿En cuál entrarías?</h2>
 
-        <a href="#contacto" class="hero-button">
+        <a href="html/formulario.html" target="_blank" rel="noopener" class="hero-button">
             Iniciar mi proyecto
         </a>
 
@@ -520,323 +520,23 @@
     </div>
 
 
-    <form id="project-form" class="project-form">
+    <div class="contact-cta-card">
 
-    <!-- PASO 1 — INFORMACIÓN DE CONTACTO -->
+        <p>
+            El formulario para iniciar tu proyecto se abre en una
+            ventana nueva, en dos pasos rápidos.
+        </p>
 
-    <div class="form-step is-active" data-step="1">
-
-        <div class="form-section">
-
-            <span class="form-section-number">01</span>
-
-            <div class="form-section-content">
-
-                <h3>Información de contacto</h3>
-
-                <div class="form-grid">
-
-                    <div class="form-field">
-
-                        <label for="name">Nombre</label>
-
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            autocomplete="name"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-field">
-
-                        <label for="phone">Número de teléfono</label>
-
-                        <input
-                            type="tel"
-                            id="phone"
-                            name="phone"
-                            autocomplete="tel"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-field">
-
-                        <label for="email">Email</label>
-
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            autocomplete="email"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-field">
-
-                        <label for="zip">Código postal</label>
-
-                        <input
-                            type="text"
-                            id="zip"
-                            name="zip"
-                            inputmode="numeric"
-                            autocomplete="postal-code"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-step-actions">
-
-                    <button
-                        type="button"
-                        class="form-button"
-                        id="next-step"
-                    >
-                        Continuar
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
+        <a
+            href="html/formulario.html"
+            target="_blank"
+            rel="noopener"
+            class="form-button"
+        >
+            Iniciar mi proyecto
+        </a>
 
     </div>
-
-
-    <!-- PASO 2 — PROYECTO -->
-
-    <div class="form-step" data-step="2">
-
-        <div class="form-section">
-
-            <span class="form-section-number">02</span>
-
-            <div class="form-section-content">
-
-                <h3>Cuéntanos de tu proyecto</h3>
-
-                <p class="form-help">
-                    Selecciona hasta 2 opciones que mejor describan
-                    lo que estás buscando.
-                </p>
-
-
-                <!-- SELECCIÓN -->
-
-                <div id="selection-mode">
-
-                    <div class="project-options">
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="identidad"
-                            >
-
-                            <span>
-                                Quiero crear la identidad de mi negocio
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="logo-identidad"
-                            >
-
-                            <span>
-                                Quiero crear mi logo desde cero y desarrollar mi identidad
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="logo-3d"
-                            >
-
-                            <span>
-                                Quiero imprimir mi logo en 3D
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="transformacion"
-                            >
-
-                            <span>
-                                Quiero transformar la imagen de mi negocio
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="asesoria"
-                            >
-
-                            <span>
-                                Quiero conocer qué necesita mi negocio
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="informacion"
-                            >
-
-                            <span>
-                                Solo quiero información antes de decidir
-                            </span>
-
-                        </label>
-
-                    </div>
-
-
-                    <button
-                        type="button"
-                        class="custom-response-trigger"
-                        id="custom-response-trigger"
-                    >
-                        Personalizar mi respuesta
-                    </button>
-
-                </div>
-
-
-                <!-- RESPUESTA PERSONALIZADA -->
-
-                <div
-                    class="custom-response custom-response-mode"
-                    id="custom-response-mode"
-                    hidden
-                >
-
-                    <label for="project-details">
-                        Cuéntanos sobre tu proyecto
-                    </label>
-
-                    <textarea
-                        id="project-details"
-                        name="project-details"
-                        rows="7"
-                        placeholder="Cuéntanos cualquier detalle, idea o plan que tengas para tu proyecto."
-                    ></textarea>
-
-
-                    <button
-                        type="button"
-                        class="back-to-selection"
-                        id="back-to-selection"
-                    >
-                        Volver a las opciones
-                    </button>
-
-                </div>
-
-
-                <!-- ARCHIVO -->
-
-                <div
-                    class="project-file"
-                    id="project-file"
-                >
-
-                    <label for="project-attachment">
-                        ¿Tienes algún material que nos ayude a entender tu proyecto?
-                    </label>
-
-                    <p>
-                        Puedes adjuntar un archivo PNG o PDF.
-                    </p>
-
-                    <input
-                        type="file"
-                        id="project-attachment"
-                        name="project-attachment"
-                        accept=".png,.pdf,image/png,application/pdf"
-                    >
-
-                    <button
-                        type="button"
-                        class="skip-file"
-                        id="skip-file"
-                    >
-                        Omitir por ahora
-                    </button>
-
-                </div>
-
-
-                <!-- ACCIONES -->
-
-                <div class="form-step-actions">
-
-                    <button
-                        type="button"
-                        class="form-button form-button-secondary"
-                        id="previous-step"
-                    >
-                        Volver
-                    </button>
-
-                    <button
-                        type="submit"
-                        class="form-button"
-                    >
-                        Enviar mi proyecto
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</form>
 
     <!-- CONTACTO SECUNDARIO -->
 
@@ -895,7 +595,7 @@
 
                 <span class="footer-label">CONTACTO</span>
 
-                <a href="#contacto">Iniciar mi proyecto</a>
+                <a href="html/formulario.html" target="_blank" rel="noopener">Iniciar mi proyecto</a>
                 <a href="#">WhatsApp</a>
                 <a href="#">Email</a>
 
