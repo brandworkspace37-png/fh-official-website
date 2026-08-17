@@ -52,15 +52,24 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    country.addEventListener("change", () => {
+    function updatePhoneCode() {
 
-        phoneCode.textContent =
-            countryCodes[country.value] || "+";
+    phoneCode.textContent =
+        countryCodes[country.value] || "+";
 
-        phone.value = "";
+}
 
-    });
 
+country.addEventListener("change", () => {
+
+    updatePhoneCode();
+
+    phone.value = "";
+
+});
+
+
+updatePhoneCode();
 
     function validateName(value) {
 
