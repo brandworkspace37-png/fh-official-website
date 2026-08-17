@@ -252,14 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
             progressStepOne.classList.add("is-complete");
             progressStepTwo.classList.add("is-active");
 
-            stepTwo
-                .querySelector("h1")
-                ?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-
-        }, 500);
+                }, 500);
 
     });
 
