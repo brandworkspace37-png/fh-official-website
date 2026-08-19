@@ -149,6 +149,10 @@ footer {
     footer {
         width: min(100% - 32px, var(--container-width));
     }
+    .project-gallery {
+    height: auto;
+    aspect-ratio: 1 / 1;
+}
 
     .nav-links {
         display: none;
