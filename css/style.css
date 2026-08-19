@@ -231,6 +231,12 @@ footer {
     overflow: hidden;
 
 }
+@media (min-width: 769px) {
+    .project-gallery {
+        height: 500px;
+        aspect-ratio: auto;
+    }
+}
 
 
 .gallery-track {
