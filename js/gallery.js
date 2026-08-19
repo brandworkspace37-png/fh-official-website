@@ -38,6 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     originalSlides.forEach((slide, index) => {
 
+        slide.style.position = "relative";
+
         const button = document.createElement("a");
 
         button.className = "gallery-project-button";
