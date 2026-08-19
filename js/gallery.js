@@ -4,10 +4,33 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    const hero = document.querySelector(".hero");
     const gallery = document.querySelector(".project-gallery");
     const track = document.querySelector(".gallery-track");
 
-    if (!gallery || !track) return;
+    if (!hero || !gallery || !track) return;
+
+
+    /* =========================================
+       HERO — SOLO PRESENTACIÓN VISUAL
+       ========================================= */
+
+    /*
+     * La primera pantalla ya no utiliza el titular
+     * ni la pregunta inferior. La galería pasa a ser
+     * el elemento principal inmediatamente debajo
+     * del encabezado.
+     */
+
+    hero.querySelector(".hero-intro")?.remove();
+    hero.querySelector(".hero-question")?.remove();
+
+    Object.assign(hero.style, {
+        minHeight: "auto",
+        display: "block",
+        paddingTop: "0",
+        paddingBottom: "0"
+    });
 
 
     /* =========================================
@@ -180,7 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 track.style.transform = "translateX(0)";
 
-                /* Fuerza el reflow antes de reactivar la transición. */
                 track.offsetHeight;
 
                 track.style.transition =
