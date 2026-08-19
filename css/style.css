@@ -216,33 +216,13 @@ footer {
 }
 
 
-/* TRANSFORMACIÓN */
+/* =========================================
+   GALERÍA DE PROYECTOS
+   ========================================= */
 
-.transformation {
-    display: grid;
-    grid-template-columns: 1fr 100px 1fr;
-    align-items: center;
-    gap: 30px;
-}
-
-.transformation-card {
+.project-gallery {
     position: relative;
-}
 
-.card-label {
-    margin-bottom: 12px;
-
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-
-    color: var(--color-gray);
-}
-
-
-/* IMÁGENES */
-
-.image-wrapper {
     width: 100%;
     height: 500px;
 
@@ -251,19 +231,31 @@ footer {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.image-wrapper img {
+
+.gallery-track {
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+.gallery-slide {
+    flex: 0 0 100%;
     width: 100%;
     height: 100%;
 
-    display: block;
-
-    object-fit: cover;
-
-    transition: transform 0.5s ease;
+    overflow: hidden;
 }
 
-.transformation-card:hover .image-wrapper img {
-    transform: scale(1.02);
+
+.gallery-slide img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
 }
 
 
