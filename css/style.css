@@ -149,9 +149,7 @@ footer {
     footer {
         width: min(100% - 32px, var(--container-width));
     }
-    .project-gallery {
-    height: auto;
-    aspect-ratio: 1 / 1;
+
 }
 
     .nav-links {
@@ -341,6 +339,10 @@ footer {
         grid-template-columns: 1fr;
         gap: 20px;
     }
+    .project-gallery {
+    height: auto;
+    aspect-ratio: 1 / 1;
+}
 
     .transformation-center {
         flex-direction: row;
