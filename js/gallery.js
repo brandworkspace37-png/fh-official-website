@@ -15,13 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
        HERO — SOLO PRESENTACIÓN VISUAL
        ========================================= */
 
-    /*
-     * La primera pantalla ya no utiliza el titular
-     * ni la pregunta inferior. La galería pasa a ser
-     * el elemento principal inmediatamente debajo
-     * del encabezado.
-     */
-
     hero.querySelector(".hero-intro")?.remove();
     hero.querySelector(".hero-question")?.remove();
 
@@ -31,6 +24,30 @@ document.addEventListener("DOMContentLoaded", () => {
         paddingTop: "0",
         paddingBottom: "0"
     });
+
+
+    /* =========================================
+       CTA / PUENTE DESPUÉS DE LA GALERÍA
+       ========================================= */
+
+    const galleryBridge = document.createElement("div");
+
+    galleryBridge.className = "hero-question";
+
+    galleryBridge.innerHTML = `
+        <h2>Tu negocio también puede verse así.</h2>
+
+        <a
+            href="html/formulario.html"
+            target="_blank"
+            rel="noopener"
+            class="hero-button"
+        >
+            Iniciar mi proyecto
+        </a>
+    `;
+
+    gallery.after(galleryBridge);
 
 
     /* =========================================
@@ -116,6 +133,16 @@ document.addEventListener("DOMContentLoaded", () => {
             gallery.style.height = "auto";
             gallery.style.aspectRatio = "16 / 9";
 
+            galleryBridge.style.marginTop = "30px";
+
+            galleryBridge
+                .querySelector("h2")
+                .style.fontSize = "28px";
+
+            galleryBridge
+                .querySelector(".hero-button")
+                .style.fontSize = "11px";
+
             document
                 .querySelectorAll(".gallery-project-button")
                 .forEach((button) => {
@@ -129,6 +156,16 @@ document.addEventListener("DOMContentLoaded", () => {
             gallery.style.width = "100%";
             gallery.style.height = "500px";
             gallery.style.aspectRatio = "auto";
+
+            galleryBridge.style.marginTop = "55px";
+
+            galleryBridge
+                .querySelector("h2")
+                .style.fontSize = "";
+
+            galleryBridge
+                .querySelector(".hero-button")
+                .style.fontSize = "";
 
             document
                 .querySelectorAll(".gallery-project-button")
