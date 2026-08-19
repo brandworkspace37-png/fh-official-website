@@ -15,6 +15,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentSlide = 0;
 
+
+    /* =========================================
+       TRANSICIÓN — EFECTO PÁGINA
+       ========================================= */
+
+    track.style.transition =
+        "transform 1500ms cubic-bezier(0.65, 0, 0.35, 1)";
+
+
+    /* =========================================
+       CAMBIAR PROYECTO
+       ========================================= */
+
     function showNextSlide() {
 
         currentSlide =
@@ -25,6 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    setInterval(showNextSlide, 2000);
+
+    /*
+     * 2 segundos visible
+     * + 1.5 segundos de transición
+     * = 3.5 segundos por proyecto
+     */
+
+    setInterval(showNextSlide, 3500);
 
 });
