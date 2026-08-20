@@ -10,10 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!hero || !gallery || !track) return;
 
-    /* =========================================
-       HERO — SOLO PRESENTACIÓN VISUAL
-       ========================================= */
-
     hero.querySelector(".hero-intro")?.remove();
     hero.querySelector(".hero-question")?.remove();
 
@@ -23,10 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
         paddingTop: "0",
         paddingBottom: "0"
     });
-
-    /* =========================================
-       HEADER — LOGO CENTRADO
-       ========================================= */
 
     const headerNav = document.querySelector("header nav");
     const headerLogo = document.querySelector("header .logo");
@@ -43,9 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* =========================================
-       CTA PRINCIPAL — FIJO DENTRO DEL ÁLBUM
-       ========================================= */
+    /* CTA PRINCIPAL — FIJO DENTRO DEL ÁLBUM */
 
     const galleryCtaGroup = document.createElement("div");
     galleryCtaGroup.className = "gallery-main-cta-group";
@@ -79,13 +69,15 @@ document.addEventListener("DOMContentLoaded", () => {
         backdropFilter: "blur(4px)",
         color: "var(--color-white)",
         fontFamily: "Arial, Helvetica, sans-serif",
-        fontSize: "23.4px",
+        fontSize: "15.6px",
         fontWeight: "600",
-        letterSpacing: "normal",
+        letterSpacing: "0.06em",
         textAlign: "left",
         whiteSpace: "nowrap",
         transition: "background 0.25s ease, color 0.25s ease, border-color 0.25s ease"
     });
+
+    /* CTA TEXTUAL — 3 FILAS */
 
     const ctaRows = document.createElement("div");
     ctaRows.className = "gallery-cta-rows";
@@ -100,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctaRowTexts.forEach((text) => {
         const row = document.createElement("span");
         row.textContent = text;
+
         Object.assign(row.style, {
             display: "block",
             width: "100%",
@@ -112,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
             color: "var(--color-white)",
             textShadow: "0 2px 7px rgba(0, 0, 0, 0.85)"
         });
+
         ctaRows.appendChild(row);
     });
 
@@ -131,9 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
         galleryCta.style.borderColor = "rgba(241, 238, 231, 0.55)";
     });
 
-    /* =========================================
-       CTA / PUENTE DESPUÉS DE LA GALERÍA
-       ========================================= */
+    /* CTA / PUENTE DESPUÉS DE LA GALERÍA */
 
     const galleryBridge = document.createElement("div");
     galleryBridge.className = "hero-question";
@@ -141,28 +133,15 @@ document.addEventListener("DOMContentLoaded", () => {
     galleryBridge.innerHTML = `
         <div class="gallery-cta-content">
             <span class="gallery-cta-eyebrow">FORM & HALO</span>
-
-            <h2>
-                Hay ideas que cambian por completo la percepción de un espacio.
-            </h2>
-
+            <h2>Hay ideas que cambian por completo la percepción de un espacio.</h2>
             <div class="gallery-cta-copy">
-                <p>
-                    Una entrada puede transmitir confianza. Una fachada puede hacer que un negocio destaque. Un espacio puede sentirse completamente diferente cuando cada elemento está pensado para trabajar en conjunto.
-                </p>
-
-                <p>
-                    En FORM & HALO tomamos esa idea y la desarrollamos contigo, cuidando el diseño, los materiales y cada detalle necesario para convertirla en una solución que realmente represente lo que quieres crear.
-                </p>
+                <p>Una entrada puede transmitir confianza. Una fachada puede hacer que un negocio destaque. Un espacio puede sentirse completamente diferente cuando cada elemento está pensado para trabajar en conjunto.</p>
+                <p>En FORM & HALO tomamos esa idea y la desarrollamos contigo, cuidando el diseño, los materiales y cada detalle necesario para convertirla en una solución que realmente represente lo que quieres crear.</p>
             </div>
         </div>
     `;
 
     gallery.after(galleryBridge);
-
-    /* =========================================
-       CTA — ESCALA VISUAL
-       ========================================= */
 
     Object.assign(galleryBridge.style, {
         display: "block",
@@ -212,9 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    /* =========================================
-       PROYECTOS
-       ========================================= */
+    /* PROYECTOS */
 
     const projectNames = [
         "Metal Frontlit Sign",
@@ -230,12 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (originalSlides.length !== projectNames.length) return;
 
-    /* =========================================
-       BOTÓN ACTIVO SOBRE CADA IMAGEN
-       ========================================= */
-
     originalSlides.forEach((slide, index) => {
-
         slide.style.position = "relative";
 
         const button = document.createElement("a");
@@ -275,17 +247,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         slide.appendChild(button);
-
     });
 
-    /* =========================================
-       RESPONSIVE — PRESENTACIÓN HORIZONTAL
-       ========================================= */
+    /* RESPONSIVE — PRESENTACIÓN HORIZONTAL */
 
     function adaptGallerySize() {
-
         if (window.innerWidth <= 768) {
-
             gallery.style.width = "100%";
             gallery.style.height = "auto";
             gallery.style.aspectRatio = "16 / 9";
@@ -297,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             galleryCta.style.width = "100%";
             galleryCta.style.padding = "14px 20px";
-            galleryCta.style.fontSize = "19.5px";
+            galleryCta.style.fontSize = "13px";
 
             galleryBridge.style.marginTop = "40px";
             galleryBridge.style.paddingTop = "32px";
@@ -323,9 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 button.style.fontSize = "10px";
                 button.style.letterSpacing = "0.1em";
             });
-
         } else {
-
             gallery.style.width = "100%";
             gallery.style.height = "500px";
             gallery.style.aspectRatio = "auto";
@@ -337,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             galleryCta.style.width = "100%";
             galleryCta.style.padding = "16px 23px";
-            galleryCta.style.fontSize = "23.4px";
+            galleryCta.style.fontSize = "15.6px";
 
             galleryBridge.style.marginTop = "70px";
             galleryBridge.style.paddingTop = "45px";
@@ -363,17 +328,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 button.style.fontSize = "12px";
                 button.style.letterSpacing = "0.14em";
             });
-
         }
-
     }
 
     adaptGallerySize();
     window.addEventListener("resize", adaptGallerySize);
 
-    /* =========================================
-       CINTA INFINITA
-       ========================================= */
+    /* CINTA INFINITA */
 
     const firstClone = originalSlides[0].cloneNode(true);
     const clonedButton = firstClone.querySelector(".gallery-project-button");
@@ -407,7 +368,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentSlide = 0;
                 track.style.transform = "translateX(0)";
                 track.offsetHeight;
-
                 track.style.transition =
                     `transform ${transitionTime}ms cubic-bezier(0.65, 0, 0.35, 1)`;
             }, transitionTime);
