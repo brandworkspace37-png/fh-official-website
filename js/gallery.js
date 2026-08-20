@@ -35,19 +35,98 @@ document.addEventListener("DOMContentLoaded", () => {
     galleryBridge.className = "hero-question";
 
     galleryBridge.innerHTML = `
-        <h2>Tu negocio también puede verse así.</h2>
+        <div class="gallery-cta-content">
+            <span class="gallery-cta-eyebrow">FORM & HALO</span>
 
-        <a
-            href="html/formulario.html"
-            target="_blank"
-            rel="noopener"
-            class="hero-button"
-        >
-            Iniciar mi proyecto
-        </a>
+            <h2>
+                Hay ideas que cambian por completo la percepción de un espacio.
+            </h2>
+
+            <div class="gallery-cta-copy">
+                <p>
+                    Una entrada puede transmitir confianza. Una fachada puede hacer que un negocio destaque. Un espacio puede sentirse completamente diferente cuando cada elemento está pensado para trabajar en conjunto.
+                </p>
+
+                <p>
+                    En FORM & HALO tomamos esa idea y la desarrollamos contigo, cuidando el diseño, los materiales y cada detalle necesario para convertirla en una solución que realmente represente lo que quieres crear.
+                </p>
+            </div>
+
+            <a
+                href="html/formulario.html"
+                target="_blank"
+                rel="noopener"
+                class="hero-button"
+            >
+                HABLEMOS DE TU PROYECTO →
+            </a>
+        </div>
     `;
 
     gallery.after(galleryBridge);
+
+
+    /* =========================================
+       CTA — ESCALA VISUAL
+       ========================================= */
+
+    Object.assign(galleryBridge.style, {
+        display: "block",
+        marginTop: "70px",
+        paddingTop: "45px",
+        paddingBottom: "20px",
+        borderTop: "1px solid rgba(255, 255, 255, 0.1)"
+    });
+
+    const ctaContent = galleryBridge.querySelector(".gallery-cta-content");
+    const ctaEyebrow = galleryBridge.querySelector(".gallery-cta-eyebrow");
+    const ctaTitle = galleryBridge.querySelector("h2");
+    const ctaCopy = galleryBridge.querySelector(".gallery-cta-copy");
+    const ctaParagraphs = galleryBridge.querySelectorAll(".gallery-cta-copy p");
+    const ctaButton = galleryBridge.querySelector(".hero-button");
+
+    Object.assign(ctaContent.style, {
+        maxWidth: "850px"
+    });
+
+    Object.assign(ctaEyebrow.style, {
+        display: "block",
+        marginBottom: "18px",
+        fontSize: "10px",
+        fontWeight: "700",
+        letterSpacing: "0.22em",
+        color: "var(--color-gray)"
+    });
+
+    Object.assign(ctaTitle.style, {
+        margin: "0 0 28px 0",
+        fontSize: "clamp(26px, 3vw, 42px)",
+        lineHeight: "1.08",
+        letterSpacing: "-0.025em",
+        fontWeight: "500",
+        maxWidth: "760px"
+    });
+
+    Object.assign(ctaCopy.style, {
+        maxWidth: "720px"
+    });
+
+    ctaParagraphs.forEach((paragraph) => {
+        Object.assign(paragraph.style, {
+            margin: "0 0 15px 0",
+            fontSize: "13px",
+            lineHeight: "1.7",
+            color: "var(--color-gray)"
+        });
+    });
+
+    Object.assign(ctaButton.style, {
+        display: "inline-block",
+        marginTop: "20px",
+        padding: "13px 20px",
+        fontSize: "11px",
+        letterSpacing: "0.08em"
+    });
 
 
     /* =========================================
@@ -63,7 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "Metal Double Sided Sign",
         "Neon LED Sign"
     ];
-
 
     const originalSlides = Array.from(
         track.querySelectorAll(".gallery-slide")
@@ -133,15 +211,19 @@ document.addEventListener("DOMContentLoaded", () => {
             gallery.style.height = "auto";
             gallery.style.aspectRatio = "16 / 9";
 
-            galleryBridge.style.marginTop = "30px";
+            galleryBridge.style.marginTop = "40px";
+            galleryBridge.style.paddingTop = "32px";
 
-            galleryBridge
-                .querySelector("h2")
-                .style.fontSize = "28px";
+            ctaTitle.style.fontSize = "26px";
+            ctaTitle.style.marginBottom = "22px";
 
-            galleryBridge
-                .querySelector(".hero-button")
-                .style.fontSize = "11px";
+            ctaParagraphs.forEach((paragraph) => {
+                paragraph.style.fontSize = "12px";
+                paragraph.style.lineHeight = "1.65";
+            });
+
+            ctaButton.style.fontSize = "10px";
+            ctaButton.style.padding = "12px 16px";
 
             document
                 .querySelectorAll(".gallery-project-button")
@@ -157,15 +239,19 @@ document.addEventListener("DOMContentLoaded", () => {
             gallery.style.height = "500px";
             gallery.style.aspectRatio = "auto";
 
-            galleryBridge.style.marginTop = "55px";
+            galleryBridge.style.marginTop = "70px";
+            galleryBridge.style.paddingTop = "45px";
 
-            galleryBridge
-                .querySelector("h2")
-                .style.fontSize = "";
+            ctaTitle.style.fontSize = "clamp(26px, 3vw, 42px)";
+            ctaTitle.style.marginBottom = "28px";
 
-            galleryBridge
-                .querySelector(".hero-button")
-                .style.fontSize = "";
+            ctaParagraphs.forEach((paragraph) => {
+                paragraph.style.fontSize = "13px";
+                paragraph.style.lineHeight = "1.7";
+            });
+
+            ctaButton.style.fontSize = "11px";
+            ctaButton.style.padding = "13px 20px";
 
             document
                 .querySelectorAll(".gallery-project-button")
@@ -179,9 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     adaptGallerySize();
-
     window.addEventListener("resize", adaptGallerySize);
 
 
@@ -189,10 +273,6 @@ document.addEventListener("DOMContentLoaded", () => {
        CINTA INFINITA
 
        1 → 2 → 3 → 4 → 5 → 6 → 7 → 1...
-
-       El 1 clonado entra desde la derecha.
-       Cuando termina su transición, volvemos
-       silenciosamente al 1 original.
        ========================================= */
 
     const firstClone = originalSlides[0].cloneNode(true);
@@ -209,7 +289,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     track.appendChild(firstClone);
 
-
     let currentSlide = 0;
 
     const totalSlides = originalSlides.length;
@@ -217,10 +296,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const transitionTime = 1500;
     const intervalTime = visibleTime + transitionTime;
 
-
     track.style.transition =
         `transform ${transitionTime}ms cubic-bezier(0.65, 0, 0.35, 1)`;
-
 
     function showNextSlide() {
 
@@ -229,17 +306,13 @@ document.addEventListener("DOMContentLoaded", () => {
         track.style.transform =
             `translateX(-${currentSlide * 100}%)`;
 
-
         if (currentSlide === totalSlides) {
 
             setTimeout(() => {
 
                 track.style.transition = "none";
-
                 currentSlide = 0;
-
                 track.style.transform = "translateX(0)";
-
                 track.offsetHeight;
 
                 track.style.transition =
@@ -250,13 +323,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     }
-
-
-    /*
-     * 2 segundos visible
-     * + 1.5 segundos de desplazamiento
-     * = 3.5 segundos por proyecto.
-     */
 
     setInterval(showNextSlide, intervalTime);
 
