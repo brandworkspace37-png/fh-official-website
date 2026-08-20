@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         transition: "background 0.25s ease, color 0.25s ease, border-color 0.25s ease"
     });
 
-    /* CTA TEXTUAL — 3 FILAS */
+    /* CTA TEXTUAL */
 
     const ctaRows = document.createElement("div");
     ctaRows.className = "gallery-cta-rows";
@@ -85,8 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const ctaRowTexts = [
         "Cuéntanos qué quieres crear y qué quieres transmitir con tu proyecto.",
-        "Recibe una propuesta pensada para tu espacio, tu identidad y lo que quieres conseguir.",
-        "Revisamos cada detalle para ayudarte a llevar tu idea a un resultado que realmente represente lo que imaginaste."
+        "Recibe una propuesta pensada para tu espacio, tu identidad y lo que quieres conseguir."
     ];
 
     ctaRowTexts.forEach((text) => {
@@ -249,22 +248,22 @@ document.addEventListener("DOMContentLoaded", () => {
         slide.appendChild(button);
     });
 
-    /* RESPONSIVE — FORMATO 1080 × 1440 (3:4) */
+    /* RESPONSIVE — PRESENTACIÓN HORIZONTAL */
 
     function adaptGallerySize() {
-        gallery.style.width = "100%";
-        gallery.style.height = "auto";
-        gallery.style.aspectRatio = "3 / 4";
-
         if (window.innerWidth <= 768) {
+            gallery.style.width = "100%";
+            gallery.style.height = "auto";
+            gallery.style.aspectRatio = "3 / 4";
+
             galleryCtaGroup.style.left = "16px";
             galleryCtaGroup.style.bottom = "16px";
             galleryCtaGroup.style.width = "40%";
             galleryCtaGroup.style.maxWidth = "40%";
 
             galleryCta.style.width = "44%";
-            galleryCta.style.padding = "14px 20px";
-            galleryCta.style.fontSize = "13px";
+            galleryCta.style.padding = "10px 12px";
+            galleryCta.style.fontSize = "12px";
 
             galleryBridge.style.marginTop = "40px";
             galleryBridge.style.paddingTop = "32px";
@@ -292,6 +291,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 button.style.letterSpacing = "0.1em";
             });
         } else {
+            gallery.style.width = "100%";
+            gallery.style.height = "500px";
+            gallery.style.aspectRatio = "auto";
+
             galleryCtaGroup.style.left = "24px";
             galleryCtaGroup.style.bottom = "24px";
             galleryCtaGroup.style.width = "40%";
