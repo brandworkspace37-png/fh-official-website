@@ -50,6 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "stretch",
+        padding: "14px 14px 10px 14px",
+        margin: "0 0 -10px -14px",
+        borderRadius: "2px",
+        background: "linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.42) 48%, rgba(0, 0, 0, 0) 100%)",
         fontFamily: "Arial, Helvetica, sans-serif"
     });
 
@@ -77,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         transition: "background 0.25s ease, color 0.25s ease, border-color 0.25s ease"
     });
 
-    /* CTA TEXTUAL */
+    /* CTA TEXTUAL — DOS FILAS */
 
     const ctaRows = document.createElement("div");
     ctaRows.className = "gallery-cta-rows";
@@ -190,65 +194,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    /* PROYECTOS */
-
-    const projectNames = [
-        "Metal Frontlit Sign",
-        "Metal Sign",
-        "Acrylic LED Sign",
-        "Light Box",
-        "Metal Blacklit Sign",
-        "Metal Double Sided Sign",
-        "Neon LED Sign"
-    ];
+    /* GALERÍA — SIN NOMBRES NI ENLACES INDIVIDUALES */
 
     const originalSlides = Array.from(track.querySelectorAll(".gallery-slide"));
 
-    if (originalSlides.length !== projectNames.length) return;
+    if (originalSlides.length !== 7) return;
 
-    originalSlides.forEach((slide, index) => {
+    originalSlides.forEach((slide) => {
         slide.style.position = "relative";
-
-        const button = document.createElement("a");
-        button.className = "gallery-project-button";
-        button.href = "html/formulario.html";
-        button.target = "_blank";
-        button.rel = "noopener";
-        button.textContent = projectNames[index];
-
-        Object.assign(button.style, {
-            position: "absolute",
-            left: "50%",
-            bottom: "24px",
-            transform: "translateX(-50%)",
-            zIndex: "5",
-            paddingBottom: "7px",
-            borderBottom: "1px solid rgba(241, 238, 231, 0.9)",
-            color: "var(--color-white)",
-            fontFamily: "Arial, Helvetica, sans-serif",
-            fontSize: "12px",
-            fontWeight: "600",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            whiteSpace: "nowrap",
-            textShadow: "0 2px 8px rgba(0, 0, 0, 0.8)",
-            transition: "opacity 0.25s ease, border-color 0.25s ease"
-        });
-
-        button.addEventListener("mouseenter", () => {
-            button.style.opacity = "0.75";
-            button.style.borderColor = "var(--color-bronze)";
-        });
-
-        button.addEventListener("mouseleave", () => {
-            button.style.opacity = "1";
-            button.style.borderColor = "rgba(241, 238, 231, 0.9)";
-        });
-
-        slide.appendChild(button);
+        slide.querySelectorAll(".gallery-project-button").forEach((button) => button.remove());
     });
 
-    /* RESPONSIVE — PRESENTACIÓN HORIZONTAL */
+    /* RESPONSIVE — PRESENTACIÓN */
 
     function adaptGallerySize() {
         if (window.innerWidth <= 768) {
@@ -260,8 +217,10 @@ document.addEventListener("DOMContentLoaded", () => {
             galleryCtaGroup.style.bottom = "16px";
             galleryCtaGroup.style.width = "40%";
             galleryCtaGroup.style.maxWidth = "40%";
+            galleryCtaGroup.style.padding = "12px 12px 8px 12px";
+            galleryCtaGroup.style.margin = "0 0 -8px -12px";
 
-            /* MÓVIL: el botón se dimensiona por su contenido, no por el 40% del grupo */
+            /* MÓVIL: botón dimensionado por su contenido */
             galleryCta.style.width = "fit-content";
             galleryCta.style.maxWidth = "100%";
             galleryCta.style.boxSizing = "border-box";
@@ -281,20 +240,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 paragraph.style.lineHeight = "1.65";
             });
 
+            /* +25% respecto al CTA móvil anterior */
             ctaRows.querySelectorAll("span").forEach((row) => {
-                row.style.fontSize = "10px";
+                row.style.fontSize = "12.5px";
                 row.style.marginTop = "4px";
                 row.style.lineHeight = "1.15";
             });
 
             if (headerLogo) headerLogo.style.fontSize = "15px";
             if (headerNav) headerNav.style.minHeight = "80px";
-
-            document.querySelectorAll(".gallery-project-button").forEach((button) => {
-                button.style.bottom = "16px";
-                button.style.fontSize = "10px";
-                button.style.letterSpacing = "0.1em";
-            });
         } else {
             gallery.style.width = "100%";
             gallery.style.height = "500px";
@@ -304,6 +258,8 @@ document.addEventListener("DOMContentLoaded", () => {
             galleryCtaGroup.style.bottom = "24px";
             galleryCtaGroup.style.width = "40%";
             galleryCtaGroup.style.maxWidth = "40%";
+            galleryCtaGroup.style.padding = "14px 14px 10px 14px";
+            galleryCtaGroup.style.margin = "0 0 -10px -14px";
 
             galleryCta.style.width = "44%";
             galleryCta.style.padding = "16px 23px";
@@ -329,12 +285,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (headerLogo) headerLogo.style.fontSize = "18px";
             if (headerNav) headerNav.style.minHeight = "80px";
-
-            document.querySelectorAll(".gallery-project-button").forEach((button) => {
-                button.style.bottom = "24px";
-                button.style.fontSize = "12px";
-                button.style.letterSpacing = "0.14em";
-            });
         }
     }
 
@@ -344,14 +294,6 @@ document.addEventListener("DOMContentLoaded", () => {
     /* CINTA INFINITA */
 
     const firstClone = originalSlides[0].cloneNode(true);
-    const clonedButton = firstClone.querySelector(".gallery-project-button");
-
-    if (clonedButton) {
-        clonedButton.href = "html/formulario.html";
-        clonedButton.target = "_blank";
-        clonedButton.rel = "noopener";
-    }
-
     track.appendChild(firstClone);
 
     let currentSlide = 0;
