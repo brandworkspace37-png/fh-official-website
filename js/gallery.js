@@ -27,6 +27,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================
+       CTA PRINCIPAL — FIJO DENTRO DEL ÁLBUM
+
+       El botón es hermano de la cinta, no parte
+       de ella. Las imágenes se desplazan detrás
+       mientras el CTA permanece en la misma
+       posición inferior izquierda.
+       ========================================= */
+
+    const galleryCta = document.createElement("a");
+
+    galleryCta.className = "gallery-main-cta";
+    galleryCta.href = "html/formulario.html";
+    galleryCta.target = "_blank";
+    galleryCta.rel = "noopener";
+    galleryCta.textContent = "Iniciar mi proyecto";
+
+    Object.assign(galleryCta.style, {
+        position: "absolute",
+        left: "24px",
+        bottom: "24px",
+        zIndex: "10",
+        display: "inline-block",
+        padding: "12px 18px",
+        border: "1px solid rgba(241, 238, 231, 0.55)",
+        background: "rgba(17, 17, 17, 0.45)",
+        backdropFilter: "blur(4px)",
+        color: "var(--color-white)",
+        fontSize: "12px",
+        fontWeight: "600",
+        letterSpacing: "0.06em",
+        whiteSpace: "nowrap",
+        transition: "background 0.25s ease, color 0.25s ease, border-color 0.25s ease"
+    });
+
+    galleryCta.addEventListener("mouseenter", () => {
+        galleryCta.style.background = "var(--color-white)";
+        galleryCta.style.color = "var(--color-black)";
+        galleryCta.style.borderColor = "var(--color-white)";
+    });
+
+    galleryCta.addEventListener("mouseleave", () => {
+        galleryCta.style.background = "rgba(17, 17, 17, 0.45)";
+        galleryCta.style.color = "var(--color-white)";
+        galleryCta.style.borderColor = "rgba(241, 238, 231, 0.55)";
+    });
+
+    gallery.appendChild(galleryCta);
+
+
+    /* =========================================
        CTA / PUENTE DESPUÉS DE LA GALERÍA
        ========================================= */
 
@@ -51,15 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     En FORM & HALO tomamos esa idea y la desarrollamos contigo, cuidando el diseño, los materiales y cada detalle necesario para convertirla en una solución que realmente represente lo que quieres crear.
                 </p>
             </div>
-
-            <a
-                href="html/formulario.html"
-                target="_blank"
-                rel="noopener"
-                class="hero-button"
-            >
-                HABLEMOS DE TU PROYECTO →
-            </a>
         </div>
     `;
 
@@ -83,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const ctaTitle = galleryBridge.querySelector("h2");
     const ctaCopy = galleryBridge.querySelector(".gallery-cta-copy");
     const ctaParagraphs = galleryBridge.querySelectorAll(".gallery-cta-copy p");
-    const ctaButton = galleryBridge.querySelector(".hero-button");
 
     Object.assign(ctaContent.style, {
         maxWidth: "850px"
@@ -118,14 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
             lineHeight: "1.7",
             color: "var(--color-gray)"
         });
-    });
-
-    Object.assign(ctaButton.style, {
-        display: "inline-block",
-        marginTop: "20px",
-        padding: "13px 20px",
-        fontSize: "11px",
-        letterSpacing: "0.08em"
     });
 
 
@@ -211,6 +243,11 @@ document.addEventListener("DOMContentLoaded", () => {
             gallery.style.height = "auto";
             gallery.style.aspectRatio = "16 / 9";
 
+            galleryCta.style.left = "16px";
+            galleryCta.style.bottom = "16px";
+            galleryCta.style.padding = "10px 15px";
+            galleryCta.style.fontSize = "10px";
+
             galleryBridge.style.marginTop = "40px";
             galleryBridge.style.paddingTop = "32px";
 
@@ -221,9 +258,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 paragraph.style.fontSize = "12px";
                 paragraph.style.lineHeight = "1.65";
             });
-
-            ctaButton.style.fontSize = "10px";
-            ctaButton.style.padding = "12px 16px";
 
             document
                 .querySelectorAll(".gallery-project-button")
@@ -239,6 +273,11 @@ document.addEventListener("DOMContentLoaded", () => {
             gallery.style.height = "500px";
             gallery.style.aspectRatio = "auto";
 
+            galleryCta.style.left = "24px";
+            galleryCta.style.bottom = "24px";
+            galleryCta.style.padding = "12px 18px";
+            galleryCta.style.fontSize = "12px";
+
             galleryBridge.style.marginTop = "70px";
             galleryBridge.style.paddingTop = "45px";
 
@@ -249,9 +288,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 paragraph.style.fontSize = "13px";
                 paragraph.style.lineHeight = "1.7";
             });
-
-            ctaButton.style.fontSize = "11px";
-            ctaButton.style.padding = "13px 20px";
 
             document
                 .querySelectorAll(".gallery-project-button")
