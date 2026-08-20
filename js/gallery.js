@@ -209,14 +209,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function adaptGallerySize() {
         if (window.innerWidth <= 768) {
-            gallery.style.width = "100%";
+            /* La galería rompe únicamente los 16px laterales del contenedor móvil.
+               Así la imagen toca ambos bordes de la pantalla sin alterar el resto del sitio. */
+            gallery.style.width = "calc(100% + 32px)";
+            gallery.style.marginLeft = "-16px";
+            gallery.style.marginRight = "0";
             gallery.style.height = "auto";
             gallery.style.aspectRatio = "3 / 4";
+            gallery.style.overflow = "hidden";
 
+            /* El degradado se extiende más allá del ancho del texto para que
+               desaparezca suavemente y nunca forme una línea vertical. */
             galleryCtaGroup.style.left = "16px";
             galleryCtaGroup.style.bottom = "16px";
-            galleryCtaGroup.style.width = "40%";
-            galleryCtaGroup.style.maxWidth = "40%";
+            galleryCtaGroup.style.width = "65%";
+            galleryCtaGroup.style.maxWidth = "65%";
             galleryCtaGroup.style.padding = "12px 12px 8px 12px";
             galleryCtaGroup.style.margin = "0 0 -8px -12px";
 
@@ -250,7 +257,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (headerLogo) headerLogo.style.fontSize = "15px";
             if (headerNav) headerNav.style.minHeight = "80px";
         } else {
+            /* ORDENADOR — se conserva exactamente la geometría existente */
             gallery.style.width = "100%";
+            gallery.style.marginLeft = "0";
+            gallery.style.marginRight = "0";
             gallery.style.height = "500px";
             gallery.style.aspectRatio = "auto";
 
