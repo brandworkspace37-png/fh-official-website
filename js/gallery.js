@@ -278,9 +278,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             ctaRows.querySelectorAll("span").forEach((row) => {
-                row.style.fontSize = "13px";
-                row.style.marginTop = "5px";
-                row.style.lineHeight = "1.2";
+                row.style.fontSize = "10px";
+                row.style.marginTop = "4px";
+                row.style.lineHeight = "1.15";
             });
 
             if (headerLogo) headerLogo.style.fontSize = "15px";
