@@ -28,15 +28,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================
        CTA PRINCIPAL — FIJO DENTRO DEL ÁLBUM
-
-       El botón es hermano de la cinta, no parte
-       de ella. Las imágenes se desplazan detrás
-       mientras el CTA permanece en la misma
-       posición inferior izquierda.
        ========================================= */
 
-    const galleryCta = document.createElement("a");
+    const galleryCtaGroup = document.createElement("div");
+    galleryCtaGroup.className = "gallery-main-cta-group";
 
+    Object.assign(galleryCtaGroup.style, {
+        position: "absolute",
+        left: "24px",
+        bottom: "24px",
+        zIndex: "10",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start"
+    });
+
+    const galleryCta = document.createElement("a");
     galleryCta.className = "gallery-main-cta";
     galleryCta.href = "html/formulario.html";
     galleryCta.target = "_blank";
@@ -44,22 +51,46 @@ document.addEventListener("DOMContentLoaded", () => {
     galleryCta.textContent = "Iniciar mi proyecto";
 
     Object.assign(galleryCta.style, {
-        position: "absolute",
-        left: "24px",
-        bottom: "24px",
-        zIndex: "10",
         display: "inline-block",
-        padding: "12px 18px",
+        padding: "16px 23px",
         border: "1px solid rgba(241, 238, 231, 0.55)",
         background: "rgba(17, 17, 17, 0.45)",
         backdropFilter: "blur(4px)",
         color: "var(--color-white)",
-        fontSize: "12px",
+        fontSize: "15.6px",
         fontWeight: "600",
         letterSpacing: "0.06em",
         whiteSpace: "nowrap",
         transition: "background 0.25s ease, color 0.25s ease, border-color 0.25s ease"
     });
+
+    const ctaRows = document.createElement("div");
+    ctaRows.className = "gallery-cta-rows";
+
+    const ctaRowTexts = [
+        "Cuéntanos qué quieres crear",
+        "Recibe una propuesta para tu proyecto",
+        "Comienza cuando estés listo"
+    ];
+
+    ctaRowTexts.forEach((text) => {
+        const row = document.createElement("span");
+        row.textContent = text;
+        Object.assign(row.style, {
+            display: "block",
+            marginTop: "7px",
+            fontSize: "10px",
+            lineHeight: "1.3",
+            letterSpacing: "0.09em",
+            color: "var(--color-white)",
+            textShadow: "0 2px 7px rgba(0, 0, 0, 0.85)"
+        });
+        ctaRows.appendChild(row);
+    });
+
+    galleryCtaGroup.appendChild(galleryCta);
+    galleryCtaGroup.appendChild(ctaRows);
+    gallery.appendChild(galleryCtaGroup);
 
     galleryCta.addEventListener("mouseenter", () => {
         galleryCta.style.background = "var(--color-white)";
@@ -73,15 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
         galleryCta.style.borderColor = "rgba(241, 238, 231, 0.55)";
     });
 
-    gallery.appendChild(galleryCta);
-
 
     /* =========================================
        CTA / PUENTE DESPUÉS DE LA GALERÍA
        ========================================= */
 
     const galleryBridge = document.createElement("div");
-
     galleryBridge.className = "hero-question";
 
     galleryBridge.innerHTML = `
@@ -125,9 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const ctaCopy = galleryBridge.querySelector(".gallery-cta-copy");
     const ctaParagraphs = galleryBridge.querySelectorAll(".gallery-cta-copy p");
 
-    Object.assign(ctaContent.style, {
-        maxWidth: "850px"
-    });
+    Object.assign(ctaContent.style, { maxWidth: "850px" });
 
     Object.assign(ctaEyebrow.style, {
         display: "block",
@@ -147,9 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
         maxWidth: "760px"
     });
 
-    Object.assign(ctaCopy.style, {
-        maxWidth: "720px"
-    });
+    Object.assign(ctaCopy.style, { maxWidth: "720px" });
 
     ctaParagraphs.forEach((paragraph) => {
         Object.assign(paragraph.style, {
@@ -175,9 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Neon LED Sign"
     ];
 
-    const originalSlides = Array.from(
-        track.querySelectorAll(".gallery-slide")
-    );
+    const originalSlides = Array.from(track.querySelectorAll(".gallery-slide"));
 
     if (originalSlides.length !== projectNames.length) return;
 
@@ -191,7 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
         slide.style.position = "relative";
 
         const button = document.createElement("a");
-
         button.className = "gallery-project-button";
         button.href = "html/formulario.html";
         button.target = "_blank";
@@ -243,10 +264,11 @@ document.addEventListener("DOMContentLoaded", () => {
             gallery.style.height = "auto";
             gallery.style.aspectRatio = "16 / 9";
 
-            galleryCta.style.left = "16px";
-            galleryCta.style.bottom = "16px";
-            galleryCta.style.padding = "10px 15px";
-            galleryCta.style.fontSize = "10px";
+            galleryCtaGroup.style.left = "16px";
+            galleryCtaGroup.style.bottom = "16px";
+
+            galleryCta.style.padding = "14px 20px";
+            galleryCta.style.fontSize = "13px";
 
             galleryBridge.style.marginTop = "40px";
             galleryBridge.style.paddingTop = "32px";
@@ -259,13 +281,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 paragraph.style.lineHeight = "1.65";
             });
 
-            document
-                .querySelectorAll(".gallery-project-button")
-                .forEach((button) => {
-                    button.style.bottom = "16px";
-                    button.style.fontSize = "10px";
-                    button.style.letterSpacing = "0.1em";
-                });
+            ctaRows.querySelectorAll("span").forEach((row) => {
+                row.style.fontSize = "9px";
+                row.style.marginTop = "6px";
+            });
+
+            document.querySelectorAll(".gallery-project-button").forEach((button) => {
+                button.style.bottom = "16px";
+                button.style.fontSize = "10px";
+                button.style.letterSpacing = "0.1em";
+            });
 
         } else {
 
@@ -273,10 +298,11 @@ document.addEventListener("DOMContentLoaded", () => {
             gallery.style.height = "500px";
             gallery.style.aspectRatio = "auto";
 
-            galleryCta.style.left = "24px";
-            galleryCta.style.bottom = "24px";
-            galleryCta.style.padding = "12px 18px";
-            galleryCta.style.fontSize = "12px";
+            galleryCtaGroup.style.left = "24px";
+            galleryCtaGroup.style.bottom = "24px";
+
+            galleryCta.style.padding = "16px 23px";
+            galleryCta.style.fontSize = "15.6px";
 
             galleryBridge.style.marginTop = "70px";
             galleryBridge.style.paddingTop = "45px";
@@ -289,13 +315,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 paragraph.style.lineHeight = "1.7";
             });
 
-            document
-                .querySelectorAll(".gallery-project-button")
-                .forEach((button) => {
-                    button.style.bottom = "24px";
-                    button.style.fontSize = "12px";
-                    button.style.letterSpacing = "0.14em";
-                });
+            ctaRows.querySelectorAll("span").forEach((row) => {
+                row.style.fontSize = "10px";
+                row.style.marginTop = "7px";
+            });
+
+            document.querySelectorAll(".gallery-project-button").forEach((button) => {
+                button.style.bottom = "24px";
+                button.style.fontSize = "12px";
+                button.style.letterSpacing = "0.14em";
+            });
 
         }
 
@@ -307,15 +336,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================
        CINTA INFINITA
-
-       1 → 2 → 3 → 4 → 5 → 6 → 7 → 1...
        ========================================= */
 
     const firstClone = originalSlides[0].cloneNode(true);
-
-    const clonedButton = firstClone.querySelector(
-        ".gallery-project-button"
-    );
+    const clonedButton = firstClone.querySelector(".gallery-project-button");
 
     if (clonedButton) {
         clonedButton.href = "html/formulario.html";
@@ -326,7 +350,6 @@ document.addEventListener("DOMContentLoaded", () => {
     track.appendChild(firstClone);
 
     let currentSlide = 0;
-
     const totalSlides = originalSlides.length;
     const visibleTime = 2000;
     const transitionTime = 1500;
@@ -336,16 +359,13 @@ document.addEventListener("DOMContentLoaded", () => {
         `transform ${transitionTime}ms cubic-bezier(0.65, 0, 0.35, 1)`;
 
     function showNextSlide() {
-
         currentSlide++;
 
         track.style.transform =
             `translateX(-${currentSlide * 100}%)`;
 
         if (currentSlide === totalSlides) {
-
             setTimeout(() => {
-
                 track.style.transition = "none";
                 currentSlide = 0;
                 track.style.transform = "translateX(0)";
@@ -353,11 +373,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 track.style.transition =
                     `transform ${transitionTime}ms cubic-bezier(0.65, 0, 0.35, 1)`;
-
             }, transitionTime);
-
         }
-
     }
 
     setInterval(showNextSlide, intervalTime);
