@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
             width: "100%",
             marginTop: "10px",
             fontFamily: "Arial, Helvetica, sans-serif",
-            fontSize: "15px",
+            fontSize: "22.5px",
             fontWeight: "400",
             lineHeight: "1.35",
             letterSpacing: "normal",
@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             ctaRows.querySelectorAll("span").forEach((row) => {
-                row.style.fontSize = "13.5px";
+                row.style.fontSize = "20.25px";
                 row.style.marginTop = "8px";
             });
 
@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             ctaRows.querySelectorAll("span").forEach((row) => {
-                row.style.fontSize = "15px";
+                row.style.fontSize = "22.5px";
                 row.style.marginTop = "10px";
             });
 
