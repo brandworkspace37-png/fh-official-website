@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     Object.assign(galleryCta.style, {
         display: "block",
-        width: "100%",
+        width: "50%",
         padding: "16px 23px",
         border: "1px solid rgba(241, 238, 231, 0.55)",
         background: "rgba(17, 17, 17, 0.45)",
@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
             galleryCtaGroup.style.width = "40%";
             galleryCtaGroup.style.maxWidth = "40%";
 
-            galleryCta.style.width = "100%";
+            galleryCta.style.width = "50%";
             galleryCta.style.padding = "14px 20px";
             galleryCta.style.fontSize = "13px";
 
@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
             galleryCtaGroup.style.width = "40%";
             galleryCtaGroup.style.maxWidth = "40%";
 
-            galleryCta.style.width = "100%";
+            galleryCta.style.width = "50%";
             galleryCta.style.padding = "16px 23px";
             galleryCta.style.fontSize = "15.6px";
 
