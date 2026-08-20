@@ -84,9 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ctaRows.style.width = "100%";
 
     const ctaRowTexts = [
-        "Cuéntanos qué quieres crear",
-        "Recibe una propuesta para tu proyecto",
-        "Comienza cuando estés listo"
+        "Cuéntanos qué quieres crear y qué quieres transmitir con tu proyecto.",
+        "Recibe una propuesta pensada para tu espacio, tu identidad y lo que quieres conseguir.",
+        "Revisamos cada detalle para ayudarte a llevar tu idea a un resultado que realmente represente lo que imaginaste."
     ];
 
     ctaRowTexts.forEach((text) => {
@@ -96,11 +96,11 @@ document.addEventListener("DOMContentLoaded", () => {
         Object.assign(row.style, {
             display: "block",
             width: "100%",
-            marginTop: "10px",
+            marginTop: "6px",
             fontFamily: "Arial, Helvetica, sans-serif",
-            fontSize: "22.5px",
+            fontSize: "15px",
             fontWeight: "400",
-            lineHeight: "1.35",
+            lineHeight: "1.2",
             letterSpacing: "normal",
             color: "var(--color-white)",
             textShadow: "0 2px 7px rgba(0, 0, 0, 0.85)"
@@ -278,8 +278,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             ctaRows.querySelectorAll("span").forEach((row) => {
-                row.style.fontSize = "20.25px";
-                row.style.marginTop = "8px";
+                row.style.fontSize = "13px";
+                row.style.marginTop = "5px";
+                row.style.lineHeight = "1.2";
             });
 
             if (headerLogo) headerLogo.style.fontSize = "15px";
@@ -316,8 +317,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             ctaRows.querySelectorAll("span").forEach((row) => {
-                row.style.fontSize = "22.5px";
-                row.style.marginTop = "10px";
+                row.style.fontSize = "15px";
+                row.style.marginTop = "6px";
+                row.style.lineHeight = "1.2";
             });
 
             if (headerLogo) headerLogo.style.fontSize = "18px";
