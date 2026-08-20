@@ -261,9 +261,14 @@ document.addEventListener("DOMContentLoaded", () => {
             galleryCtaGroup.style.width = "40%";
             galleryCtaGroup.style.maxWidth = "40%";
 
-            galleryCta.style.width = "44%";
-            galleryCta.style.padding = "10px 12px";
+            /* MÓVIL: el botón se dimensiona por su contenido, no por el 40% del grupo */
+            galleryCta.style.width = "fit-content";
+            galleryCta.style.maxWidth = "100%";
+            galleryCta.style.boxSizing = "border-box";
+            galleryCta.style.padding = "10px 16px";
             galleryCta.style.fontSize = "12px";
+            galleryCta.style.textAlign = "center";
+            galleryCta.style.alignSelf = "flex-start";
 
             galleryBridge.style.marginTop = "40px";
             galleryBridge.style.paddingTop = "32px";
@@ -303,6 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
             galleryCta.style.width = "44%";
             galleryCta.style.padding = "16px 23px";
             galleryCta.style.fontSize = "15.6px";
+            galleryCta.style.textAlign = "center";
 
             galleryBridge.style.marginTop = "70px";
             galleryBridge.style.paddingTop = "45px";
