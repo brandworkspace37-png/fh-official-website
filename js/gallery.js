@@ -249,14 +249,14 @@ document.addEventListener("DOMContentLoaded", () => {
         slide.appendChild(button);
     });
 
-    /* RESPONSIVE — PRESENTACIÓN HORIZONTAL */
+    /* RESPONSIVE — FORMATO 1080 × 1440 (3:4) */
 
     function adaptGallerySize() {
-        if (window.innerWidth <= 768) {
-            gallery.style.width = "100%";
-            gallery.style.height = "auto";
-            gallery.style.aspectRatio = "16 / 9";
+        gallery.style.width = "100%";
+        gallery.style.height = "auto";
+        gallery.style.aspectRatio = "3 / 4";
 
+        if (window.innerWidth <= 768) {
             galleryCtaGroup.style.left = "16px";
             galleryCtaGroup.style.bottom = "16px";
             galleryCtaGroup.style.width = "40%";
@@ -292,10 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 button.style.letterSpacing = "0.1em";
             });
         } else {
-            gallery.style.width = "100%";
-            gallery.style.height = "500px";
-            gallery.style.aspectRatio = "auto";
-
             galleryCtaGroup.style.left = "24px";
             galleryCtaGroup.style.bottom = "24px";
             galleryCtaGroup.style.width = "40%";
