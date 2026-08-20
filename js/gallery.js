@@ -27,6 +27,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================
+       HEADER — LOGO CENTRADO
+       ========================================= */
+
+    const headerNav = document.querySelector("header nav");
+    const headerLogo = document.querySelector("header .logo");
+
+    if (headerNav && headerLogo) {
+        headerNav.style.position = "relative";
+
+        Object.assign(headerLogo.style, {
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            whiteSpace: "nowrap",
+            zIndex: "2"
+        });
+    }
+
+
+    /* =========================================
        CTA PRINCIPAL — FIJO DENTRO DEL ÁLBUM
        ========================================= */
 
@@ -286,6 +306,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 row.style.marginTop = "6px";
             });
 
+            if (headerLogo) headerLogo.style.fontSize = "15px";
+            if (headerNav) headerNav.style.minHeight = "80px";
+
             document.querySelectorAll(".gallery-project-button").forEach((button) => {
                 button.style.bottom = "16px";
                 button.style.fontSize = "10px";
@@ -319,6 +342,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 row.style.fontSize = "10px";
                 row.style.marginTop = "7px";
             });
+
+            if (headerLogo) headerLogo.style.fontSize = "18px";
+            if (headerNav) headerNav.style.minHeight = "80px";
 
             document.querySelectorAll(".gallery-project-button").forEach((button) => {
                 button.style.bottom = "24px";
