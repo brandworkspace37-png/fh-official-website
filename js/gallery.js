@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!hero || !gallery || !track) return;
 
-
     /* =========================================
        HERO — SOLO PRESENTACIÓN VISUAL
        ========================================= */
@@ -24,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
         paddingTop: "0",
         paddingBottom: "0"
     });
-
 
     /* =========================================
        HEADER — LOGO CENTRADO
@@ -45,7 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
     /* =========================================
        CTA PRINCIPAL — FIJO DENTRO DEL ÁLBUM
        ========================================= */
@@ -58,9 +55,12 @@ document.addEventListener("DOMContentLoaded", () => {
         left: "24px",
         bottom: "24px",
         zIndex: "10",
+        width: "40%",
+        maxWidth: "40%",
         display: "flex",
         flexDirection: "column",
-        alignItems: "flex-start"
+        alignItems: "stretch",
+        fontFamily: "Arial, Helvetica, sans-serif"
     });
 
     const galleryCta = document.createElement("a");
@@ -71,21 +71,25 @@ document.addEventListener("DOMContentLoaded", () => {
     galleryCta.textContent = "Iniciar mi proyecto";
 
     Object.assign(galleryCta.style, {
-        display: "inline-block",
+        display: "block",
+        width: "100%",
         padding: "16px 23px",
         border: "1px solid rgba(241, 238, 231, 0.55)",
         background: "rgba(17, 17, 17, 0.45)",
         backdropFilter: "blur(4px)",
         color: "var(--color-white)",
-        fontSize: "15.6px",
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontSize: "23.4px",
         fontWeight: "600",
-        letterSpacing: "0.06em",
+        letterSpacing: "normal",
+        textAlign: "left",
         whiteSpace: "nowrap",
         transition: "background 0.25s ease, color 0.25s ease, border-color 0.25s ease"
     });
 
     const ctaRows = document.createElement("div");
     ctaRows.className = "gallery-cta-rows";
+    ctaRows.style.width = "100%";
 
     const ctaRowTexts = [
         "Cuéntanos qué quieres crear",
@@ -98,10 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
         row.textContent = text;
         Object.assign(row.style, {
             display: "block",
-            marginTop: "7px",
-            fontSize: "10px",
-            lineHeight: "1.3",
-            letterSpacing: "0.09em",
+            width: "100%",
+            marginTop: "10px",
+            fontFamily: "Arial, Helvetica, sans-serif",
+            fontSize: "15px",
+            fontWeight: "400",
+            lineHeight: "1.35",
+            letterSpacing: "normal",
             color: "var(--color-white)",
             textShadow: "0 2px 7px rgba(0, 0, 0, 0.85)"
         });
@@ -123,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
         galleryCta.style.color = "var(--color-white)";
         galleryCta.style.borderColor = "rgba(241, 238, 231, 0.55)";
     });
-
 
     /* =========================================
        CTA / PUENTE DESPUÉS DE LA GALERÍA
@@ -154,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     gallery.after(galleryBridge);
 
-
     /* =========================================
        CTA — ESCALA VISUAL
        ========================================= */
@@ -178,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Object.assign(ctaEyebrow.style, {
         display: "block",
         marginBottom: "18px",
+        fontFamily: "Arial, Helvetica, sans-serif",
         fontSize: "10px",
         fontWeight: "700",
         letterSpacing: "0.22em",
@@ -186,9 +192,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     Object.assign(ctaTitle.style, {
         margin: "0 0 28px 0",
+        fontFamily: "Arial, Helvetica, sans-serif",
         fontSize: "clamp(26px, 3vw, 42px)",
         lineHeight: "1.08",
-        letterSpacing: "-0.025em",
+        letterSpacing: "normal",
         fontWeight: "500",
         maxWidth: "760px"
     });
@@ -198,12 +205,12 @@ document.addEventListener("DOMContentLoaded", () => {
     ctaParagraphs.forEach((paragraph) => {
         Object.assign(paragraph.style, {
             margin: "0 0 15px 0",
+            fontFamily: "Arial, Helvetica, sans-serif",
             fontSize: "13px",
             lineHeight: "1.7",
             color: "var(--color-gray)"
         });
     });
-
 
     /* =========================================
        PROYECTOS
@@ -222,7 +229,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const originalSlides = Array.from(track.querySelectorAll(".gallery-slide"));
 
     if (originalSlides.length !== projectNames.length) return;
-
 
     /* =========================================
        BOTÓN ACTIVO SOBRE CADA IMAGEN
@@ -248,6 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
             paddingBottom: "7px",
             borderBottom: "1px solid rgba(241, 238, 231, 0.9)",
             color: "var(--color-white)",
+            fontFamily: "Arial, Helvetica, sans-serif",
             fontSize: "12px",
             fontWeight: "600",
             letterSpacing: "0.14em",
@@ -271,7 +278,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-
     /* =========================================
        RESPONSIVE — PRESENTACIÓN HORIZONTAL
        ========================================= */
@@ -286,9 +292,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             galleryCtaGroup.style.left = "16px";
             galleryCtaGroup.style.bottom = "16px";
+            galleryCtaGroup.style.width = "40%";
+            galleryCtaGroup.style.maxWidth = "40%";
 
+            galleryCta.style.width = "100%";
             galleryCta.style.padding = "14px 20px";
-            galleryCta.style.fontSize = "13px";
+            galleryCta.style.fontSize = "19.5px";
 
             galleryBridge.style.marginTop = "40px";
             galleryBridge.style.paddingTop = "32px";
@@ -302,8 +311,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             ctaRows.querySelectorAll("span").forEach((row) => {
-                row.style.fontSize = "9px";
-                row.style.marginTop = "6px";
+                row.style.fontSize = "13.5px";
+                row.style.marginTop = "8px";
             });
 
             if (headerLogo) headerLogo.style.fontSize = "15px";
@@ -323,9 +332,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             galleryCtaGroup.style.left = "24px";
             galleryCtaGroup.style.bottom = "24px";
+            galleryCtaGroup.style.width = "40%";
+            galleryCtaGroup.style.maxWidth = "40%";
 
+            galleryCta.style.width = "100%";
             galleryCta.style.padding = "16px 23px";
-            galleryCta.style.fontSize = "15.6px";
+            galleryCta.style.fontSize = "23.4px";
 
             galleryBridge.style.marginTop = "70px";
             galleryBridge.style.paddingTop = "45px";
@@ -339,8 +351,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             ctaRows.querySelectorAll("span").forEach((row) => {
-                row.style.fontSize = "10px";
-                row.style.marginTop = "7px";
+                row.style.fontSize = "15px";
+                row.style.marginTop = "10px";
             });
 
             if (headerLogo) headerLogo.style.fontSize = "18px";
@@ -358,7 +370,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     adaptGallerySize();
     window.addEventListener("resize", adaptGallerySize);
-
 
     /* =========================================
        CINTA INFINITA
