@@ -68,17 +68,16 @@ document.addEventListener("DOMContentLoaded", () => {
         display: "block",
         width: "44%",
         padding: "16px 23px",
-        border: "1px solid rgba(241, 238, 231, 0.55)",
-        background: "rgba(17, 17, 17, 0.45)",
-        backdropFilter: "blur(4px)",
-        color: "var(--color-white)",
+        border: "1px solid #F1EEE7",
+        background: "#F1EEE7",
+        color: "#111111",
         fontFamily: "Arial, Helvetica, sans-serif",
         fontSize: "15.6px",
         fontWeight: "600",
         letterSpacing: "0.06em",
         textAlign: "center",
         whiteSpace: "nowrap",
-        transition: "background 0.25s ease, color 0.25s ease, border-color 0.25s ease"
+        transition: "none"
     });
 
     /* CTA TEXTUAL — DOS FILAS */
@@ -116,17 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     galleryCtaGroup.appendChild(ctaRows);
     gallery.appendChild(galleryCtaGroup);
 
-    galleryCta.addEventListener("mouseenter", () => {
-        galleryCta.style.background = "var(--color-white)";
-        galleryCta.style.color = "var(--color-black)";
-        galleryCta.style.borderColor = "var(--color-white)";
-    });
-
-    galleryCta.addEventListener("mouseleave", () => {
-        galleryCta.style.background = "rgba(17, 17, 17, 0.45)";
-        galleryCta.style.color = "var(--color-white)";
-        galleryCta.style.borderColor = "rgba(241, 238, 231, 0.55)";
-    });
+    /* El CTA permanece siempre blanco con texto negro. */
 
     /* CTA / PUENTE DESPUÉS DE LA GALERÍA */
 
@@ -209,8 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function adaptGallerySize() {
         if (window.innerWidth <= 768) {
-            /* La galería rompe únicamente los 16px laterales del contenedor móvil.
-               Así la imagen toca ambos bordes de la pantalla sin alterar el resto del sitio. */
             gallery.style.width = "calc(100% + 32px)";
             gallery.style.marginLeft = "-16px";
             gallery.style.marginRight = "0";
@@ -218,8 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
             gallery.style.aspectRatio = "3 / 4";
             gallery.style.overflow = "hidden";
 
-            /* El degradado se extiende más allá del ancho del texto para que
-               desaparezca suavemente y nunca forme una línea vertical. */
             galleryCtaGroup.style.left = "16px";
             galleryCtaGroup.style.bottom = "16px";
             galleryCtaGroup.style.width = "65%";
@@ -247,7 +232,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 paragraph.style.lineHeight = "1.65";
             });
 
-            /* +25% respecto al CTA móvil anterior */
             ctaRows.querySelectorAll("span").forEach((row) => {
                 row.style.fontSize = "12.5px";
                 row.style.marginTop = "4px";
@@ -257,7 +241,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (headerLogo) headerLogo.style.fontSize = "15px";
             if (headerNav) headerNav.style.minHeight = "80px";
         } else {
-            /* ORDENADOR — se conserva exactamente la geometría existente */
             gallery.style.width = "100%";
             gallery.style.marginLeft = "0";
             gallery.style.marginRight = "0";
