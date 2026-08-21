@@ -7,6 +7,7 @@ const CATALOG = {
 };
 
 const PAYPAL_BASE = "https://api-m.sandbox.paypal.com";
+const PAYPAL_SANDBOX_CLIENT_ID = "BAAtak9QgP73i1YR516K5C2Y0JXYZw5gGgufsobmVkKtOJeMNw7IEZe0OkLLmw6000fE-hg-KWgyR7qTBc";
 
 function json(data, status = 200, origin = "*") {
   return new Response(JSON.stringify(data), {
@@ -28,10 +29,11 @@ function getOrigin(request) {
 }
 
 async function getAccessToken(env) {
-  if (!env.PAYPAL_CLIENT_ID || !env.PAYPAL_CLIENT_SECRET) {
-    throw new Error("PayPal server credentials are not configured.");
+  const clientId = env.PAYPAL_CLIENT_ID || PAYPAL_SANDBOX_CLIENT_ID;
+  if (!clientId || !env.PAYPAL_CLIENT_SECRET) {
+    throw new Error("PayPal server secret is not configured.");
   }
-  const credentials = btoa(`${env.PAYPAL_CLIENT_ID}:${env.PAYPAL_CLIENT_SECRET}`);
+  const credentials = btoa(`${clientId}:${env.PAYPAL_CLIENT_SECRET}`);
   const response = await fetch(`${PAYPAL_BASE}/v1/oauth2/token`, {
     method: "POST",
     headers: {
@@ -43,6 +45,7 @@ async function getAccessToken(env) {
   });
   const data = await response.json();
   if (!response.ok || !data.access_token) {
+    console.error("PayPal OAuth error", response.status, data);
     throw new Error("Unable to authenticate with PayPal.");
   }
   return data.access_token;
