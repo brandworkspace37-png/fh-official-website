@@ -22,11 +22,22 @@
     color: var(--color-gray);
 }
 
-.product-main {
+/* 4 productos arriba + 2 abajo. Los espacios vacíos quedan reservados. */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+    align-items: start;
+}
+
+.product-card {
+    min-width: 0;
+}
+
+.product-main,
+.placeholder-box {
     width: 100%;
-    max-width: 1100px;
     aspect-ratio: 1 / 1;
-    margin: 0 auto;
     overflow: hidden;
     background: #f7f7f5;
 }
@@ -39,26 +50,83 @@
 }
 
 .product-description {
-    max-width: 760px;
-    margin: 48px auto 0;
-    text-align: center;
+    margin: 24px 0 0;
+    text-align: left;
+}
+
+.product-number {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    color: var(--color-gray);
+}
+
+.product-description h3 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.15;
+    font-weight: 500;
 }
 
 .product-description p {
-    margin: 0;
-    font-size: 20px;
-    line-height: 1.65;
+    max-width: 360px;
+    margin: 12px 0 0;
+    font-size: 14px;
+    line-height: 1.55;
     color: var(--color-gray);
 }
 
 .product-availability {
     display: block;
-    margin-top: 22px;
-    font-size: 11px;
+    margin-top: 16px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: .2em;
+    letter-spacing: .16em;
     text-transform: uppercase;
     color: var(--color-gray);
+}
+
+/* Cajas vacías para reservar los próximos productos */
+.placeholder-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255,255,255,.10);
+}
+
+.placeholder-box > span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    color: rgba(255,255,255,.38);
+}
+
+.placeholder-box button {
+    padding: 10px 16px;
+    border: 1px solid rgba(255,255,255,.18);
+    background: transparent;
+    color: rgba(255,255,255,.55);
+    font-family: var(--font-main);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    cursor: default;
+}
+
+/* Los productos 05 y 06 forman la segunda fila y quedan centrados */
+.product-card:nth-child(5) {
+    grid-column: 2;
+}
+
+@media (max-width: 1100px) {
+    .product-grid {
+        gap: 20px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -71,15 +139,33 @@
         margin-bottom: 60px;
     }
 
-    .product-main {
-        aspect-ratio: 1 / 1;
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 12px;
+    }
+
+    .product-card:nth-child(5) {
+        grid-column: auto;
     }
 
     .product-description {
-        margin-top: 32px;
+        margin-top: 18px;
+    }
+
+    .product-description h3 {
+        font-size: 16px;
     }
 
     .product-description p {
-        font-size: 16px;
+        font-size: 13px;
+    }
+
+    .placeholder-box {
+        gap: 14px;
+    }
+
+    .placeholder-box button {
+        padding: 8px 10px;
+        font-size: 9px;
     }
 }
