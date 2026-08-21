@@ -8,11 +8,8 @@
     --color-gray: #A6A39B;
     --color-dark-gray: #6F7A70;
     --color-bronze: #9A7B52;
-
     --font-main: Arial, Helvetica, sans-serif;
-
     --container-width: 1400px;
-
     --spacing-section: 120px;
 }
 
@@ -148,15 +145,15 @@ footer { width:min(100% - 48px,var(--container-width)); margin:0 auto; padding:4
     .footer-bottom { flex-direction:column; gap:8px; }
 }
 
-/* FULL-BLEED GALLERY — desktop + mobile
-   The gallery intentionally escapes the centered 1400px section container,
-   matching the edge-to-edge presentation used by premium ecommerce sites. */
+/* ONLY THE GALLERY IS FULL-BLEED.
+   All written content remains inside the centered premium container. */
 .project-gallery {
     width: 100vw;
     max-width: none;
     position: relative;
     left: 50%;
-    margin-left: -50vw;
+    transform: translateX(-50%);
+    margin-left: 0;
     margin-right: 0;
 }
 
