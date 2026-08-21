@@ -80,8 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
         transition: "none"
     });
 
-    /* CTA TEXTUAL — DOS FILAS */
-
     const ctaRows = document.createElement("div");
     ctaRows.className = "gallery-cta-rows";
     ctaRows.style.width = "100%";
@@ -115,9 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     galleryCtaGroup.appendChild(ctaRows);
     gallery.appendChild(galleryCtaGroup);
 
-    /* El CTA permanece siempre blanco con texto negro. */
-
-    /* CTA / PUENTE DESPUÉS DE LA GALERÍA */
+    /* PUENTE DESPUÉS DE LA GALERÍA */
 
     const galleryBridge = document.createElement("div");
     galleryBridge.className = "hero-question";
@@ -140,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         marginTop: "70px",
         paddingTop: "45px",
         paddingBottom: "20px",
-        borderTop: "1px solid rgba(255, 255, 255, 0.1)"
+        borderTop: "none"
     });
 
     const ctaContent = galleryBridge.querySelector(".gallery-cta-content");
@@ -194,10 +190,11 @@ document.addEventListener("DOMContentLoaded", () => {
         slide.querySelectorAll(".gallery-project-button").forEach((button) => button.remove());
     });
 
-    /* RESPONSIVE — PRESENTACIÓN */
+    /* RESPONSIVE — GALERÍA 16:9 EN DESKTOP */
 
     function adaptGallerySize() {
         if (window.innerWidth <= 768) {
+            /* Móvil: mantiene el ancho completo y una composición vertical */
             gallery.style.width = "calc(100% + 32px)";
             gallery.style.marginLeft = "-16px";
             gallery.style.marginRight = "0";
@@ -212,7 +209,6 @@ document.addEventListener("DOMContentLoaded", () => {
             galleryCtaGroup.style.padding = "12px 12px 8px 12px";
             galleryCtaGroup.style.margin = "0 0 -8px -12px";
 
-            /* MÓVIL: botón dimensionado por su contenido */
             galleryCta.style.width = "fit-content";
             galleryCta.style.maxWidth = "100%";
             galleryCta.style.boxSizing = "border-box";
@@ -223,6 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             galleryBridge.style.marginTop = "40px";
             galleryBridge.style.paddingTop = "32px";
+            galleryBridge.style.borderTop = "none";
 
             ctaTitle.style.fontSize = "26px";
             ctaTitle.style.marginBottom = "22px";
@@ -239,13 +236,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (headerLogo) headerLogo.style.fontSize = "15px";
-            if (headerNav) headerNav.style.minHeight = "80px";
+            if (headerNav) headerNav.style.minHeight = "64px";
         } else {
+            /* Desktop: proporción real 1920 × 1080 = 16:9 */
             gallery.style.width = "100%";
             gallery.style.marginLeft = "0";
             gallery.style.marginRight = "0";
-            gallery.style.height = "500px";
-            gallery.style.aspectRatio = "auto";
+            gallery.style.height = "auto";
+            gallery.style.aspectRatio = "16 / 9";
 
             galleryCtaGroup.style.left = "24px";
             galleryCtaGroup.style.bottom = "24px";
@@ -261,6 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             galleryBridge.style.marginTop = "70px";
             galleryBridge.style.paddingTop = "45px";
+            galleryBridge.style.borderTop = "none";
 
             ctaTitle.style.fontSize = "clamp(26px, 3vw, 42px)";
             ctaTitle.style.marginBottom = "28px";
@@ -277,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (headerLogo) headerLogo.style.fontSize = "18px";
-            if (headerNav) headerNav.style.minHeight = "80px";
+            if (headerNav) headerNav.style.minHeight = "64px";
         }
     }
 
