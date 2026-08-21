@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         checkout.disabled = true;
     };
 
-    const open = () => { render(); drawer.classList.add('is-open'); drawer.setAttribute('aria-hidden', 'false'); document.body.classList.add('cart-open'); };
+    const open = () => { window.location.href = 'carrito.html'; };
     const close = () => { drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); document.body.classList.remove('cart-open'); };
     window.FHCart = { open, close, render };
 
