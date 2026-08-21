@@ -145,18 +145,28 @@ footer { width:min(100% - 48px,var(--container-width)); margin:0 auto; padding:4
     .footer-bottom { flex-direction:column; gap:8px; }
 }
 
-/* FULL-BLEED GALLERY ONLY */
+/* GALLERY: FULL VIEWPORT BLEED */
 .project-gallery {
-    position: relative;
-    width: 100vw;
-    max-width: none;
-    left: calc(50% - 50vw);
-    margin-left: 0;
-    margin-right: 0;
-    flex: 0 0 100vw;
+    position: relative !important;
+    width: 100vw !important;
+    max-width: none !important;
+    min-width: 100vw !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    flex: 0 0 100vw !important;
+}
+
+.gallery-track,
+.gallery-slide,
+.gallery-slide img {
+    width: 100% !important;
+    max-width: none !important;
 }
 
 html, body {
     max-width: 100%;
-    overflow-x: clip;
+    overflow-x: hidden;
 }
