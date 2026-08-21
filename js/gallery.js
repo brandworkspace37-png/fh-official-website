@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
         slide.querySelectorAll(".gallery-project-button").forEach((button) => button.remove());
     });
 
-    /* RESPONSIVE — GALERÍA 16:9 EN DESKTOP */
+    /* RESPONSIVE — GALERÍA 1920 × 720 EN DESKTOP */
 
     function adaptGallerySize() {
         if (window.innerWidth <= 768) {
@@ -238,12 +238,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (headerLogo) headerLogo.style.fontSize = "15px";
             if (headerNav) headerNav.style.minHeight = "64px";
         } else {
-            /* Desktop: proporción real 1920 × 1080 = 16:9 */
+            /* Desktop: proporción objetivo 1920 × 720 = 8:3 */
             gallery.style.width = "100%";
             gallery.style.marginLeft = "0";
             gallery.style.marginRight = "0";
             gallery.style.height = "auto";
-            gallery.style.aspectRatio = "16 / 9";
+            gallery.style.aspectRatio = "8 / 3";
 
             galleryCtaGroup.style.left = "24px";
             galleryCtaGroup.style.bottom = "24px";
