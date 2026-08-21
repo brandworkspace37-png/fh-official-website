@@ -36,34 +36,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="product-modal-eyebrow">COLECCIÓN MEXICANA · 01</span>
                     <h2 id="product-modal-title">Catrina Mexicana <span>LED.</span></h2>
                     <p class="product-modal-lead">Una pieza creada para convertir una pared en parte de la experiencia. La tradición mexicana toma forma y se encuentra con la luz.</p>
-
                     <div class="product-choice-block">
                         <span class="product-choice-label">ELIGE TU TAMAÑO</span>
                         <div class="product-size-options" role="group" aria-label="Seleccionar tamaño">
-                            <button type="button" data-size="Small">Small</button>
-                            <button type="button" data-size="Medium" class="is-selected">Medium</button>
-                            <button type="button" data-size="Large">Large</button>
+                            <button type="button" data-size="Small">Small</button><button type="button" data-size="Medium" class="is-selected">Medium</button><button type="button" data-size="Large">Large</button>
                         </div>
                         <small class="product-selection-status">Medium seleccionado</small>
                     </div>
-
                     <div class="product-specs">
-                        <div class="product-spec"><span>Diseño</span><span>Catrina Mexicana</span></div>
-                        <div class="product-spec"><span>Construcción</span><span>Acrílico + iluminación LED</span></div>
-                        <div class="product-spec"><span>Color</span><span>Diseño multicolor</span></div>
-                        <div class="product-spec"><span>Medidas</span><span>Se definirán por tamaño</span></div>
+                        <div class="product-spec"><span>Diseño</span><span>Catrina Mexicana</span></div><div class="product-spec"><span>Construcción</span><span>Acrílico + iluminación LED</span></div><div class="product-spec"><span>Color</span><span>Diseño multicolor</span></div><div class="product-spec"><span>Medidas</span><span>Se definirán por tamaño</span></div>
                     </div>
-
                     <div class="product-warning"><strong>Antes de instalar.</strong><br>Revisa las indicaciones técnicas y de seguridad correspondientes al producto. No conectes ni instales la pieza hasta confirmar las especificaciones.</div>
-
                     <div class="product-manual"><div><span>Manual de instalación</span><small>Guía paso a paso</small></div><b>PRÓXIMAMENTE</b></div>
-
                     <button type="button" class="product-add-cart">Añadir al carrito <span>→</span></button>
                     <p class="product-cart-note">El precio y las medidas finales se configurarán próximamente.</p>
                 </div>
             </div>
         </div>`;
-
     document.body.appendChild(modal);
 
     const modalImage = modal.querySelector('.product-modal-main-image img');
@@ -72,16 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const status = modal.querySelector('.product-selection-status');
     const addCart = modal.querySelector('.product-add-cart');
 
-    const close = () => {
-        modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('product-modal-open');
-    };
-    const open = () => {
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('product-modal-open');
-    };
+    const close = () => { modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('product-modal-open'); };
+    const open = () => { modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); document.body.classList.add('product-modal-open'); };
+    const openCart = () => { if (window.FHCart && typeof window.FHCart.open === 'function') window.FHCart.open(); };
 
     button.addEventListener('click', open);
     imageBox.style.cursor = 'pointer';
@@ -94,57 +76,49 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.addEventListener('click', event => { if (event.target === modal) close(); });
     document.addEventListener('keydown', event => { if (event.key === 'Escape' && modal.classList.contains('is-open')) close(); });
 
-    thumbnails.forEach(thumb => {
-        thumb.addEventListener('click', () => {
-            const image = thumb.querySelector('img');
-            modalImage.src = image.src;
-            modalImage.alt = image.alt;
-            thumbnails.forEach(item => item.classList.remove('is-active'));
-            thumb.classList.add('is-active');
-        });
-    });
+    thumbnails.forEach(thumb => { thumb.addEventListener('click', () => { const image = thumb.querySelector('img'); modalImage.src = image.src; modalImage.alt = image.alt; thumbnails.forEach(item => item.classList.remove('is-active')); thumb.classList.add('is-active'); }); });
 
     let selectedSize = 'Medium';
-    sizeButtons.forEach(sizeButton => {
-        sizeButton.addEventListener('click', () => {
-            selectedSize = sizeButton.dataset.size;
-            sizeButtons.forEach(item => item.classList.toggle('is-selected', item === sizeButton));
-            status.textContent = `${selectedSize} seleccionado`;
-        });
-    });
+    sizeButtons.forEach(sizeButton => { sizeButton.addEventListener('click', () => { selectedSize = sizeButton.dataset.size; sizeButtons.forEach(item => item.classList.toggle('is-selected', item === sizeButton)); status.textContent = `${selectedSize} seleccionado`; }); });
 
-    const updateCartBadge = () => {
+    const alreadyInCart = () => {
         const cart = JSON.parse(localStorage.getItem('fhCart') || '[]');
-        let badge = document.querySelector('.fh-cart-badge');
-        if (!badge) {
-            badge = document.createElement('button');
-            badge.type = 'button';
-            badge.className = 'fh-cart-badge';
-            badge.innerHTML = '<span>CARRO</span><b>0</b>';
-            document.body.appendChild(badge);
+        return cart.some(item => item.product === 'Catrina Mexicana LED' && item.size === selectedSize);
+    };
+
+    const setCartLinkState = () => {
+        if (alreadyInCart()) {
+            addCart.classList.add('is-cart-link');
+            addCart.innerHTML = 'Ir al carrito <span>→</span>';
+            addCart.dataset.cartLink = 'true';
+        } else {
+            addCart.classList.remove('is-cart-link');
+            addCart.innerHTML = 'Añadir al carrito <span>→</span>';
+            delete addCart.dataset.cartLink;
         }
-        badge.querySelector('b').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-        badge.classList.toggle('has-items', cart.length > 0);
     };
 
     addCart.addEventListener('click', () => {
+        if (addCart.dataset.cartLink === 'true') {
+            close();
+            openCart();
+            return;
+        }
         const cart = JSON.parse(localStorage.getItem('fhCart') || '[]');
         const existing = cart.find(item => item.product === 'Catrina Mexicana LED' && item.size === selectedSize);
         if (existing) existing.quantity += 1;
         else cart.push({ product: 'Catrina Mexicana LED', size: selectedSize, quantity: 1 });
         localStorage.setItem('fhCart', JSON.stringify(cart));
-        updateCartBadge();
-        addCart.classList.add('is-added');
-        addCart.innerHTML = 'Añadido al carrito <span>✓</span>';
-        setTimeout(() => {
-            addCart.classList.remove('is-added');
-            addCart.innerHTML = 'Añadir al carrito <span>→</span>';
-        }, 1800);
+        window.dispatchEvent(new Event('fh:cart-updated'));
+        addCart.classList.add('is-cart-link');
+        addCart.dataset.cartLink = 'true';
+        addCart.innerHTML = 'Ir al carrito <span>→</span>';
     });
 
-    updateCartBadge();
+    sizeButtons.forEach(sizeButton => sizeButton.addEventListener('click', setCartLinkState));
+    window.addEventListener('fh:cart-updated', setCartLinkState);
+    window.addEventListener('storage', setCartLinkState);
+    setCartLinkState();
 
-    document.querySelectorAll('.product-placeholder button').forEach(btn => {
-        btn.addEventListener('click', () => btn.blur());
-    });
+    document.querySelectorAll('.product-placeholder button').forEach(btn => { btn.addEventListener('click', () => btn.blur()); });
 });
