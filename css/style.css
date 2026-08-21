@@ -146,14 +146,14 @@ footer { width:min(100% - 48px,var(--container-width)); margin:0 auto; padding:4
 }
 
 /* ONLY THE GALLERY IS FULL-BLEED.
-   All written content remains inside the centered premium container. */
+   Written content stays inside the centered premium container. */
 .project-gallery {
     width: 100vw;
     max-width: none;
     position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-left: 0;
+    left: auto;
+    transform: none;
+    margin-left: calc((100vw - 100%) / -2);
     margin-right: 0;
 }
 
