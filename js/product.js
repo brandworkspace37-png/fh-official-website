@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const mainImage = productCard.querySelector('.product-main img');
     const description = productCard.querySelector('.product-description');
-    if (!mainImage || !description) return;
+    const imageBox = productCard.querySelector('.product-main');
+    if (!mainImage || !description || !imageBox) return;
 
     const button = document.createElement('button');
     button.type = 'button';
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button type="button"><img src="assets/la%20catrina%20oficial%201.png" alt="Vista 1"></button>
                         <button type="button"><img src="assets/la%20catrina%20oficial%202.png" alt="Vista 2"></button>
                         <button type="button"><img src="assets/oficial%20la%20catrina%20product%203.png" alt="Vista 3"></button>
+                        <button type="button"><img src="assets/oficial%20la%20catrina%20product%204.png" alt="Vista 4"></button>
                     </div>
                 </div>
                 <div class="product-modal-info">
@@ -61,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     button.addEventListener('click', open);
+    imageBox.style.cursor = 'pointer';
+    imageBox.addEventListener('click', open);
     modal.querySelector('.product-modal-close').addEventListener('click', close);
     modal.addEventListener('click', event => { if (event.target === modal) close(); });
     document.addEventListener('keydown', event => { if (event.key === 'Escape' && modal.classList.contains('is-open')) close(); });
@@ -77,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.product-placeholder button').forEach(btn => {
         btn.addEventListener('click', () => {
-            btn.textContent = 'Próximamente';
             btn.blur();
         });
     });
