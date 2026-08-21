@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito | Form & Halo</title>
+    <meta name="description" content="Revisa tus productos y tu pedido en Form & Halo.">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .cart-page { min-height: 100vh; padding: 150px 24px 120px; }
+        .cart-container { width: min(1200px, 100%); margin: 0 auto; }
+        .cart-header { margin-bottom: 70px; }
+        .cart-header .section-eyebrow { display:block; margin-bottom:20px; }
+        .cart-header h1 { max-width:800px; font-size:clamp(52px,8vw,100px); line-height:.95; letter-spacing:-.045em; font-weight:500; }
+        .cart-header h1 span { color:var(--color-gray); }
+        .cart-layout { display:grid; grid-template-columns:1fr 360px; gap:70px; border-top:1px solid rgba(255,255,255,.12); padding-top:50px; }
+        .cart-empty { min-height:300px; display:flex; flex-direction:column; justify-content:center; border:1px solid rgba(255,255,255,.12); padding:40px; }
+        .cart-empty h2 { font-size:28px; font-weight:500; margin-bottom:15px; }
+        .cart-empty p { color:var(--color-gray); line-height:1.6; max-width:500px; }
+        .cart-summary { border:1px solid rgba(255,255,255,.12); padding:30px; height:max-content; }
+        .cart-summary h2 { font-size:18px; font-weight:600; margin-bottom:30px; }
+        .summary-row { display:flex; justify-content:space-between; gap:20px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.08); font-size:14px; }
+        .summary-row span:last-child { color:var(--color-gray); }
+        .cart-actions { margin-top:30px; display:flex; flex-direction:column; gap:12px; }
+        .cart-button { display:inline-flex; align-items:center; justify-content:center; min-height:50px; padding:14px 20px; border:1px solid rgba(255,255,255,.3); color:var(--color-white); background:transparent; text-decoration:none; font-size:12px; letter-spacing:.08em; text-transform:uppercase; transition:.25s ease; }
+        .cart-button:hover { background:var(--color-white); color:var(--color-black); }
+        .cart-links { margin-top:70px; display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+        .cart-link { padding:25px 20px; border-top:1px solid rgba(255,255,255,.15); color:var(--color-white); text-decoration:none; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+        .cart-link:hover { color:var(--color-gray); }
+        @media (max-width:800px) {
+            .cart-page { padding:110px 20px 80px; }
+            .cart-layout { grid-template-columns:1fr; gap:35px; }
+            .cart-links { grid-template-columns:1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="nav-links">
+            <a href="index.html#transformacion">Transformación</a>
+            <a href="index.html#servicios">Servicios</a>
+            <a href="index.html#proceso">Proceso</a>
+            <a href="index.html#proyectos">Proyectos</a>
+            <a href="index.html#contacto">Contacto</a>
+        </div>
+        <a class="logo" href="index.html">FORM &amp; HALO</a>
+        <a class="cart-nav" href="carrito.html" aria-label="Abrir carrito">CARRO <span class="cart-count">0</span></a>
+    </nav>
+</header>
+
+<main class="cart-page">
+    <div class="cart-container">
+        <div class="cart-header">
+            <span class="section-eyebrow">TU PEDIDO</span>
+            <h1>Tu carrito<span>.</span></h1>
+        </div>
+
+        <div class="cart-layout">
+            <section class="cart-items" aria-label="Productos del carrito">
+                <div class="cart-empty">
+                    <h2>Tu carrito está vacío.</h2>
+                    <p>Cuando agregues un producto, aquí podrás revisar sus detalles, tamaño, cantidad y estado antes de continuar.</p>
+                    <div class="cart-actions">
+                        <a class="cart-button" href="index.html#producto">Ver productos</a>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="cart-summary">
+                <h2>Resumen del pedido</h2>
+                <div class="summary-row"><span>Productos</span><span>0</span></div>
+                <div class="summary-row"><span>Subtotal</span><span>—</span></div>
+                <div class="summary-row"><span>Envío</span><span>Se calculará después</span></div>
+                <div class="cart-actions">
+                    <a class="cart-button" href="#">Continuar</a>
+                </div>
+            </aside>
+        </div>
+
+        <div class="cart-links" aria-label="Información del pedido">
+            <a class="cart-link" href="#">Mis pedidos</a>
+            <a class="cart-link" href="#">Seguimiento</a>
+            <a class="cart-link" href="#">Política de devolución</a>
+            <a class="cart-link" href="#">Soporte</a>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Base preparada para conectar el carrito real posteriormente.
+    const count = localStorage.getItem('fhCartCount') || '0';
+    document.querySelector('.cart-count').textContent = count;
+</script>
+</body>
+</html>
