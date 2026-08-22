@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Recibo | Form & Halo</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.receipt-page{min-height:100vh;padding:140px 24px 100px}.receipt-wrap{width:min(850px,100%);margin:auto}.receipt-head{margin-bottom:55px}.receipt-eyebrow{font-size:10px;letter-spacing:.2em;color:var(--color-gray)}.receipt-head h1{font-size:clamp(52px,8vw,92px);line-height:.92;letter-spacing:-.05em;font-weight:500;margin-top:20px}.receipt-head h1 span{display:block;color:var(--color-gray)}.receipt-card{border:1px solid rgba(255,255,255,.13);padding:38px}.receipt-meta{display:flex;justify-content:space-between;gap:30px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.1)}.meta-label{display:block;font-size:9px;letter-spacing:.15em;color:var(--color-gray);margin-bottom:7px}.meta-value{font-size:14px}.receipt-items{padding:30px 0;border-bottom:1px solid rgba(255,255,255,.1)}.receipt-item{display:flex;justify-content:space-between;gap:30px;padding:12px 0}.receipt-item h2{font-size:17px;font-weight:500}.receipt-item p{font-size:11px;color:var(--color-gray);margin-top:5px}.receipt-item strong{font-size:16px}.receipt-total{display:flex;justify-content:space-between;align-items:center;padding-top:28px}.receipt-total span{font-size:10px;letter-spacing:.15em;color:var(--color-gray)}.receipt-total strong{font-size:26px;font-weight:500}.receipt-payment{margin-top:12px;font-size:10px;color:var(--color-gray)}.receipt-note{margin-top:35px;font-size:11px;line-height:1.7;color:var(--color-gray)}.receipt-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:35px}.receipt-button{display:inline-flex;padding:13px 18px;border:1px solid rgba(255,255,255,.25);font-size:9px;letter-spacing:.12em;text-transform:uppercase}.receipt-button.primary{background:#fff;color:#000}.receipt-button:hover{background:#fff;color:#000}@media(max-width:650px){.receipt-page{padding:110px 20px 70px}.receipt-card{padding:25px}.receipt-meta{flex-direction:column}.receipt-item{flex-direction:column;gap:8px}.receipt-actions{flex-direction:column}.receipt-button{justify-content:center}}
+</style>
+</head>
+<body>
+<header><nav><div class="nav-links"><a href="index.html#transformacion">Transformación</a><a href="index.html#servicios">Servicios</a><a href="index.html#proceso">Proceso</a><a href="index.html#contacto">Contacto</a></div><a class="logo" href="index.html">FORM &amp; HALO</a><a class="cart-nav" href="carrito.html">🛒</a></nav></header>
+<main class="receipt-page"><div class="receipt-wrap">
+<div class="receipt-head"><span class="receipt-eyebrow">FORM &amp; HALO · RECIBO</span><h1>Tu <span>recibo.</span></h1></div>
+<section class="receipt-card" id="receiptCard"></section>
+</div></main>
+<script>
+const order=JSON.parse(localStorage.getItem('fhLastOrder')||'null');
+const card=document.getElementById('receiptCard');
+if(!order){card.innerHTML='<p style="color:var(--color-gray)">No encontramos un pedido reciente.</p><div class="receipt-actions"><a class="receipt-button primary" href="index.html">Volver al inicio</a></div>'}
+else{
+const date=order.createdAt?new Date(order.createdAt).toLocaleDateString('es-US',{year:'numeric',month:'long',day:'numeric'}):'—';
+const items=(order.items||[]).map(i=>{const total=(Number(i.price)||0)*Number(i.quantity||1);return `<div class="receipt-item"><div><h2>${i.product||'Producto'}</h2><p>${i.size||''} · ${i.dimensions||''} · Cantidad: ${i.quantity||1}</p></div><strong>$${total.toLocaleString('en-US')}</strong></div>`}).join('');
+card.innerHTML=`<div class="receipt-meta"><div><span class="meta-label">NÚMERO DE PEDIDO</span><span class="meta-value">${order.number||'—'}</span></div><div><span class="meta-label">FECHA</span><span class="meta-value">${date}</span></div><div><span class="meta-label">ESTADO</span><span class="meta-value">${order.status||'Pagado'}</span></div></div><div class="receipt-items">${items}</div><div class="receipt-total"><span>TOTAL PAGADO</span><strong>$${Number(order.total||0).toLocaleString('en-US')}</strong></div><div class="receipt-payment">Pago confirmado · ${order.payment?.provider||'PayPal'} · ${order.payment?.status||order.status||'Pagado'}</div><p class="receipt-note">Gracias por confiar en FORM &amp; HALO. Conserva este recibo como comprobante de tu pedido.</p><div class="receipt-actions"><button class="receipt-button primary" type="button" onclick="window.print()">Imprimir / Guardar PDF</button><a class="receipt-button" href="mis-productos.html">Mis productos</a><a class="receipt-button" href="index.html">Inicio</a></div>`;
+}
+</script>
+</body></html>
