@@ -7,5 +7,13 @@
     "directory": ".",
     "binding": "ASSETS",
     "run_worker_first": ["/api/*"]
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "fh-production-db",
+      "database_id": "f0d5946f-8487-47a1-977f-dbe060e2ab77",
+      "migrations_dir": "migrations"
+    }
+  ]
 }
