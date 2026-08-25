@@ -6,15 +6,7 @@
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*", "/checkout.html"],
-    "exclude": [
-      ".git",
-      ".git/**",
-      ".wrangler",
-      ".wrangler/**",
-      "node_modules",
-      "node_modules/**"
-    ]
+    "run_worker_first": ["/api/*", "/checkout.html"]
   },
   "d1_databases": [
     {
