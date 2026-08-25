@@ -1,7 +1,19 @@
 .git
+.git/**
 .wrangler
+.wrangler/**
+.vscode
+.vscode/**
 node_modules
-.gitignore
-README.md
-wrangler.jsonc
+node_modules/**
+worker.js
+database
+ database/**
+migrations
+migrations/**
+package.json
 package-lock.json
+wrangler.jsonc
+README.md
+.gitignore
+.assetsignore
