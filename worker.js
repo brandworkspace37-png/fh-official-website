@@ -28,6 +28,90 @@ function getOrigin(request) {
   return origin === new URL(request.url).origin ? origin : null;
 }
 
+function normalizeProjectLead(body) {
+  const name = String(body?.name || "").trim();
+  const country = String(body?.country || "").trim().toUpperCase();
+  const phone = String(body?.phone || "").trim();
+  const email = String(body?.email || "").trim().toLowerCase();
+  const zip = String(body?.zip || "").trim();
+  const details = String(body?.details || "").trim();
+  const interests = Array.isArray(body?.interests)
+    ? body.interests.map(String).slice(0, 2)
+    : [];
+  const attachment = body?.attachment && typeof body.attachment === "object"
+    ? {
+        name: String(body.attachment.name || "").slice(0, 180),
+        type: String(body.attachment.type || "").slice(0, 80),
+        size: Number(body.attachment.size) || 0,
+      }
+    : null;
+
+  if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:[ '-][A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$/.test(name)) {
+    throw new Error("Invalid name.");
+  }
+  if (!/^[^\s@,]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)) {
+    throw new Error("Invalid email.");
+  }
+  if (!["US", "MX", "CA"].includes(country)) throw new Error("Unsupported country.");
+  if (phone.replace(/\D/g, "").length !== 10) throw new Error("Invalid phone number.");
+  if (country === "US" && !/^\d{5}$/.test(zip)) throw new Error("Invalid ZIP code.");
+  if (country === "MX" && !/^\d{5}$/.test(zip)) throw new Error("Invalid postal code.");
+  if (country === "CA" && !/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(zip)) throw new Error("Invalid postal code.");
+  if (!details && interests.length === 0) throw new Error("Project information is required.");
+  if (details.length > 5000) throw new Error("Project details are too long.");
+
+  return { name, country, phone, email, zip, details, interests, attachment };
+}
+
+async function saveProjectLead(request, env) {
+  if (!env.DB) throw new Error("Database binding is not configured.");
+  const body = await request.json();
+  const lead = normalizeProjectLead(body);
+  const customerId = crypto.randomUUID();
+  const leadId = crypto.randomUUID();
+  const now = new Date().toISOString();
+
+  const existing = await env.DB.prepare(
+    "SELECT id FROM customers WHERE lower(email) = lower(?) LIMIT 1"
+  ).bind(lead.email).first("id");
+
+  const resolvedCustomerId = existing?.id || customerId;
+  const metadata = JSON.stringify({
+    lead_id: leadId,
+    country: lead.country,
+    zip: lead.zip,
+    interests: lead.interests,
+    details: lead.details,
+    attachment: lead.attachment,
+    source: "website",
+    submitted_at: now,
+  });
+
+  const statements = [];
+  if (existing?.id) {
+    statements.push(
+      env.DB.prepare(
+        "UPDATE customers SET first_name = ?, phone = ?, language = ?, updated_at = datetime('now') WHERE id = ?"
+      ).bind(lead.name, lead.phone, lead.country === "US" ? "en" : "es", resolvedCustomerId)
+    );
+  } else {
+    statements.push(
+      env.DB.prepare(
+        "INSERT INTO customers (id, first_name, last_name, email, phone, language, status) VALUES (?, ?, ?, ?, ?, ?, 'active')"
+      ).bind(resolvedCustomerId, lead.name, "", lead.email, lead.phone, lead.country === "US" ? "en" : "es")
+    );
+  }
+
+  statements.push(
+    env.DB.prepare(
+      "INSERT INTO activity_log (id, actor_type, actor_id, action, entity_type, entity_id, metadata) VALUES (?, 'customer', ?, 'project_lead_submitted', 'project_lead', ?, ?)"
+    ).bind(leadId, resolvedCustomerId, leadId, metadata)
+  );
+
+  await env.DB.batch(statements);
+  return { success: true, leadId, customerId: resolvedCustomerId };
+}
+
 async function getAccessToken(env) {
   const clientId = env.PAYPAL_CLIENT_ID || PAYPAL_SANDBOX_CLIENT_ID;
   if (!clientId || !env.PAYPAL_CLIENT_SECRET) {
@@ -219,9 +303,26 @@ export default {
 
     if (url.pathname.startsWith("/api/")) {
       if (!origin) return json({ error: "Origin not allowed." }, 403, "null");
-      if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type" } });
+      if (request.method === "OPTIONS") {
+        return new Response(null, {
+          status: 204,
+          headers: {
+            "Access-Control-Allow-Origin": origin,
+            "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+          },
+        });
+      }
 
       try {
+        if (url.pathname === "/api/health" && request.method === "GET") {
+          if (!env.DB) return json({ ok: false, db: false }, 503, origin);
+          await env.DB.prepare("SELECT 1 AS ok").first();
+          return json({ ok: true, db: true }, 200, origin);
+        }
+        if (url.pathname === "/api/project-leads" && request.method === "POST") {
+          return json(await saveProjectLead(request, env), 201, origin);
+        }
         if (url.pathname === "/api/paypal/create-order" && request.method === "POST") {
           return json(await createPayPalOrder(request, env), 200, origin);
         }
@@ -230,7 +331,8 @@ export default {
         }
         return json({ error: "Not found." }, 404, origin);
       } catch (error) {
-        return json({ error: error instanceof Error ? error.message : "Payment service error." }, 400, origin);
+        console.error("API error", error);
+        return json({ error: error instanceof Error ? error.message : "Server error." }, 400, origin);
       }
     }
 
