@@ -1,533 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar mi proyecto | Form & Halo</title>
-
-    <meta
-        name="description"
-        content="Cuéntanos sobre tu proyecto y descubre cómo Form & Halo puede ayudarte a transformar su identidad visual."
-    >
-
+    <meta name="description" content="Cuéntanos sobre tu proyecto y descubre cómo Form & Halo puede ayudarte a transformar su identidad visual.">
     <link rel="stylesheet" href="../css/style.css">
-
 </head>
-
-
 <body>
+<main class="project-page">
+    <header class="project-header">
+        <a href="../index.html" class="project-logo">FORM &amp; HALO</a>
+        <a href="../index.html" class="project-back">Volver al sitio</a>
+    </header>
 
-    <main class="project-page">
-
-        <!-- HEADER DEL FORMULARIO -->
-
-        <header class="project-header">
-
-           <a href="../index.html" class="project-logo">
-    FORM & HALO
-</a>
-
-<a href="../index.html" class="project-back">
-    Volver al sitio
-</a>
-
-        </header>
-
-
-        <!-- INDICADOR DE PASOS -->
-
-        <div class="form-progress" aria-label="Progreso del formulario">
-
-            <div
-                class="form-progress-step is-active"
-                data-progress-step="1"
-            >
-                <span>STEP 1</span>
-            </div>
-
-            <div class="form-progress-line"></div>
-
-            <div
-                class="form-progress-step"
-                data-progress-step="2"
-            >
-                <span>STEP 2</span>
-            </div>
-
-        </div>
-
-
-        <!-- FORMULARIO -->
-
-        <form
-            id="project-form"
-            class="project-form"
-            novalidate
-        >
-          <div class="form-slider">
-         <div class="form-track">
-
-            <!-- =========================================
-                 STEP 1 — INFORMACIÓN DE CONTACTO
-                 ========================================= -->
-
-            <section
-              class="form-step is-active"
-               data-step="1"
-                aria-hidden="false"
->
-                <div class="form-step-header">
-
-                    <span class="form-step-label">
-                        STEP 1
-                    </span>
-
-                    <h1>
-                        Información de
-                        <span>contacto.</span>
-                    </h1>
-
-                    <p>
-                        Primero necesitamos algunos datos para poder
-                        identificar y contactar contigo sobre tu proyecto.
-                    </p>
-
-                </div>
-
-
-                <div class="contact-fields">
-
-                    <!-- NOMBRE -->
-
-                    <div class="form-field">
-
-                        <label for="name">
-                            Nombre
-                        </label>
-
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            autocomplete="name"
-                            placeholder="Tu nombre"
-                            required
-                        >
-
-                    </div>
-
-
-                    <!-- PAÍS -->
-
-                    <div class="form-field">
-
-                        <label for="country">
-                            País de residencia
-                        </label>
-
-                        <select
-                            id="country"
-                            name="country"
-                            required
-                        >
-
-                            <option value="">
-                                Selecciona tu país
-                            </option>
-
-                            <option value="US">
-                                🇺🇸 Estados Unidos (+1)
-                            </option>
-
-                            <option value="MX">
-                                🇲🇽 México (+52)
-                            </option>
-
-                            <option value="CA">
-                                🇨🇦 Canadá (+1)
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- TELÉFONO -->
-
-<div class="form-field">
-
-    <label for="phone">
-        Número de teléfono
-    </label>
-
-    <div class="phone-field">
-
-        <select
-            id="country"
-            name="country"
-            required
-            aria-label="Seleccionar país"
-        >
-            <option value="US">🇺🇸</option>
-            <option value="MX">🇲🇽</option>
-            <option value="CA">🇨🇦</option>
-        </select>
-
-        <span
-            id="phone-code"
-            class="phone-code"
-        >
-            +
-        </span>
-
-        <input
-            type="tel"
-            id="phone"
-            name="phone"
-            autocomplete="tel"
-            inputmode="tel"
-            placeholder="Número de teléfono"
-            required
-        >
-
+    <div class="form-progress" aria-label="Progreso del formulario">
+        <div class="form-progress-step is-active" data-progress-step="1"><span>STEP 1</span></div>
+        <div class="form-progress-line"></div>
+        <div class="form-progress-step" data-progress-step="2"><span>STEP 2</span></div>
     </div>
 
-</div>
-
-                    <!-- EMAIL -->
-
-                    <div class="form-field">
-
-                        <label for="email">
-                            Email
-                        </label>
-
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            autocomplete="email"
-                            placeholder="tu@email.com"
-                            required
-                        >
-
+    <form id="project-form" class="project-form" novalidate>
+        <div class="form-slider">
+            <div class="form-track">
+                <section class="form-step is-active" data-step="1" aria-hidden="false">
+                    <div class="form-step-header">
+                        <span class="form-step-label">STEP 1</span>
+                        <h1>Información de <span>contacto.</span></h1>
+                        <p>Primero necesitamos algunos datos para poder identificar y contactar contigo sobre tu proyecto.</p>
                     </div>
 
+                    <div class="contact-fields">
+                        <div class="form-field">
+                            <label for="name">Nombre</label>
+                            <input type="text" id="name" name="name" autocomplete="name" placeholder="Tu nombre" required>
+                        </div>
 
-                    <!-- CÓDIGO POSTAL -->
+                        <div class="form-field">
+                            <label for="country">País de residencia</label>
+                            <select id="country" name="country" required>
+                                <option value="">Selecciona tu país</option>
+                                <option value="US">Estados Unidos (+1)</option>
+                                <option value="MX">México (+52)</option>
+                                <option value="CA">Canadá (+1)</option>
+                            </select>
+                        </div>
 
-                    <div class="form-field">
+                        <div class="form-field">
+                            <label for="phone">Número de teléfono</label>
+                            <div class="phone-field">
+                                <select id="phone-country" name="phone-country" aria-label="Seleccionar país">
+                                    <option value="US">🇺🇸</option>
+                                    <option value="MX">🇲🇽</option>
+                                    <option value="CA">🇨🇦</option>
+                                </select>
+                                <span id="phone-code" class="phone-code">+1</span>
+                                <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="Número de teléfono" required>
+                            </div>
+                        </div>
 
-                        <label for="zip">
-                            Código postal
-                        </label>
+                        <div class="form-field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" autocomplete="email" placeholder="tu@email.com" required>
+                        </div>
 
-                        <input
-                            type="text"
-                            id="zip"
-                            name="zip"
-                            autocomplete="postal-code"
-                            placeholder="Código postal"
-                            required
-                        >
-
+                        <div class="form-field">
+                            <label for="zip">Código postal</label>
+                            <input type="text" id="zip" name="zip" autocomplete="postal-code" placeholder="Código postal" required>
+                        </div>
                     </div>
 
-                </div>
+                    <div id="step-one-message" class="form-validation-message" aria-live="polite"></div>
+                    <div class="form-step-actions">
+                        <button type="button" id="next-step" class="form-button">Continuar</button>
+                    </div>
+                </section>
 
-
-                <!-- MENSAJE DE VALIDACIÓN -->
-
-                <div
-                    id="step-one-message"
-                    class="form-validation-message"
-                    aria-live="polite"
-                ></div>
-
-
-                <!-- CONTINUAR -->
-
-                <div class="form-step-actions">
-
-                    <button
-                        type="button"
-                        id="next-step"
-                        class="form-button"
-                    >
-                        Continuar
-                    </button>
-
-                </div>
-
-            </section>
-
-
-            <!-- =========================================
-                 STEP 2 — PROYECTO
-                 ========================================= -->
-
-            <section
-                class="form-step"
-                data-step="2"
-                aria-hidden="true"
-            >
-
-                <div class="form-step-header">
-
-                    <span class="form-step-label">
-                        STEP 2
-                    </span>
-
-                    <h1>
-                        Cuéntanos de
-                        <span>tu proyecto.</span>
-                    </h1>
-
-                    <p>
-                        Cuéntanos qué estás buscando o explícanos
-                        directamente qué quieres construir.
-                    </p>
-
-                </div>
-
-
-                <!-- OPCIONES -->
-
-                <div
-                    id="selection-mode"
-                    class="selection-mode"
-                >
-
-                    <p class="form-help">
-                        Selecciona hasta 2 opciones.
-                    </p>
-
-
-                    <div class="project-options">
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="identidad"
-                            >
-
-                            <span>
-                                Quiero crear la identidad de mi negocio
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="logo-identidad"
-                            >
-
-                            <span>
-                                Quiero crear mi logo desde cero y desarrollar mi identidad
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="logo-3d"
-                            >
-
-                            <span>
-                                Quiero imprimir mi logo en 3D
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="transformacion"
-                            >
-
-                            <span>
-                                Quiero transformar la imagen de mi negocio
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="asesoria"
-                            >
-
-                            <span>
-                                Quiero conocer qué necesita mi negocio
-                            </span>
-
-                        </label>
-
-
-                        <label class="project-option">
-
-                            <input
-                                type="checkbox"
-                                name="interest"
-                                value="informacion"
-                            >
-
-                            <span>
-                                Solo quiero información antes de decidir
-                            </span>
-
-                        </label>
-
+                <section class="form-step" data-step="2" aria-hidden="true">
+                    <div class="form-step-header">
+                        <span class="form-step-label">STEP 2</span>
+                        <h1>Cuéntanos de <span>tu proyecto.</span></h1>
+                        <p>Cuéntanos qué estás buscando o explícanos directamente qué quieres construir.</p>
                     </div>
 
+                    <div id="selection-mode" class="selection-mode">
+                        <p class="form-help">Selecciona hasta 2 opciones.</p>
+                        <div class="project-options">
+                            <label class="project-option"><input type="checkbox" name="interest" value="identidad"><span>Quiero crear la identidad de mi negocio</span></label>
+                            <label class="project-option"><input type="checkbox" name="interest" value="logo-identidad"><span>Quiero crear mi logo desde cero y desarrollar mi identidad</span></label>
+                            <label class="project-option"><input type="checkbox" name="interest" value="logo-3d"><span>Quiero imprimir mi logo en 3D</span></label>
+                            <label class="project-option"><input type="checkbox" name="interest" value="transformacion"><span>Quiero transformar la imagen de mi negocio</span></label>
+                            <label class="project-option"><input type="checkbox" name="interest" value="asesoria"><span>Quiero conocer qué necesita mi negocio</span></label>
+                            <label class="project-option"><input type="checkbox" name="interest" value="informacion"><span>Solo quiero información antes de decidir</span></label>
+                        </div>
+                        <button type="button" id="custom-response-trigger" class="custom-response-trigger">Personalizar mi respuesta</button>
+                    </div>
 
-                    <!-- PERSONALIZAR -->
+                    <div id="custom-response-mode" class="custom-response-mode" hidden>
+                        <label for="project-details">Personalizar mi respuesta</label>
+                        <textarea id="project-details" name="project-details" rows="8" minlength="50" placeholder="Cuéntanos sobre tu proyecto, tu idea o lo que quieres construir..."></textarea>
+                        <span class="character-counter">0 / 50 caracteres mínimos</span>
+                        <button type="button" id="back-to-selection" class="back-to-selection">Volver a las opciones</button>
+                    </div>
 
-                    <button
-                        type="button"
-                        id="custom-response-trigger"
-                        class="custom-response-trigger"
-                    >
-                        Personalizar mi respuesta
-                    </button>
+                    <div id="project-file" class="project-file" hidden>
+                        <label for="project-attachment">¿Tienes algún material que nos ayude a entender tu proyecto?</label>
+                        <input type="file" id="project-attachment" name="project-attachment" accept=".png,.pdf,image/png,application/pdf">
+                        <p class="file-instruction">PNG o PDF · Máximo 10 MB · Opcional</p>
+                        <button type="button" id="skip-file" class="skip-file">Omitir por ahora</button>
+                    </div>
 
-                </div>
-
-
-                <!-- RESPUESTA PERSONALIZADA -->
-
-                <div
-                    id="custom-response-mode"
-                    class="custom-response-mode"
-                    hidden
-                >
-
-                    <label for="project-details">
-                        Personalizar mi respuesta
-                    </label>
-
-                    <textarea
-                        id="project-details"
-                        name="project-details"
-                        rows="8"
-                        minlength="50"
-                        placeholder="Cuéntanos sobre tu proyecto, tu idea o lo que quieres construir..."
-                    ></textarea>
-
-                    <span class="character-counter">
-                        Mínimo 50 caracteres
-                    </span>
-
-                    <button
-                        type="button"
-                        id="back-to-selection"
-                        class="back-to-selection"
-                    >
-                        Volver a las opciones
-                    </button>
-
-                </div>
-
-
-                <!-- ARCHIVO -->
-
-                <div
-                    id="project-file"
-                    class="project-file"
-                    hidden
-                >
-
-                    <label for="project-attachment">
-                        ¿Tienes algún material que nos ayude a entender tu proyecto?
-                    </label>
-
-                    <input
-                        type="file"
-                        id="project-attachment"
-                        name="project-attachment"
-                        accept=".png,.pdf,image/png,application/pdf"
-                    >
-
-                    <p class="file-instruction">
-                        Sube un archivo de alta calidad. Evita imágenes
-                        borrosas u oscuras; el contenido debe verse claro.
-                    </p>
-
-                    <button
-                        type="button"
-                        id="skip-file"
-                        class="skip-file"
-                    >
-                        Omitir por ahora
-                    </button>
-
-                </div>
-
-
-                <!-- MENSAJE -->
-
-                <div
-                    id="step-two-message"
-                    class="form-validation-message"
-                    aria-live="polite"
-                ></div>
-
-
-                <!-- ACCIONES -->
-
-                <div class="form-step-actions">
-
-                    <button
-                        type="button"
-                        id="previous-step"
-                        class="form-button form-button-secondary"
-                    >
-                        Volver
-                    </button>
-
-                    <button
-                        type="submit"
-                        class="form-button"
-                    >
-                        Enviar mi proyecto
-                    </button>
-
-                </div>
-
-            </section>
-         </div>
-          </div>
-
-        </form>
-
-    </main>
-
-
-    <script src="../js/formulario.js"></script>
-    
+                    <div id="step-two-message" class="form-validation-message" aria-live="polite"></div>
+                    <div class="form-step-actions">
+                        <button type="button" id="previous-step" class="form-button form-button-secondary">Volver</button>
+                        <button type="submit" class="form-button">Enviar mi proyecto</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </form>
+</main>
+<script src="../js/formulario.js"></script>
 </body>
-
 </html>
