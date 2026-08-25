@@ -1,675 +1,253 @@
-/* =========================================
-   FORM & HALO — FORMULARIO
-   STEP 1 + STEP 2
-   ========================================= */
-
 document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("#project-form");
+  if (!form) return;
 
-    const form = document.querySelector("#project-form");
+  const stepOne = document.querySelector('[data-step="1"]');
+  const stepTwo = document.querySelector('[data-step="2"]');
+  const track = document.querySelector(".form-track");
+  const progressOne = document.querySelector('[data-progress-step="1"]');
+  const progressTwo = document.querySelector('[data-progress-step="2"]');
+  const nextStep = document.querySelector("#next-step");
+  const previousStep = document.querySelector("#previous-step");
+  const stepOneMessage = document.querySelector("#step-one-message");
+  const stepTwoMessage = document.querySelector("#step-two-message");
 
-    if (!form) return;
+  const name = document.querySelector("#name");
+  const country = document.querySelector('.contact-fields select#country');
+  const phone = document.querySelector("#phone");
+  const phoneCountry = document.querySelector('.phone-field select#country');
+  const phoneCode = document.querySelector("#phone-code");
+  const email = document.querySelector("#email");
+  const zip = document.querySelector("#zip");
 
+  // The original markup contained two elements with id="country".
+  // Normalize the second one immediately so the form has unique IDs at runtime.
+  if (phoneCountry && phoneCountry !== country) {
+    phoneCountry.id = "phone-country";
+    phoneCountry.name = "phone-country";
+  }
 
-    /* =========================================
-       ELEMENTOS GENERALES
-       ========================================= */
+  const countryCodes = { US: "+1", MX: "+52", CA: "+1" };
+  const updatePhoneCode = () => {
+    const value = country?.value || "";
+    if (phoneCode) phoneCode.textContent = countryCodes[value] || "+";
+    if (phoneCountry && phoneCountry.value !== value) phoneCountry.value = value;
+  };
 
-    const stepOne = document.querySelector('[data-step="1"]');
-    const stepTwo = document.querySelector('[data-step="2"]');
-    const formTrack =
-    document.querySelector(".form-track");
+  country?.addEventListener("change", () => {
+    if (phoneCountry) phoneCountry.value = country.value;
+    if (phone) phone.value = "";
+    updatePhoneCode();
+  });
 
-    const nextStep = document.querySelector("#next-step");
-    const previousStep = document.querySelector("#previous-step");
+  phoneCountry?.addEventListener("change", () => {
+    if (country) country.value = phoneCountry.value;
+    updatePhoneCode();
+    if (phone) phone.value = "";
+  });
+  updatePhoneCode();
 
-    const progressStepOne =
-        document.querySelector('[data-progress-step="1"]');
+  const nameRule = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:\s+[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$/;
+  const emailRule = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-    const progressStepTwo =
-        document.querySelector('[data-progress-step="2"]');
+  const showMessage = (element, text, type = "error") => {
+    if (!element) return;
+    element.textContent = text;
+    element.classList.remove("has-error", "is-success");
+    if (text) element.classList.add(type === "success" ? "is-success" : "has-error");
+  };
 
+  const validateStepOne = () => {
+    const nameValue = name.value.trim();
+    const emailValue = email.value.trim();
+    const phoneDigits = phone.value.replace(/\D/g, "");
+    const countryValue = country.value;
+    const zipValue = zip.value.trim();
 
-    /* =========================================
-       STEP 1
-       ========================================= */
+    if (!nameValue || !nameRule.test(nameValue)) {
+      showMessage(stepOneMessage, "Revisa tu nombre.");
+      name.focus();
+      return false;
+    }
+    if (!["US", "MX", "CA"].includes(countryValue)) {
+      showMessage(stepOneMessage, "Selecciona tu país.");
+      country.focus();
+      return false;
+    }
+    if (phoneDigits.length !== 10) {
+      showMessage(stepOneMessage, "Introduce un teléfono válido de 10 dígitos.");
+      phone.focus();
+      return false;
+    }
+    if (!emailRule.test(emailValue)) {
+      showMessage(stepOneMessage, "Introduce un email válido.");
+      email.focus();
+      return false;
+    }
+    const validZip = countryValue === "CA"
+      ? /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(zipValue)
+      : /^\d{5}$/.test(zipValue);
+    if (!validZip) {
+      showMessage(stepOneMessage, "Revisa tu código postal.");
+      zip.focus();
+      return false;
+    }
 
-    const country = document.querySelector("#country");
-    const phone = document.querySelector("#phone");
-    const phoneCode = document.querySelector("#phone-code");
+    showMessage(stepOneMessage, "✓", "success");
+    return true;
+  };
 
-    const name = document.querySelector("#name");
-    const email = document.querySelector("#email");
-    const zip = document.querySelector("#zip");
+  nextStep?.addEventListener("click", () => {
+    if (!validateStepOne()) return;
+    setTimeout(() => {
+      stepOne.classList.remove("is-active");
+      stepTwo.classList.add("is-active");
+      stepOne.setAttribute("aria-hidden", "true");
+      stepTwo.setAttribute("aria-hidden", "false");
+      track.classList.add("show-step-2");
+      progressOne.classList.add("is-complete");
+      progressTwo.classList.add("is-active");
+    }, 250);
+  });
 
-    const stepOneMessage =
-        document.querySelector("#step-one-message");
+  previousStep?.addEventListener("click", () => {
+    stepTwo.classList.remove("is-active");
+    stepOne.classList.add("is-active");
+    stepTwo.setAttribute("aria-hidden", "true");
+    stepOne.setAttribute("aria-hidden", "false");
+    track.classList.remove("show-step-2");
+    progressTwo.classList.remove("is-active");
+    progressOne.classList.remove("is-complete");
+  });
 
+  const interestOptions = [...document.querySelectorAll('input[name="interest"]')];
+  const selectionMode = document.querySelector("#selection-mode");
+  const customTrigger = document.querySelector("#custom-response-trigger");
+  const customModeElement = document.querySelector("#custom-response-mode");
+  const backToSelection = document.querySelector("#back-to-selection");
+  const projectDetails = document.querySelector("#project-details");
+  const projectFile = document.querySelector("#project-file");
+  const attachment = document.querySelector("#project-attachment");
+  const skipFile = document.querySelector("#skip-file");
+  const counter = document.querySelector(".character-counter");
+  let customMode = false;
 
-    const countryCodes = {
-        US: "+1",
-        MX: "+52",
-        CA: "+1"
+  const updateInterestLimit = () => {
+    const selected = interestOptions.filter((item) => item.checked);
+    interestOptions.forEach((item) => {
+      item.disabled = selected.length >= 2 && !item.checked;
+    });
+    if (selected.length && !customMode) projectFile.hidden = false;
+  };
+
+  interestOptions.forEach((option) => option.addEventListener("change", updateInterestLimit));
+
+  customTrigger?.addEventListener("click", () => {
+    customMode = true;
+    interestOptions.forEach((option) => { option.checked = false; option.disabled = false; });
+    selectionMode.hidden = true;
+    customModeElement.hidden = false;
+    projectFile.hidden = true;
+    showMessage(stepTwoMessage, "");
+    projectDetails.focus();
+  });
+
+  backToSelection?.addEventListener("click", () => {
+    customMode = false;
+    customModeElement.hidden = true;
+    selectionMode.hidden = false;
+    projectFile.hidden = true;
+    showMessage(stepTwoMessage, "");
+  });
+
+  projectDetails?.addEventListener("input", () => {
+    if (counter) counter.textContent = `${projectDetails.value.trim().length} / 50 caracteres mínimos`;
+  });
+
+  skipFile?.addEventListener("click", () => {
+    attachment.value = "";
+    projectFile.dataset.skipped = "true";
+  });
+
+  attachment?.addEventListener("change", () => {
+    const file = attachment.files?.[0];
+    if (!file) return;
+    const allowed = ["image/png", "application/pdf"];
+    if (!allowed.includes(file.type)) {
+      attachment.value = "";
+      showMessage(stepTwoMessage, "Solo puedes subir archivos PNG o PDF.");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      attachment.value = "";
+      showMessage(stepTwoMessage, "El archivo no puede superar los 10 MB.");
+    }
+  });
+
+  const submitProject = async () => {
+    if (!validateStepOne()) {
+      stepOne.classList.add("is-active");
+      stepTwo.classList.remove("is-active");
+      track.classList.remove("show-step-2");
+      return;
+    }
+
+    const interests = interestOptions.filter((item) => item.checked).map((item) => item.value);
+    const details = projectDetails?.value.trim() || "";
+    if (customMode && details.length < 50) {
+      showMessage(stepTwoMessage, "Cuéntanos un poco más sobre tu proyecto (mínimo 50 caracteres).");
+      projectDetails.focus();
+      return;
+    }
+    if (!customMode && (interests.length < 1 || interests.length > 2)) {
+      showMessage(stepTwoMessage, "Selecciona 1 o 2 opciones para continuar.");
+      return;
+    }
+
+    const file = attachment?.files?.[0];
+    const payload = {
+      name: name.value.trim(),
+      country: country.value,
+      phone: phone.value.trim(),
+      email: email.value.trim(),
+      zip: zip.value.trim(),
+      interests,
+      details,
+      attachment: file ? { name: file.name, type: file.type, size: file.size } : null,
     };
 
-
-    function updatePhoneCode() {
-
-    phoneCode.textContent =
-        countryCodes[country.value] || "+";
-
-}
-
-
-country.addEventListener("change", () => {
-
-    updatePhoneCode();
-
-    phone.value = "";
-
-});
-
-
-updatePhoneCode();
-
-    function validateName(value) {
-
-        const namePattern =
-            /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:\s+[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$/;
-
-        return namePattern.test(value.trim());
-
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Enviando…";
     }
+    showMessage(stepTwoMessage, "Enviando tu proyecto…");
 
+    try {
+      const response = await fetch("/api/project-leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "No pudimos enviar el formulario.");
 
-    function validateEmail(value) {
-
-        const emailPattern =
-            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-        return emailPattern.test(value.trim());
-
+      showMessage(stepTwoMessage, "✓ Recibimos tu proyecto. Te contactaremos pronto.", "success");
+      form.querySelectorAll("input, select, textarea, button").forEach((element) => {
+        if (element !== submitButton) element.disabled = true;
+      });
+      if (submitButton) submitButton.textContent = "Proyecto enviado";
+    } catch (error) {
+      showMessage(stepTwoMessage, error instanceof Error ? error.message : "No pudimos enviar el formulario. Inténtalo nuevamente.");
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Enviar mi proyecto";
+      }
     }
-
-
-    function validatePhone(value, selectedCountry) {
-
-        const digits = value.replace(/\D/g, "");
-
-        if (!selectedCountry) return false;
-
-        if (
-            selectedCountry === "US" ||
-            selectedCountry === "CA"
-        ) {
-            return digits.length === 10;
-        }
-
-        if (selectedCountry === "MX") {
-            return digits.length === 10;
-        }
-
-        return false;
-
-    }
-
-
-    function validateZip(value, selectedCountry) {
-
-        const cleanZip = value.trim();
-
-        if (selectedCountry === "US") {
-            return /^\d{5}(-\d{4})?$/.test(cleanZip);
-        }
-
-        if (selectedCountry === "CA") {
-            return /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/
-                .test(cleanZip);
-        }
-
-        if (selectedCountry === "MX") {
-            return /^\d{5}$/.test(cleanZip);
-        }
-
-        return false;
-
-    }
-
-
-    function showStepOneError() {
-
-        stepOneMessage.textContent = "😥";
-        stepOneMessage.classList.add("has-error");
-
-    }
-
-
-    function showStepOneSuccess() {
-
-        stepOneMessage.textContent = "✓";
-        stepOneMessage.classList.remove("has-error");
-        stepOneMessage.classList.add("is-success");
-
-    }
-
-
-    function clearStepOneMessage() {
-
-        stepOneMessage.textContent = "";
-
-        stepOneMessage.classList.remove(
-            "has-error",
-            "is-success"
-        );
-
-    }
-
-
-    /* =========================================
-       PASAR A STEP 2
-       ========================================= */
-
-    nextStep.addEventListener("click", () => {
-
-        clearStepOneMessage();
-
-
-        const nameValue = name.value.trim();
-        const emailValue = email.value.trim();
-        const phoneValue = phone.value.trim();
-        const zipValue = zip.value.trim();
-        const countryValue = country.value;
-
-
-        if (
-            !nameValue ||
-            !validateName(nameValue)
-        ) {
-
-            showStepOneError();
-            name.focus();
-
-            return;
-
-        }
-
-
-        if (!countryValue) {
-
-            showStepOneError();
-            country.focus();
-
-            return;
-
-        }
-
-
-        if (
-            !validatePhone(
-                phoneValue,
-                countryValue
-            )
-        ) {
-
-            showStepOneError();
-            phone.focus();
-
-            return;
-
-        }
-
-
-        if (
-            !emailValue ||
-            !validateEmail(emailValue)
-        ) {
-
-            showStepOneError();
-            email.focus();
-
-            return;
-
-        }
-
-
-        if (
-            !validateZip(
-                zipValue,
-                countryValue
-            )
-        ) {
-
-            showStepOneError();
-            zip.focus();
-
-            return;
-
-        }
-
-
-        showStepOneSuccess();
-
-
-        setTimeout(() => {
-
-            stepOne.classList.remove("is-active");
-            stepTwo.classList.add("is-active");
-
-            stepOne.setAttribute("aria-hidden", "true");
-            stepTwo.removeAttribute("aria-hidden");
-
-            formTrack.classList.add("show-step-2");
-            progressStepOne.classList.add("is-complete");
-            progressStepTwo.classList.add("is-active");
-
-                }, 500);
-
-    });
-
-
-    /* =========================================
-       VOLVER A STEP 1
-       ========================================= */
-
-    previousStep.addEventListener("click", () => {
-
-        stepTwo.classList.remove("is-active");
-        stepTwo.setAttribute("aria-hidden", "true");
-
-        stepOne.classList.add("is-active");
-        stepOne.removeAttribute("aria-hidden");
-
-        formTrack.classList.remove("show-step-2");
-
-        progressStepTwo.classList.remove("is-active");
-        progressStepOne.classList.remove("is-complete");
-
-        stepOne
-            .querySelector("h1")
-            ?.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-    });
-
-
-    /* =========================================
-       STEP 2 — ELEMENTOS
-       ========================================= */
-
-    const interestOptions =
-        document.querySelectorAll(
-            'input[name="interest"]'
-        );
-
-    const selectionMode =
-        document.querySelector("#selection-mode");
-
-    const customResponseTrigger =
-        document.querySelector(
-            "#custom-response-trigger"
-        );
-
-    const customResponseMode =
-        document.querySelector(
-            "#custom-response-mode"
-        );
-
-    const backToSelection =
-        document.querySelector(
-            "#back-to-selection"
-        );
-
-    const projectDetails =
-        document.querySelector(
-            "#project-details"
-        );
-
-    const projectFile =
-        document.querySelector(
-            "#project-file"
-        );
-
-    const attachment =
-        document.querySelector(
-            "#project-attachment"
-        );
-
-    const skipFile =
-        document.querySelector("#skip-file");
-
-    const stepTwoMessage =
-        document.querySelector(
-            "#step-two-message"
-        );
-
-
-    let customMode = false;
-
-
-    /* =========================================
-       MÁXIMO 2 OPCIONES
-       ========================================= */
-
-    interestOptions.forEach((option) => {
-
-        option.addEventListener("change", () => {
-
-            const selected =
-                document.querySelectorAll(
-                    'input[name="interest"]:checked'
-                );
-
-            if (selected.length >= 2) {
-
-                interestOptions.forEach((item) => {
-
-                    if (!item.checked) {
-                        item.disabled = true;
-                    }
-
-                });
-
-            } else {
-
-                interestOptions.forEach((item) => {
-                    item.disabled = false;
-                });
-
-            }
-
-        });
-
-    });
-
-
-    /* =========================================
-       PERSONALIZAR MI RESPUESTA
-       ========================================= */
-
-    customResponseTrigger.addEventListener(
-        "click",
-        () => {
-
-            customMode = true;
-
-
-            interestOptions.forEach((option) => {
-
-                option.checked = false;
-                option.disabled = false;
-
-            });
-
-
-            selectionMode.hidden = true;
-
-            customResponseMode.hidden = false;
-
-            projectFile.hidden = true;
-
-            stepTwoMessage.textContent = "";
-
-            projectDetails.focus();
-
-        }
-    );
-
-
-    /* =========================================
-       VOLVER A OPCIONES
-       ========================================= */
-
-    backToSelection.addEventListener(
-        "click",
-        () => {
-
-            customMode = false;
-
-            customResponseMode.hidden = true;
-
-            selectionMode.hidden = false;
-
-            projectFile.hidden = true;
-
-            stepTwoMessage.textContent = "";
-
-        }
-    );
-
-
-    /* =========================================
-       CONTADOR DE CARACTERES
-       ========================================= */
-
-    const characterCounter =
-        document.querySelector(
-            ".character-counter"
-        );
-
-
-    projectDetails.addEventListener(
-        "input",
-        () => {
-
-            const length =
-                projectDetails.value.trim().length;
-
-            characterCounter.textContent =
-                `${length} / 50 caracteres mínimos`;
-
-        }
-    );
-
-
-    /* =========================================
-       ARCHIVO
-       ========================================= */
-
-    interestOptions.forEach((option) => {
-
-        option.addEventListener("change", () => {
-
-            const selected =
-                document.querySelectorAll(
-                    'input[name="interest"]:checked'
-                );
-
-            if (
-                selected.length > 0 &&
-                !customMode
-            ) {
-
-                projectFile.hidden = false;
-
-            }
-
-        });
-
-    });
-
-
-    /* =========================================
-       OMITIR ARCHIVO
-       ========================================= */
-
-    skipFile.addEventListener(
-        "click",
-        () => {
-
-            attachment.value = "";
-
-            projectFile.dataset.skipped = "true";
-
-        }
-    );
-
-
-    /* =========================================
-       VALIDAR ARCHIVO
-       ========================================= */
-
-    attachment.addEventListener(
-        "change",
-        () => {
-
-            const file = attachment.files[0];
-
-            if (!file) return;
-
-
-            const allowedTypes = [
-                "image/png",
-                "application/pdf"
-            ];
-
-
-            if (!allowedTypes.includes(file.type)) {
-
-                attachment.value = "";
-
-                alert(
-                    "Solo puedes subir archivos PNG o PDF."
-                );
-
-                return;
-
-            }
-
-
-            /*
-             * Límite inicial de 10 MB.
-             * Posteriormente podremos cambiarlo
-             * desde el backend.
-             */
-
-            const maxSize =
-                10 * 1024 * 1024;
-
-
-            if (file.size > maxSize) {
-
-                attachment.value = "";
-
-                alert(
-                    "El archivo no puede superar los 10 MB."
-                );
-
-            }
-
-        }
-    );
-
-
-    /* =========================================
-       MENSAJE DE ERROR STEP 2
-       ========================================= */
-
-    function showStepTwoError() {
-
-        stepTwoMessage.textContent = "😥";
-        stepTwoMessage.classList.add("has-error");
-
-    }
-
-
-    function clearStepTwoMessage() {
-
-        stepTwoMessage.textContent = "";
-
-        stepTwoMessage.classList.remove(
-            "has-error"
-        );
-
-    }
-
-
-    /* =========================================
-   ENVÍO DEL FORMULARIO
-   ========================================= */
-
-    form.addEventListener("submit", (event) => {
-
-        event.preventDefault();
-
-        clearStepTwoMessage();
-
-
-        /* =========================================
-           CAMINO 1 — PERSONALIZAR
-           ========================================= */
-
-        if (customMode) {
-
-            const text = projectDetails.value.trim();
-
-            if (text.length < 50) {
-
-                showStepTwoError();
-
-                projectDetails.focus();
-
-                return;
-            }
-
-        }
-
-
-        /* =========================================
-           CAMINO 2 — SELECCIÓN
-           ========================================= */
-
-        else {
-
-            const selected =
-                document.querySelectorAll(
-                    'input[name="interest"]:checked'
-                );
-
-            /* FIX: el texto dice "Selecciona hasta 2
-               opciones" (1 o 2 son válidas), pero antes
-               se exigía exactamente 2. */
-            if (
-                selected.length < 1 ||
-                selected.length > 2
-            ) {
-
-                showStepTwoError();
-
-                return;
-            }
-
-        }
-
-
-        /* =========================================
-           VALIDACIÓN CORRECTA
-           ========================================= */
-
-        stepTwoMessage.textContent = "✓";
-
-        stepTwoMessage.classList.remove("has-error");
-        stepTwoMessage.classList.add("is-success");
-
-
-        /*
-         * TODAVÍA NO ENVIAMOS LOS DATOS.
-         *
-         * Aquí posteriormente conectaremos:
-         *
-         * formulario
-         * ↓
-         * backend
-         * ↓
-         * almacenamiento
-         * ↓
-         * base de datos
-         * ↓
-         * CRM
-         */
-
-        console.log("Formulario válido y listo para enviar.");
-
-    });
-
+  };
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    submitProject();
+  });
 });
