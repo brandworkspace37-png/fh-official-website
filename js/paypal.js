@@ -68,37 +68,9 @@
       throw new Error(capture.error || "PayPal no pudo confirmar el pago.");
     }
 
-    const order = {
-      number: capture.internalNumber,
-      items: getCart(),
-      customer: {
-        firstName: get("firstName").value.trim(),
-        lastName: get("lastName").value.trim(),
-        email: get("email").value.trim(),
-        phone: get("phone").value.trim(),
-        address: get("address").value.trim(),
-        city: get("city").value.trim(),
-        state: get("state").value.trim(),
-        zip: get("zip").value.trim(),
-        country: "United States",
-      },
-      status: "Pagado",
-      payment: {
-        provider: "PayPal",
-        environment: "sandbox",
-        paypalOrderId: capture.orderID,
-        captureId: capture.captureID,
-        status: capture.status,
-        amount: capture.amount,
-      },
-      createdAt: new Date().toISOString(),
-      total: Number(capture.amount || 0),
-    };
-
-    localStorage.setItem("fhLastOrder", JSON.stringify(order));
-    localStorage.setItem("fhOrders", JSON.stringify([order, ...JSON.parse(localStorage.getItem("fhOrders") || "[]")]));
     localStorage.removeItem("fhCart");
-    window.location.href = "pedido-confirmado.html";
+    localStorage.removeItem("fhLastOrder");
+    window.location.href = `pedido-confirmado.html?order=${encodeURIComponent(capture.internalNumber)}`;
     return capture;
   }
 
