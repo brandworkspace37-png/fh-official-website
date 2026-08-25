@@ -1,0 +1,14 @@
+{
+  "name": "fh-official-website",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "d1:list": "wrangler d1 list",
+    "d1:migrate": "wrangler d1 migrations apply fh-production-db --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4.125.0"
+  }
+}
