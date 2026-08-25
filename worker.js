@@ -107,16 +107,19 @@ function normalizeCart(cart) {
 }
 
 async function createPayPalOrder(request, env) {
+  if (!env.DB) throw new Error("Database binding is not configured.");
   const body = await request.json();
   const { subtotal, items } = normalizeCart(body.cart);
   const customer = body.customer || {};
   const firstName = String(customer.firstName || "").trim();
   const lastName = String(customer.lastName || "").trim();
+  const email = String(customer.email || "").trim().toLowerCase();
+  const phone = String(customer.phone || "").trim();
   const address = String(customer.address || "").trim();
   const city = String(customer.city || "").trim();
   const state = String(customer.state || "").trim();
   const zip = String(customer.zip || "").trim();
-  if (!firstName || !lastName || !address || !city || !state || !/^\d{5}$/.test(zip)) throw new Error("Customer and shipping information is incomplete.");
+  if (!firstName || !lastName || !email || !phone || !address || !city || !state || !/^\d{5}$/.test(zip)) throw new Error("Customer and shipping information is incomplete.");
 
   const internalNumber = `FH-${new Date().toISOString().slice(0, 10).replaceAll("-", "")}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`;
   const token = await getAccessToken(env);
@@ -142,10 +145,40 @@ async function createPayPalOrder(request, env) {
     console.error("PayPal create order error", response.status, data);
     throw new Error("PayPal could not create the payment order.");
   }
+
+  const now = new Date().toISOString();
+  const existingCustomer = await env.DB.prepare("SELECT id FROM customers WHERE lower(email) = lower(?) LIMIT 1").bind(email).first("id");
+  const customerId = existingCustomer?.id || crypto.randomUUID();
+  const addressId = crypto.randomUUID();
+  const orderId = crypto.randomUUID();
+  const paymentId = crypto.randomUUID();
+  const shippingSnapshot = JSON.stringify({ firstName, lastName, address, city, state, zip, country: "US" });
+
+  const statements = [];
+  if (existingCustomer?.id) {
+    statements.push(env.DB.prepare("UPDATE customers SET first_name = ?, last_name = ?, phone = ?, updated_at = datetime('now') WHERE id = ?").bind(firstName, lastName, phone, customerId));
+  } else {
+    statements.push(env.DB.prepare("INSERT INTO customers (id, first_name, last_name, email, phone, language, status) VALUES (?, ?, ?, ?, ?, 'en', 'active')").bind(customerId, firstName, lastName, email, phone));
+  }
+  statements.push(env.DB.prepare("INSERT INTO customer_addresses (id, customer_id, address_line_1, city, state, postal_code, country, address_type, is_default) VALUES (?, ?, ?, ?, ?, ?, 'US', 'shipping', 1)").bind(addressId, customerId, address, city, state, zip));
+  statements.push(env.DB.prepare("INSERT INTO orders (id, order_number, customer_id, status, subtotal, total, shipping_address_snapshot, customer_email_snapshot, customer_phone_snapshot) VALUES (?, ?, ?, 'pending', ?, ?, ?, ?, ?)").bind(orderId, internalNumber, customerId, subtotal, subtotal, shippingSnapshot, email, phone));
+  for (const cartItem of body.cart) {
+    const product = String(cartItem?.product || "");
+    const size = String(cartItem?.size || "");
+    const quantity = Number(cartItem?.quantity);
+    const productData = CATALOG[product][size];
+    const itemId = crypto.randomUUID();
+    statements.push(env.DB.prepare("INSERT INTO order_items (id, order_id, product_name, variant_name, sku, size, dimensions, unit_price, quantity, line_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").bind(itemId, orderId, product, size, `CATRINA-${size.toUpperCase()}`, size, productData.dimensions, productData.price, quantity, productData.price * quantity));
+  }
+  statements.push(env.DB.prepare("INSERT INTO payments (id, order_id, provider, provider_order_id, amount, currency, status, payment_method) VALUES (?, ?, 'PayPal', ?, ?, 'USD', 'created', 'paypal')").bind(paymentId, orderId, data.id, subtotal));
+  statements.push(env.DB.prepare("INSERT INTO order_status_history (id, order_id, previous_status, new_status, changed_by_type, note) VALUES (?, ?, NULL, 'pending', 'system', 'Order created before PayPal approval.')").bind(crypto.randomUUID(), orderId));
+  await env.DB.batch(statements);
+
   return { id: data.id, number: internalNumber, amount: subtotal.toFixed(2) };
 }
 
 async function capturePayPalOrder(request, env) {
+  if (!env.DB) throw new Error("Database binding is not configured.");
   const orderId = String((await request.json()).orderID || "").trim();
   if (!/^[A-Z0-9]+$/.test(orderId)) throw new Error("Invalid PayPal order ID.");
   const token = await getAccessToken(env);
@@ -167,7 +200,28 @@ async function capturePayPalOrder(request, env) {
   }
   const captureStatus = capture.purchase_units?.[0]?.payments?.captures?.[0]?.status;
   if (capture.status !== "COMPLETED" || captureStatus !== "COMPLETED") throw new Error("Payment was not completed.");
-  return { status: "COMPLETED", orderID: order.id, internalNumber: customId, captureID: capture.purchase_units[0].payments.captures[0].id, amount: capture.purchase_units[0].payments.captures[0].amount?.value || "0.00" };
+
+  const captureId = capture.purchase_units[0].payments.captures[0].id;
+  const amount = capture.purchase_units[0].payments.captures[0].amount?.value || "0.00";
+  const existingOrder = await env.DB.prepare("SELECT id, status FROM orders WHERE order_number = ? LIMIT 1").bind(customId).first();
+  if (!existingOrder) throw new Error("Internal order was not found.");
+
+  await env.DB.batch([
+    env.DB.prepare("UPDATE orders SET status = 'paid', total = ?, updated_at = datetime('now') WHERE id = ?").bind(Number(amount), existingOrder.id),
+    env.DB.prepare("UPDATE payments SET status = 'captured', provider_payment_id = ?, amount = ?, updated_at = datetime('now') WHERE order_id = ? AND provider_order_id = ?").bind(captureId, Number(amount), existingOrder.id, orderId),
+    env.DB.prepare("INSERT INTO order_status_history (id, order_id, previous_status, new_status, changed_by_type, note) VALUES (?, ?, ?, 'paid', 'system', 'PayPal payment captured successfully.')").bind(crypto.randomUUID(), existingOrder.id, existingOrder.status),
+  ]);
+
+  return { status: "COMPLETED", orderID: order.id, internalNumber: customId, captureID: captureId, amount };
+}
+
+async function getOrder(request, env, orderNumber) {
+  if (!env.DB) throw new Error("Database binding is not configured.");
+  const order = await env.DB.prepare("SELECT id, order_number, status, currency, total, customer_email_snapshot, created_at FROM orders WHERE order_number = ? LIMIT 1").bind(orderNumber).first();
+  if (!order || order.status !== "paid") throw new Error("Order not found or payment not confirmed.");
+  const items = await env.DB.prepare("SELECT product_name AS product, variant_name AS size, dimensions, quantity, unit_price AS price, line_total FROM order_items WHERE order_id = ? ORDER BY created_at").bind(order.id).all();
+  const payment = await env.DB.prepare("SELECT provider, provider_order_id, provider_payment_id, amount, status FROM payments WHERE order_id = ? ORDER BY created_at DESC LIMIT 1").bind(order.id).first();
+  return { number: order.order_number, status: order.status, currency: order.currency, total: order.total, items: items.results || [], payment: payment ? { provider: payment.provider, paypalOrderId: payment.provider_order_id, captureId: payment.provider_payment_id, amount: payment.amount, status: payment.status } : null, createdAt: order.created_at };
 }
 
 export default {
@@ -196,6 +250,11 @@ export default {
         if (url.pathname === "/api/project-leads" && request.method === "POST") return json(await saveProjectLead(request, env), 201, origin);
         if (url.pathname === "/api/paypal/create-order" && request.method === "POST") return json(await createPayPalOrder(request, env), 200, origin);
         if (url.pathname === "/api/paypal/capture-order" && request.method === "POST") return json(await capturePayPalOrder(request, env), 200, origin);
+        if (url.pathname.startsWith("/api/orders/") && request.method === "GET") {
+          const orderNumber = decodeURIComponent(url.pathname.slice("/api/orders/".length)).trim();
+          if (!/^FH-\d{8}-[A-Z0-9]{6}$/.test(orderNumber)) return json({ error: "Invalid order number." }, 400, origin);
+          return json(await getOrder(request, env, orderNumber), 200, origin);
+        }
         return json({ error: "Not found." }, 404, origin);
       } catch (error) {
         console.error("API error", error);
