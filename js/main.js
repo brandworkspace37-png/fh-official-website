@@ -46,4 +46,60 @@ document.addEventListener("DOMContentLoaded", () => {
         const svg = link.querySelector("svg");
         if (svg) { svg.style.width = "15px"; svg.style.height = "15px"; }
     });
+
+    /* =========================================
+       STORE — 6 PRODUCT ECOMMERCE GRID
+       ========================================= */
+    const store = document.querySelector(".fh-shop-grid");
+    if (store) {
+        const products = [
+            { category:"COLECCIÓN MEXICANA", name:"Catrina Mexicana LED", price:"Desde $599", image:"assets/oficial principal.png", href:"html/catrina-led.html" },
+            { category:"RESTAURANTES", name:"Kebabé LED Sign", price:"Desde $799", image:"assets/acrylic led sign fh.png", href:"html/formulario.html?producto=Kebabe" },
+            { category:"SALONES DE BELLEZA", name:"Nails by Yaneth", price:"Desde $499", image:"assets/metal blacklit sing fh.png", href:"html/formulario.html?producto=Nails" },
+            { category:"CAFETERÍAS", name:"Paris Baguette", price:"Desde $899", image:"assets/metal frontlit sign fh.png", href:"html/formulario.html?producto=Paris" },
+            { category:"FARMACIAS", name:"Cruz LED", price:"Desde $399", image:"assets/neon ledsing fh.png", href:"html/formulario.html?producto=Cruz" },
+            { category:"BARES & LOUNGE", name:"Bar Lounge", price:"Desde $699", image:"assets/light box fh.png", href:"html/formulario.html?producto=Bar" }
+        ];
+
+        store.innerHTML = products.map(product => `
+            <article class="fh-product-card">
+                <a class="fh-product-image" href="${product.href}" aria-label="Ver ${product.name}">
+                    <img src="${product.image}" alt="${product.name}" loading="lazy">
+                </a>
+                <div class="fh-product-info">
+                    <div class="fh-product-meta"><span>${product.category}</span><span>01</span></div>
+                    <h3>${product.name}</h3>
+                    <p>${product.price}</p>
+                    <a class="fh-product-action" href="${product.href}">Ver producto <span>→</span></a>
+                </div>
+            </article>
+        `).join("");
+
+        const style = document.createElement("style");
+        style.textContent = `
+            .fh-shop-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:34px 18px!important;align-items:start}
+            .fh-product-card{background:transparent!important;min-width:0}
+            .fh-product-image{aspect-ratio:1/1!important;background:#f0eee8;border:1px solid rgba(245,243,237,.09);overflow:hidden}
+            .fh-product-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease,filter .45s ease}
+            .fh-product-card:hover .fh-product-image img{transform:scale(1.025);filter:saturate(1.04)}
+            .fh-product-info{padding:14px 1px 0!important}
+            .fh-product-meta{font-size:7px!important;letter-spacing:.14em!important}
+            .fh-product-info h3{font-size:18px!important;line-height:1.15!important;margin:9px 0 5px!important}
+            .fh-product-info p{font-size:11px!important;color:var(--fh-muted)!important;margin:0!important}
+            .fh-product-action{margin-top:13px!important;font-size:8px!important;letter-spacing:.14em!important}
+            @media(max-width:640px){
+                .fh-section{padding:68px 0!important}
+                .fh-section-head{margin-bottom:28px!important;gap:12px!important}
+                .fh-section-head h2{font-size:36px!important;line-height:.95!important;letter-spacing:-.045em!important}
+                .fh-section-head p{font-size:12px!important;line-height:1.5!important}
+                .fh-shop-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:30px 8px!important}
+                .fh-product-info{padding-top:10px!important}
+                .fh-product-meta{font-size:5.5px!important;letter-spacing:.09em!important;white-space:nowrap;overflow:hidden}
+                .fh-product-info h3{font-size:12px!important;line-height:1.15!important;margin:6px 0 4px!important}
+                .fh-product-info p{font-size:9px!important}
+                .fh-product-action{margin-top:8px!important;font-size:6.5px!important;letter-spacing:.09em!important}
+            }
+        `;
+        document.head.appendChild(style);
+    }
 });
