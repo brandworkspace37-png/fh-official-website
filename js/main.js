@@ -42,87 +42,63 @@ document.addEventListener("DOMContentLoaded", () => {
        ========================================= */
     const storeStyle = document.createElement("style");
     storeStyle.textContent = `
-        .fh-shop-grid{
-            grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-            gap:34px 22px !important;
-        }
-        .fh-product-card{
-            min-width:0 !important;
-            background:transparent !important;
-        }
-        .fh-product-image{
-            aspect-ratio:1/1 !important;
-            background:transparent !important;
-            border:0 !important;
-            box-shadow:none !important;
-            overflow:hidden !important;
-        }
-        .fh-product-image img{
-            width:100% !important;
-            height:100% !important;
-            object-fit:contain !important;
-            mix-blend-mode:multiply !important;
-            display:block !important;
-        }
-        .fh-product-info{
-            padding:14px 0 0 !important;
-        }
-        .fh-product-info h3{
-            margin:8px 0 5px !important;
-            font-size:18px !important;
-        }
-        .fh-product-info p{
-            font-size:11px !important;
-            max-width:420px !important;
-        }
-        .fh-product-action{
-            margin-top:12px !important;
-        }
+        .fh-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:34px 22px !important;}
+        .fh-product-card{min-width:0 !important;background:transparent !important;}
+        .fh-product-image{aspect-ratio:1/1 !important;background:transparent !important;border:0 !important;box-shadow:none !important;overflow:hidden !important;}
+        .fh-product-image img{width:100% !important;height:100% !important;object-fit:contain !important;display:block !important;}
+        .fh-product-info{padding:14px 0 0 !important;}
+        .fh-product-info h3{margin:8px 0 5px !important;font-size:18px !important;}
+        .fh-product-info p{font-size:11px !important;max-width:420px !important;}
+        .fh-product-action{margin-top:12px !important;}
         @media(max-width:640px){
-            .fh-shop-grid{
-                grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-                gap:28px 12px !important;
-            }
-            .fh-product-info h3{
-                font-size:15px !important;
-                line-height:1.15 !important;
-            }
-            .fh-product-info p{
-                font-size:10px !important;
-                line-height:1.4 !important;
-            }
-            .fh-product-action{
-                font-size:8px !important;
-                margin-top:10px !important;
-            }
-            .fh-product-meta{
-                font-size:6.5px !important;
-                letter-spacing:.11em !important;
-            }
+            .fh-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:28px 12px !important;}
+            .fh-product-info h3{font-size:15px !important;line-height:1.15 !important;}
+            .fh-product-info p{font-size:10px !important;line-height:1.4 !important;}
+            .fh-product-action{font-size:8px !important;margin-top:10px !important;}
+            .fh-product-meta{font-size:6.5px !important;letter-spacing:.11em !important;}
         }
     `;
     document.head.appendChild(storeStyle);
 
     const catrinaImage = "assets/oficial%20principal.png";
     const catrinaProduct = "html/catrina-led.html";
-    document.querySelectorAll(".fh-product-card").forEach((card) => {
-        const image = card.querySelector(".fh-product-image img");
-        const title = card.querySelector(".fh-product-info h3");
-        const description = card.querySelector(".fh-product-info p");
-        const action = card.querySelector(".fh-product-action");
-        const link = card.querySelector("a");
-        const meta = card.querySelector(".fh-product-meta");
+    const grid = document.querySelector(".fh-shop-grid");
 
-        if (image) {
-            image.src = catrinaImage;
-            image.alt = "Catrina Mexicana LED — Form & Halo";
+    if (grid) {
+        const template = grid.querySelector(".fh-product-card");
+        if (template) {
+            grid.innerHTML = "";
+            for (let i = 1; i <= 6; i++) {
+                const card = template.cloneNode(true);
+                const image = card.querySelector(".fh-product-image");
+                const img = card.querySelector(".fh-product-image img");
+                const title = card.querySelector(".fh-product-info h3");
+                const description = card.querySelector(".fh-product-info p");
+                const action = card.querySelector(".fh-product-action");
+                const link = card.querySelector("a");
+                const meta = card.querySelector(".fh-product-meta");
+
+                if (image) {
+                    image.classList.remove("fh-coming-image");
+                    image.innerHTML = `<img src="${catrinaImage}" alt="Catrina Mexicana LED — Form & Halo">`;
+                }
+                if (img) {
+                    img.src = catrinaImage;
+                    img.alt = "Catrina Mexicana LED — Form & Halo";
+                }
+                if (title) title.textContent = "Catrina Mexicana LED";
+                if (description) description.textContent = "Pieza luminosa para espacios con identidad.";
+                if (action) {
+                    action.textContent = "Ver producto →";
+                    action.href = catrinaProduct;
+                }
+                if (meta) meta.innerHTML = `<span>COLECCIÓN MEXICANA · 0${i}</span><span>$599</span>`;
+                if (link) link.href = catrinaProduct;
+
+                grid.appendChild(card);
+            }
         }
-        if (title) title.textContent = "Catrina Mexicana LED";
-        if (description) description.textContent = "Pieza luminosa para espacios con identidad.";
-        if (action) action.textContent = "Ver producto →";
-        if (meta) meta.innerHTML = "<span>COLECCIÓN MEXICANA</span><span>$599</span>";
-        if (link) link.href = catrinaProduct;
-    });
+    }
 
     const socialIcon = (type) => type === "Instagram"
         ? '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17.4" cy="6.7" r="1" fill="currentColor"/></svg>'
