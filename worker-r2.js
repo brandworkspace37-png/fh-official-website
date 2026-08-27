@@ -344,6 +344,8 @@ export default {
       }
     }
 
+    if (url.pathname === "/admin/login.html" || url.pathname === "/admin/login" || url.pathname === "/admin/login.js" || url.pathname === "/admin/admin.css") { return env.ASSETS.fetch(request); }
+
     if (url.pathname.startsWith("/admin") && url.pathname !== "/admin/login.html" && url.pathname !== "/admin/login") {
       const admin = await requireAdmin(request, env);
       if (!admin) {
