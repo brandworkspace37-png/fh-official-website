@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const validateStepOne = () => {
     const nameValue = name.value.trim();
-    const emailValue = email.value.trim();
     const phoneDigits = phone.value.replace(/\D/g, "");
     const zipValue = zip.value.trim();
     if (!nameValue || !/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:[ '\-][A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$/.test(nameValue)) { showMessage(stepOneMessage, "Revisa tu nombre."); name.focus(); return false; }
@@ -98,7 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
   attachment?.addEventListener("change", () => {
     const file = attachment.files?.[0]; if (!file) return;
     if (!["image/png", "application/pdf"].includes(file.type)) { attachment.value = ""; showMessage(stepTwoMessage, "Solo puedes subir archivos PNG o PDF."); return; }
-    if (file.size > 10 * 1024 * 1024) { attachment.value = ""; showMessage(stepTwoMessage, "El archivo no puede superar los 10 MB."); }
+    if (file.size > 10 * 1024 * 1024) { attachment.value = ""; showMessage(stepTwoMessage, "El archivo no puede superar los 10 MB."); return; }
+    if (projectFile) projectFile.dataset.skipped = "false";
+    showMessage(stepTwoMessage, "Archivo listo ✓", "success");
   });
 
   form.addEventListener("submit", async event => {
@@ -109,16 +110,30 @@ document.addEventListener("DOMContentLoaded", () => {
     if (customMode && details.length < 50) { showMessage(stepTwoMessage, "Cuéntanos un poco más sobre tu proyecto (mínimo 50 caracteres)."); projectDetails?.focus(); return; }
     if (!customMode && (interests.length < 1 || interests.length > 2)) { showMessage(stepTwoMessage, "Selecciona 1 o 2 opciones para continuar."); return; }
 
-    const file = attachment?.files?.[0];
-    const payload = { name:name.value.trim(), country:country.value, phone:phone.value.trim(), email:email.value.trim(), zip:zip.value.trim(), interests, details, attachment:file ? {name:file.name,type:file.type,size:file.size} : null };
+    const file = attachment?.files?.[0] || null;
+    if (file && (!["image/png", "application/pdf"].includes(file.type) || file.size > 10 * 1024 * 1024)) {
+      showMessage(stepTwoMessage, "Revisa el archivo. Solo PNG o PDF de máximo 10 MB.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", name.value.trim());
+    formData.append("country", country.value);
+    formData.append("phone", phone.value.trim());
+    formData.append("email", email.value.trim());
+    formData.append("zip", zip.value.trim());
+    formData.append("interests", JSON.stringify(interests));
+    formData.append("details", details);
+    if (file) formData.append("attachment", file, file.name);
+
     const submitButton = form.querySelector('button[type="submit"]');
     if (submitButton) { submitButton.disabled = true; submitButton.textContent = "Enviando…"; }
-    showMessage(stepTwoMessage, "Guardando tu proyecto…");
+    showMessage(stepTwoMessage, file ? "Subiendo tu proyecto…" : "Guardando tu proyecto…");
     try {
-      const response = await fetch("/api/project-leads", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
+      const response = await fetch("/api/project-leads", { method:"POST", body:formData });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "No pudimos enviar el formulario.");
-      showMessage(stepTwoMessage, "Proyecto recibido ✓", "success");
+      showMessage(stepTwoMessage, file ? "Proyecto enviado con archivo ✓" : "Proyecto recibido ✓", "success");
       form.querySelectorAll("input, select, textarea").forEach(element => element.disabled = true);
       if (submitButton) { submitButton.textContent = "Proyecto enviado ✓"; submitButton.disabled = true; }
     } catch (error) {
