@@ -54,23 +54,101 @@ function normalizeProjectLead(body) {
 
 async function saveProjectLead(request, env) {
   if (!env.DB) throw new Error("Database binding is not configured.");
+
   const lead = normalizeProjectLead(await request.json());
+
   const customerId = crypto.randomUUID();
   const leadId = crypto.randomUUID();
   const now = new Date().toISOString();
-  const existing = await env.DB.prepare("SELECT id FROM customers WHERE lower(email) = lower(?) LIMIT 1").bind(lead.email).first("id");
+
+  const existing = await env.DB
+    .prepare("SELECT id FROM customers WHERE lower(email) = lower(?) LIMIT 1")
+    .bind(lead.email)
+    .first("id");
+
   const resolvedCustomerId = existing?.id || customerId;
-  const metadata = JSON.stringify({ lead_id: leadId, country: lead.country, zip: lead.zip, interests: lead.interests, details: lead.details, attachment: lead.attachment, source: "website", submitted_at: now });
+
+  const interestsJson = JSON.stringify(lead.interests);
+
+  const metadata = JSON.stringify({
+    lead_id: leadId,
+    country: lead.country,
+    zip: lead.zip,
+    interests: lead.interests,
+    details: lead.details,
+    attachment: lead.attachment,
+    source: "website",
+    submitted_at: now,
+  });
 
   const statements = [];
+
+  // 1. Crear o actualizar cliente
   if (existing?.id) {
-    statements.push(env.DB.prepare("UPDATE customers SET first_name = ?, phone = ?, language = ?, updated_at = datetime('now') WHERE id = ?").bind(lead.name, lead.phone, lead.country === "US" ? "en" : "es", resolvedCustomerId));
+    statements.push(
+      env.DB
+        .prepare(
+          "UPDATE customers SET first_name = ?, phone = ?, language = ?, updated_at = datetime('now') WHERE id = ?"
+        )
+        .bind(
+          lead.name,
+          lead.phone,
+          lead.country === "US" ? "en" : "es",
+          resolvedCustomerId
+        )
+    );
   } else {
-    statements.push(env.DB.prepare("INSERT INTO customers (id, first_name, last_name, email, phone, language, status) VALUES (?, ?, ?, ?, ?, ?, 'active')").bind(resolvedCustomerId, lead.name, "", lead.email, lead.phone, lead.country === "US" ? "en" : "es"));
+    statements.push(
+      env.DB
+        .prepare(
+          "INSERT INTO customers (id, first_name, last_name, email, phone, language, status) VALUES (?, ?, ?, ?, ?, ?, 'active')"
+        )
+        .bind(
+          resolvedCustomerId,
+          lead.name,
+          "",
+          lead.email,
+          lead.phone,
+          lead.country === "US" ? "en" : "es"
+        )
+    );
   }
-  statements.push(env.DB.prepare("INSERT INTO activity_log (id, actor_type, actor_id, action, entity_type, entity_id, metadata) VALUES (?, 'customer', ?, 'project_lead_submitted', 'project_lead', ?, ?)").bind(leadId, resolvedCustomerId, leadId, metadata));
+
+  // 2. Crear el Lead real
+  statements.push(
+    env.DB
+      .prepare(
+        "INSERT INTO leads (id, customer_id, status, source, project_details, interests) VALUES (?, ?, 'new', 'website', ?, ?)"
+      )
+      .bind(
+        leadId,
+        resolvedCustomerId,
+        lead.details,
+        interestsJson
+      )
+  );
+
+  // 3. Registrar actividad / historial
+  statements.push(
+    env.DB
+      .prepare(
+        "INSERT INTO activity_log (id, actor_type, actor_id, action, entity_type, entity_id, metadata) VALUES (?, 'customer', ?, 'project_lead_submitted', 'lead', ?, ?)"
+      )
+      .bind(
+        crypto.randomUUID(),
+        resolvedCustomerId,
+        leadId,
+        metadata
+      )
+  );
+
   await env.DB.batch(statements);
-  return { success: true, leadId, customerId: resolvedCustomerId };
+
+  return {
+    success: true,
+    leadId,
+    customerId: resolvedCustomerId,
+  };
 }
 
 async function getAccessToken(env) {
