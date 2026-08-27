@@ -1,0 +1,52 @@
+[1mdiff --git a/wrangler.jsonc b/wrangler.jsonc[m
+[1mindex ab06302..c244e3c 100644[m
+[1m--- a/wrangler.jsonc[m
+[1m+++ b/wrangler.jsonc[m
+[36m@@ -1,19 +1,28 @@[m
+ {[m
+[31m-  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",[m
+[31m-  "name": "fh-official-website",[m
+[31m-  "main": "./worker.js",[m
+[31m-  "compatibility_date": "2026-08-21",[m
+[31m-  "assets": {[m
+[31m-    "directory": ".",[m
+[31m-    "binding": "ASSETS",[m
+[31m-    "run_worker_first": ["/api/*", "/checkout.html"][m
+[31m-  },[m
+[31m-  "d1_databases": [[m
+[31m-    {[m
+[31m-      "binding": "DB",[m
+[31m-      "database_name": "fh-production-db",[m
+[31m-      "database_id": "f0d5946f-8487-47a1-977f-dbe060e2ab77",[m
+[31m-      "migrations_dir": "migrations"[m
+[31m-    }[m
+[31m-  ][m
+[31m-}[m
+[32m+[m	[32m"$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",[m
+[32m+[m	[32m"name": "fh-official-website",[m
+[32m+[m	[32m"main": "./worker.js",[m
+[32m+[m	[32m"compatibility_date": "2026-08-21",[m
+[32m+[m	[32m"assets": {[m
+[32m+[m		[32m"directory": ".",[m
+[32m+[m		[32m"binding": "ASSETS",[m
+[32m+[m		[32m"run_worker_first": [[m
+[32m+[m			[32m"/api/*",[m
+[32m+[m			[32m"/checkout.html"[m
+[32m+[m		[32m][m
+[32m+[m	[32m},[m
+[32m+[m	[32m"d1_databases": [[m
+[32m+[m		[32m{[m
+[32m+[m			[32m"binding": "DB",[m
+[32m+[m			[32m"database_name": "fh-production-db",[m
+[32m+[m			[32m"database_id": "f0d5946f-8487-47a1-977f-dbe060e2ab77",[m
+[32m+[m			[32m"migrations_dir": "migrations"[m
+[32m+[m		[32m}[m
+[32m+[m	[32m],[m
+[32m+[m	[32m"r2_buckets": [[m
+[32m+[m		[32m{[m
+[32m+[m			[32m"bucket_name": "fh-lead-attachments",[m
+[32m+[m			[32m"binding": "fh_lead_attachments"[m
+[32m+[m		[32m}[m
+[32m+[m	[32m][m
+[32m+[m[32m}[m
+\ No newline at end of file[m
