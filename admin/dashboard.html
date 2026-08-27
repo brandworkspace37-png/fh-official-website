@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FORM & HALO — Dashboard</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body class="admin-body">
+  <main class="auth-card">
+    <div class="brand-mark">FORM &amp; HALO</div>
+    <p class="eyebrow">ADMIN PORTAL</p>
+    <h1>Dashboard</h1>
+    <p id="welcome" class="muted">Loading your account…</p>
+    <button id="logout" type="button">Sign out</button>
+  </main>
+  <script>
+    (async () => {
+      const welcome = document.getElementById('welcome');
+      const response = await fetch('/api/admin/me', { credentials: 'same-origin', cache: 'no-store' });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.authenticated) {
+        window.location.replace('/admin/login.html');
+        return;
+      }
+      welcome.textContent = `Welcome, ${data.admin.name}. Role: ${data.admin.role}. Leads dashboard is next.`;
+    })();
+
+    document.getElementById('logout').addEventListener('click', async () => {
+      await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
+      window.location.replace('/admin/login.html');
+    });
+  </script>
+</body>
+</html>
