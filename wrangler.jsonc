@@ -1,7 +1,7 @@
 {
   "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
   "name": "fh-official-website",
-  "main": "./worker.js",
+  "main": "./worker-r2.js",
   "compatibility_date": "2026-08-21",
   "assets": {
     "directory": ".",
@@ -14,6 +14,12 @@
       "database_name": "fh-production-db",
       "database_id": "f0d5946f-8487-47a1-977f-dbe060e2ab77",
       "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "fh_lead_attachments",
+      "bucket_name": "fh-lead-attachments"
     }
   ]
 }
