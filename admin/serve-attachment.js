@@ -24,7 +24,7 @@ export async function serveAdminAttachment(request, env, documentId) {
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Content-Disposition", `inline; filename="${String(document.file_name || "attachment").replace(/[\\"\r\n]/g, "_").slice(0, 180)}"`);
   headers.set("ETag", object.httpEtag);
-  if (object.size != null) headers.set("Content-Length", String(object.size));
+  if (!object.range && object.size != null) headers.set("Content-Length", String(object.size));
 
   return new Response(object.body, {
     status: object.range ? 206 : 200,
