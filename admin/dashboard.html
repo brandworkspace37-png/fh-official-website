@@ -48,6 +48,7 @@
     .modal-file { margin-top:22px; padding:15px 16px; border:1px solid #e5e5e1; border-radius:12px; background:#fafaf8; }
     .modal-file-name { font-size:13px; font-weight:600; overflow-wrap:anywhere; }
     .secure-note { margin-top:5px; color:#777; font-size:11px; }
+    .file-link { display:inline-flex; align-items:center; justify-content:center; width:auto; min-width:130px; height:38px; margin-top:12px; padding:0 14px; border:1px solid #171717; border-radius:8px; background:#171717; color:#fff; font-size:12px; font-weight:700; text-decoration:none; }
     .modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:24px; }
     .modal-actions button { width:auto; min-width:100px; padding:0 18px; margin:0; }
     .modal-actions .secondary { background:#fff; color:#171717; border:1px solid #d8d8d4; }
@@ -178,7 +179,8 @@
           <div class="modal-file">
             <div class="detail-label">Attachment</div>
             <div class="modal-file-name">${escapeHtml(lead.file_name)}</div>
-            <div class="secure-note">Stored securely in project storage. Secure file access will be enabled next.</div>
+            <div class="secure-note">Private admin-only access.</div>
+            ${lead.document_id ? `<a class="file-link" href="/api/admin/attachment/${encodeURIComponent(lead.document_id)}" target="_blank" rel="noopener">Open attachment</a>` : ''}
           </div>` : ''}
         <div class="modal-actions">
           <button id="modalCloseAction" class="secondary" type="button">Close</button>
