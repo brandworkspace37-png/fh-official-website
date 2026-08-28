@@ -299,6 +299,40 @@ async function saveProjectLeadWithAttachment(request, env) {
     throw error;
   }
 }
+async function getAdminLeads(request, env) {
+  if (!env.DB) throw new Error("Database binding is not configured.");
+
+  const result = await env.DB.prepare(`
+    SELECT
+      l.id,
+      l.customer_id,
+      c.first_name,
+      c.last_name,
+      c.email,
+      c.phone,
+      l.status,
+      l.source,
+      l.country,
+      l.zip,
+      l.project_details,
+      l.interests,
+      l.created_at,
+      d.id AS document_id,
+      d.file_name,
+      d.file_url,
+      d.created_at AS document_created_at
+    FROM leads l
+    LEFT JOIN customers c ON c.id = l.customer_id
+    LEFT JOIN documents d ON d.lead_id = l.id
+    ORDER BY l.created_at DESC
+  `).all();
+
+  return {
+    success: true,
+    leads: result.results || [],
+  };
+}
+
 
 export default {
   async fetch(request, env, ctx) {
@@ -341,6 +375,29 @@ export default {
       } catch (error) {
         console.error("Admin logout error", error);
         return json({ error: "Could not close the session." }, 500, origin);
+      }
+    }
+    if (url.pathname === "/api/admin/leads" && request.method === "GET") {
+      try {
+        const admin = await requireAdmin(request, env);
+
+        if (!admin) {
+          return json({ error: "Authentication required." }, 401, origin);
+        }
+
+        return json(await getAdminLeads(request, env), 200, origin);
+      } catch (error) {
+        console.error("Admin leads error", error);
+        return json(
+          {
+            error:
+              error instanceof Error
+                ? error.message
+                : "Could not load leads.",
+          },
+          500,
+          origin
+        );
       }
     }
 
