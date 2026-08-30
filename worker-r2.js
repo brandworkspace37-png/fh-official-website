@@ -1,4 +1,5 @@
 import currentWorker from "./worker.js";
+import { serveAdminAttachment } from "./admin/serve-attachment.js";
 
 const ALLOWED_TYPES = new Set(["image/png", "application/pdf"]);
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -128,7 +129,6 @@ async function requestAdminOtp(request, env) {
 
   const admin = await env.DB.prepare("SELECT id, email, name, role, status FROM admin_users WHERE lower(email) = lower(?) LIMIT 1").bind(email).first();
 
-  // Do not reveal whether an email belongs to an administrator.
   if (!admin || admin.status !== "active") {
     return { success: true, message: "If that email is authorized, a verification code has been sent." };
   }
@@ -299,6 +299,7 @@ async function saveProjectLeadWithAttachment(request, env) {
     throw error;
   }
 }
+
 async function getAdminLeads(request, env) {
   if (!env.DB) throw new Error("Database binding is not configured.");
 
@@ -332,7 +333,6 @@ async function getAdminLeads(request, env) {
     leads: result.results || [],
   };
 }
-
 
 export default {
   async fetch(request, env, ctx) {
@@ -377,31 +377,36 @@ export default {
         return json({ error: "Could not close the session." }, 500, origin);
       }
     }
+
     if (url.pathname === "/api/admin/leads" && request.method === "GET") {
       try {
         const admin = await requireAdmin(request, env);
-
-        if (!admin) {
-          return json({ error: "Authentication required." }, 401, origin);
-        }
-
+        if (!admin) return json({ error: "Authentication required." }, 401, origin);
         return json(await getAdminLeads(request, env), 200, origin);
       } catch (error) {
         console.error("Admin leads error", error);
-        return json(
-          {
-            error:
-              error instanceof Error
-                ? error.message
-                : "Could not load leads.",
-          },
-          500,
-          origin
-        );
+        return json({ error: error instanceof Error ? error.message : "Could not load leads." }, 500, origin);
       }
     }
 
-    if (url.pathname === "/admin/login.html" || url.pathname === "/admin/login" || url.pathname === "/admin/login.js" || url.pathname === "/admin/admin.css") { return env.ASSETS.fetch(request); }
+    if (url.pathname.startsWith("/api/admin/attachment/") && request.method === "GET") {
+      try {
+        const admin = await requireAdmin(request, env);
+        if (!admin) return json({ error: "Authentication required." }, 401, origin);
+
+        const documentId = decodeURIComponent(url.pathname.slice("/api/admin/attachment/".length)).trim();
+        if (!documentId || documentId.includes("/")) return new Response("Attachment not found.", { status: 404 });
+
+        return await serveAdminAttachment(request, env, documentId);
+      } catch (error) {
+        console.error("Admin attachment error", error);
+        return new Response("Could not open attachment.", { status: 500 });
+      }
+    }
+
+    if (url.pathname === "/admin/login.html" || url.pathname === "/admin/login" || url.pathname === "/admin/login.js" || url.pathname === "/admin/admin.css") {
+      return env.ASSETS.fetch(request);
+    }
 
     if (url.pathname.startsWith("/admin") && url.pathname !== "/admin/login.html" && url.pathname !== "/admin/login") {
       const admin = await requireAdmin(request, env);
