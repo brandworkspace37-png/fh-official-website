@@ -10,9 +10,25 @@ const PAYPAL_BASE = "https://api-m.sandbox.paypal.com";
 const PAYPAL_SANDBOX_CLIENT_ID = "BAAtak9QgP73i1YR516K5C2Y0JXYZw5gGgufsobmVkKtOJeMNw7IEZe0OkLLmw6000fE-hg-KWgyR7qTBc";
 const ADMIN_SESSION_COOKIE = "fh_admin_session";
 const ORDER_STATUSES = new Set(["pending", "paid", "in_production", "quality_check", "completed", "shipped", "delivered", "cancelled"]);
+const SHIPMENT_STATUSES = new Set(["label_created", "in_transit", "out_for_delivery", "delivered", "delayed", "exception", "returned"]);
 
-function json(data, status = 200, origin = "*") { return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Methods": "GET,POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type" } }); }
-function getOrigin(request) { const origin = request.headers.get("Origin"); if (!origin) return new URL(request.url).origin; return origin === new URL(request.url).origin ? origin : null; }
+function json(data, status = 200, origin = "*") {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Access-Control-Allow-Origin": origin,
+      "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  });
+}
+function getOrigin(request) {
+  const origin = request.headers.get("Origin");
+  if (!origin) return new URL(request.url).origin;
+  return origin === new URL(request.url).origin ? origin : null;
+}
 function normalizeProjectLead(body) {
   const name = String(body?.name || "").trim(), country = String(body?.country || "").trim().toUpperCase(), phone = String(body?.phone || "").trim(), email = String(body?.email || "").trim().toLowerCase(), zip = String(body?.zip || "").trim(), details = String(body?.details || "").trim();
   const interests = Array.isArray(body?.interests) ? body.interests.map(String).slice(0, 2) : [];
@@ -77,6 +93,7 @@ async function capturePayPalOrder(request, env) {
 }
 function getCookie(request, name) { const cookies = request.headers.get("Cookie") || ""; const match = cookies.split(";").map(p=>p.trim()).find(p=>p.startsWith(`${name}=`)); return match ? decodeURIComponent(match.slice(name.length+1)) : null; }
 async function sha256Hex(value) { const data=new TextEncoder().encode(value),digest=await crypto.subtle.digest("SHA-256",data); return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,"0")).join(""); }
+function randomToken() { const bytes = new Uint8Array(32); crypto.getRandomValues(bytes); return [...bytes].map(b=>b.toString(16).padStart(2,"0")).join(""); }
 async function requireOwner(request, env) {
   if (!env.DB) throw new Error("Database binding is not configured."); const token=getCookie(request,ADMIN_SESSION_COOKIE); if(!token)return null; const tokenHash=await sha256Hex(token);
   const admin=await env.DB.prepare("SELECT a.id,a.email,a.name,a.role,s.id AS session_id FROM admin_sessions s JOIN admin_users a ON a.id=s.admin_user_id WHERE s.token_hash=? AND s.revoked_at IS NULL AND a.status='active' AND lower(a.role)='owner' AND datetime(s.expires_at)>datetime('now') LIMIT 1").bind(tokenHash).first(); if(!admin)return null;
@@ -91,10 +108,72 @@ async function getAdminOrders(request, env) {
   const result=await env.DB.prepare(`SELECT o.id,o.order_number,o.status,o.subtotal,o.total,o.customer_email_snapshot,o.customer_phone_snapshot,o.created_at,o.updated_at,c.first_name,c.last_name FROM orders o LEFT JOIN customers c ON c.id=o.customer_id ORDER BY o.created_at DESC LIMIT 50`).all(); const orders=[];
   for(const row of result.results||[]){const items=await env.DB.prepare("SELECT product_name,variant_name,sku,size,dimensions,unit_price,quantity,line_total FROM order_items WHERE order_id=? ORDER BY rowid ASC").bind(row.id).all();orders.push({...row,items:items.results||[]});} return{success:true,orders};
 }
+async function sendCustomerSms(env, phone, body) {
+  if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_FROM_NUMBER) return { sent: false, reason: "not_configured" };
+  const digits = String(phone || "").replace(/\D/g, "");
+  const to = digits.length === 10 ? `+1${digits}` : digits.length === 11 && digits.startsWith("1") ? `+${digits}` : String(phone || "").startsWith("+") ? String(phone) : null;
+  if (!to) return { sent: false, reason: "invalid_phone" };
+  const auth = btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`);
+  const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${encodeURIComponent(env.TWILIO_ACCOUNT_SID)}/Messages.json`, { method: "POST", headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ To: to, From: env.TWILIO_FROM_NUMBER, Body: body }).toString() });
+  const data = await response.json();
+  if (!response.ok) { console.error("Twilio SMS error", response.status, data); return { sent: false, reason: "provider_error" }; }
+  return { sent: true, sid: data.sid || null };
+}
 async function updateAdminOrderStatus(request,env,admin){
   if(!env.DB)throw new Error("Database binding is not configured."); const body=await request.json(),number=String(body?.orderNumber||"").trim(),status=String(body?.status||"").trim().toLowerCase(),note=String(body?.note||"").trim().slice(0,500); if(!/^FH-[A-Z0-9-]+$/i.test(number)||!ORDER_STATUSES.has(status))throw new Error("Invalid order status request.");
   const order=await env.DB.prepare("SELECT id,status,customer_phone_snapshot FROM orders WHERE order_number=? LIMIT 1").bind(number).first(); if(!order)throw new Error("Order not found."); if(order.status===status)return{success:true,orderNumber:number,status,changed:false}; const statusNote=note||`Owner changed order status to ${status}.`;
   await env.DB.batch([env.DB.prepare("UPDATE orders SET status=?,updated_at=datetime('now') WHERE id=?").bind(status,order.id),env.DB.prepare("INSERT INTO order_status_history (id,order_id,previous_status,new_status,changed_by_type,changed_by_id,note) VALUES (?,?,?,?, 'admin',?,?)").bind(crypto.randomUUID(),order.id,order.status,status,admin.id,statusNote),env.DB.prepare("INSERT INTO activity_log (id,actor_type,actor_id,action,entity_type,entity_id,metadata) VALUES (?, 'admin', ?, 'order_status_changed', 'order', ?, ?)").bind(crypto.randomUUID(),admin.id,order.id,JSON.stringify({order_number:number,previous_status:order.status,new_status:status,note:statusNote}))]);
-  return{success:true,orderNumber:number,previousStatus:order.status,status,changed:true,customerPhone:order.customer_phone_snapshot||null};
+  let sms={sent:false,reason:"not_configured"};
+  if(order.customer_phone_snapshot){ sms=await sendCustomerSms(env,order.customer_phone_snapshot,`FORM & HALO: tu pedido ${number} ahora está en ${status.replaceAll("_"," ")}.`); }
+  return{success:true,orderNumber:number,previousStatus:order.status,status,changed:true,customerPhone:order.customer_phone_snapshot||null,sms};
 }
-export default {async fetch(request,env){const origin=getOrigin(request);if(request.method==='OPTIONS')return json({},204,origin||'*');if(!origin)return json({error:'Origin not allowed.'},403,'*');const url=new URL(request.url);try{if(url.pathname==='/api/health'&&request.method==='GET')return json({ok:true,db:Boolean(env.DB)},200,origin);if(url.pathname==='/api/project-leads'&&request.method==='POST')return json(await saveProjectLead(request,env),200,origin);if(url.pathname==='/api/paypal/create-order'&&request.method==='POST')return json(await createPayPalOrder(request,env),200,origin);if(url.pathname==='/api/paypal/capture-order'&&request.method==='POST')return json(await capturePayPalOrder(request,env),200,origin);if(url.pathname==='/api/admin/orders'&&request.method==='GET'){const admin=await requireOwner(request,env);if(!admin)return json({error:'Owner authentication required.'},401,origin);return json(await getAdminOrders(request,env),200,origin);}if(url.pathname==='/api/admin/orders/status'&&request.method==='POST'){const admin=await requireOwner(request,env);if(!admin)return json({error:'Owner authentication required.'},401,origin);return json(await updateAdminOrderStatus(request,env,admin),200,origin);}if(url.pathname==='/api/orders'&&request.method==='GET'){const order=await getOrder(request,env,false);return order?json(order,200,origin):json({error:'Order not found.'},404,origin);}return env.ASSETS?env.ASSETS.fetch(request):new Response('Not found',{status:404});}catch(error){console.error(error);return json({error:error instanceof Error?error.message:'Unexpected server error.'},400,origin);}}};
+async function updateAdminShipment(request, env, admin) {
+  if (!env.DB) throw new Error("Database binding is not configured.");
+  const body = await request.json();
+  const number = String(body?.orderNumber || "").trim();
+  const carrier = String(body?.carrier || "").trim().slice(0, 80);
+  const trackingNumber = String(body?.trackingNumber || "").trim().slice(0, 120);
+  const trackingUrl = String(body?.trackingUrl || "").trim().slice(0, 500);
+  const shipmentStatus = String(body?.status || "label_created").trim().toLowerCase();
+  const estimatedDeliveryAt = String(body?.estimatedDeliveryAt || "").trim();
+  if (!/^FH-[A-Z0-9-]+$/i.test(number)) throw new Error("Invalid order number.");
+  if (!trackingNumber) throw new Error("Tracking number is required.");
+  if (!SHIPMENT_STATUSES.has(shipmentStatus)) throw new Error("Invalid shipment status.");
+  if (trackingUrl && !/^https?:\/\//i.test(trackingUrl)) throw new Error("Tracking URL must use http or https.");
+  if (estimatedDeliveryAt && Number.isNaN(Date.parse(estimatedDeliveryAt))) throw new Error("Invalid estimated delivery date.");
+  const order = await env.DB.prepare("SELECT id,status,customer_phone_snapshot FROM orders WHERE order_number=? LIMIT 1").bind(number).first();
+  if (!order) throw new Error("Order not found.");
+  const existing = await env.DB.prepare("SELECT id,portal_token_hash FROM shipments WHERE order_id=? ORDER BY created_at DESC LIMIT 1").bind(order.id).first();
+  const rawToken = randomToken();
+  const tokenHash = await sha256Hex(rawToken);
+  const statements = [];
+  if (existing) {
+    if (existing.portal_token_hash) {
+      statements.push(env.DB.prepare("UPDATE shipments SET carrier=?,tracking_number=?,tracking_url=?,status=?,estimated_delivery_at=?,shipped_at=COALESCE(shipped_at,datetime('now')),updated_at=datetime('now') WHERE id=?").bind(carrier || null, trackingNumber, trackingUrl || null, shipmentStatus, estimatedDeliveryAt || null, existing.id));
+    } else {
+      statements.push(env.DB.prepare("UPDATE shipments SET carrier=?,tracking_number=?,tracking_url=?,status=?,estimated_delivery_at=?,shipped_at=COALESCE(shipped_at,datetime('now')),portal_token_hash=?,portal_token_expires_at=datetime('now','+30 days'),updated_at=datetime('now') WHERE id=?").bind(carrier || null, trackingNumber, trackingUrl || null, shipmentStatus, estimatedDeliveryAt || null, tokenHash, existing.id));
+    }
+  } else {
+    statements.push(env.DB.prepare("INSERT INTO shipments (id,order_id,carrier,tracking_number,tracking_url,status,shipped_at,estimated_delivery_at,portal_token_hash,portal_token_expires_at) VALUES (?,?,?,?,?,?,datetime('now'),?,?,datetime('now','+30 days'))").bind(crypto.randomUUID(), order.id, carrier || null, trackingNumber, trackingUrl || null, shipmentStatus, estimatedDeliveryAt || null, tokenHash));
+  }
+  if (order.status !== "shipped" && order.status !== "delivered") {
+    statements.push(env.DB.prepare("UPDATE orders SET status='shipped',updated_at=datetime('now') WHERE id=?").bind(order.id));
+    statements.push(env.DB.prepare("INSERT INTO order_status_history (id,order_id,previous_status,new_status,changed_by_type,changed_by_id,note) VALUES (?,?,?,?, 'admin',?,?)").bind(crypto.randomUUID(),order.id,order.status,"shipped",admin.id,"Tracking number assigned; customer shipping portal created."));
+  }
+  statements.push(env.DB.prepare("INSERT INTO activity_log (id,actor_type,actor_id,action,entity_type,entity_id,metadata) VALUES (?, 'admin', ?, 'shipment_tracking_assigned', 'order', ?, ?)").bind(crypto.randomUUID(),admin.id,order.id,JSON.stringify({order_number:number,carrier,tracking_number:trackingNumber,shipment_status:shipmentStatus})));
+  await env.DB.batch(statements);
+  const portalToken = existing?.portal_token_hash ? null : rawToken;
+  const portalUrl = portalToken ? new URL(`/tracking.html?token=${encodeURIComponent(portalToken)}`, request.url).toString() : null;
+  const sms = order.customer_phone_snapshot && portalUrl ? await sendCustomerSms(env, order.customer_phone_snapshot, `FORM & HALO: tu pedido ${number} ya tiene seguimiento. Tracking: ${trackingNumber}. Ver envío: ${portalUrl}`) : { sent:false, reason: portalUrl ? "no_phone" : "portal_already_exists" };
+  return { success:true, orderNumber:number, trackingNumber, shipmentStatus, portalUrl, sms };
+}
+async function getTrackingPortal(request, env) {
+  if (!env.DB) throw new Error("Database binding is not configured.");
+  const token = String(new URL(request.url).searchParams.get("token") || "").trim();
+  if (!/^[a-f0-9]{64}$/i.test(token)) throw new Error("Invalid tracking link.");
+  const tokenHash = await sha256Hex(token);
+  const shipment = await env.DB.prepare("SELECT s.order_id,s.carrier,s.tracking_number,s.tracking_url,s.status,s.shipped_at,s.estimated_delivery_at,s.delivered_at,s.portal_token_expires_at,o.order_number,o.status AS order_status,o.created_at,c.first_name,c.last_name FROM shipments s JOIN orders o ON o.id=s.order_id JOIN customers c ON c.id=o.customer_id WHERE s.portal_token_hash=? AND (s.portal_token_expires_at IS NULL OR datetime(s.portal_token_expires_at)>datetime('now')) LIMIT 1").bind(tokenHash).first();
+  if (!shipment) throw new Error("Tracking link not found or expired.");
+  return { success:true, order:{ order_number:shipment.order_number, status:shipment.order_status, created_at:shipment.created_at, first_name:shipment.first_name, last_name:shipment.last_name }, shipment:{ carrier:shipment.carrier, tracking_number:shipment.tracking_number, tracking_url:shipment.tracking_url, status:shipment.status, shipped_at:shipment.shipped_at, estimated_delivery_at:shipment.estimated_delivery_at, delivered_at:shipment.delivered_at } };
+}
+export default {async fetch(request,env){const origin=getOrigin(request);if(request.method==='OPTIONS')return json({},204,origin||'*');if(!origin)return json({error:'Origin not allowed.'},403,'*');const url=new URL(request.url);try{if(url.pathname==='/api/health'&&request.method==='GET')return json({ok:true,db:Boolean(env.DB)},200,origin);if(url.pathname==='/api/project-leads'&&request.method==='POST')return json(await saveProjectLead(request,env),200,origin);if(url.pathname==='/api/paypal/create-order'&&request.method==='POST')return json(await createPayPalOrder(request,env),200,origin);if(url.pathname==='/api/paypal/capture-order'&&request.method==='POST')return json(await capturePayPalOrder(request,env),200,origin);if(url.pathname==='/api/admin/orders'&&request.method==='GET'){const admin=await requireOwner(request,env);if(!admin)return json({error:'Owner authentication required.'},401,origin);return json(await getAdminOrders(request,env),200,origin);}if(url.pathname==='/api/admin/orders/status'&&request.method==='POST'){const admin=await requireOwner(request,env);if(!admin)return json({error:'Owner authentication required.'},401,origin);return json(await updateAdminOrderStatus(request,env,admin),200,origin);}if(url.pathname==='/api/admin/orders/shipment'&&request.method==='POST'){const admin=await requireOwner(request,env);if(!admin)return json({error:'Owner authentication required.'},401,origin);return json(await updateAdminShipment(request,env,admin),200,origin);}if(url.pathname==='/api/tracking'&&request.method==='GET')return json(await getTrackingPortal(request,env),200,origin);if(url.pathname==='/api/orders'&&request.method==='GET'){const order=await getOrder(request,env,false);return order?json(order,200,origin):json({error:'Order not found.'},404,origin);}return env.ASSETS?env.ASSETS.fetch(request):new Response('Not found',{status:404});}catch(error){console.error(error);return json({error:error instanceof Error?error.message:'Unexpected server error.'},400,origin);}}};
